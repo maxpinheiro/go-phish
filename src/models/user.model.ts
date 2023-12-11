@@ -24,6 +24,7 @@ export const emptyUser: User = {
   emailVerified: null,
   image: null,
   avatarType: null,
+  hometown: null,
 };
 
 export const avatarColorLabels: Record<AvatarType, Record<keyof Omit<AvatarConfig, 'type'>, string | null>> = {

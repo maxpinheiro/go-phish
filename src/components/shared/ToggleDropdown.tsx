@@ -29,7 +29,7 @@ const ToggleDropdown: React.FC<ToggleDropdownProps> = ({
           <DropDownIcon
             height={8}
             className={`transition duration-300 fill-black dark:fill-white ${
-              dropdownOpen ? '' : '-rotate-180'
+              dropdownOpen ? '-rotate-180' : ''
             } cursor-pointer`}
           />
         </div>

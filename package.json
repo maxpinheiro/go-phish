@@ -28,6 +28,7 @@
     "@types/string-similarity": "^4.0.0",
     "autoprefixer": "^10.4.14",
     "cheerio": "^1.0.0-rc.12",
+    "color": "^4.2.3",
     "eslint": "8.39.0",
     "eslint-config-next": "13.4.0",
     "http": "^0.0.1-security",
@@ -53,7 +54,8 @@
     "url": "^0.11.1"
   },
   "devDependencies": {
-    "ts-node": "^10.9.1",
-    "prisma": "^4.16.2"
+    "@types/color": "^3.0.6",
+    "prisma": "^4.16.2",
+    "ts-node": "^10.9.1"
   }
 }

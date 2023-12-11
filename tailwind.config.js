@@ -74,7 +74,7 @@ module.exports = {
     },
     {
       pattern: /fill-(red|blue|green|purple)/,
-      variants: ['hover', 'marker'],
+      variants: ['hover', 'marker', '[&_*]'],
     },
   ],
   plugins: [],

@@ -4,6 +4,7 @@ import { getSongById } from '@/services/phishnet.service';
 import { getAllSongs } from '@/services/song.service';
 import { useThemeContext } from '@/store/theme.store';
 import { PhishNetSong, ResponseStatus } from '@/types/main';
+import { desaturateColor } from '@/utils/color.util';
 import { Song } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
@@ -54,7 +55,8 @@ const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
   const [error, setError] = useState<string | null>(null);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [songData, setSongData] = useState<PhishNetSong | null>(null);
-  const { color } = useThemeContext();
+  const { color, hexColor } = useThemeContext();
+  const desatColor = desaturateColor(hexColor, 0.5);
 
   const alertError = (errorMsg: string) => {
     setStatus('error');
@@ -86,7 +88,7 @@ const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
       <div className="w-3/4 mb-5">
         <SongInput allSongs={allSongs} selectSong={selectSong} selectedSong={null} />
       </div>
-      {status === 'loading' && <LoadingSpinner />}
+      {status === 'loading' && <LoadingSpinner color={hexColor} secondaryColor={desatColor} />}
       {status === 'loaded' && songData && selectedSong && (
         <div className={`w-3/4 flex flex-col items-center border border-${color} rounded-lg px-5 py-4 space-y-2`}>
           <p className="text-xl font-regular">{songData.name}</p>

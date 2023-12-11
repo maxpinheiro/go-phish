@@ -64,7 +64,7 @@ const RunRecord: React.FC<RunRecordProps> = ({ runRecord: allRuns }) => {
                 <DropDownIcon
                   height={8}
                   className={`transition duration-300 fill-black dark:fill-white ${
-                    openRunId === run.id ? '' : '-rotate-180'
+                    openRunId === run.id ? '-rotate-180' : ''
                   }`}
                 />
               </div>

@@ -2,13 +2,15 @@ import { suggestFeedback } from '@/client/feedback.client';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import { useThemeContext } from '@/store/theme.store';
 import { ResponseStatus } from '@/types/main';
+import { desaturateColor } from '@/utils/color.util';
 import React, { useState } from 'react';
 
 const FeedbackPage: React.FC = () => {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error' | 'success'>('loaded');
   const [error, setError] = useState<string | null>(null);
-  const { color } = useThemeContext();
+  const { color, hexColor } = useThemeContext();
+  const desatColor = desaturateColor(hexColor, 0.5);
 
   const submitFeedback = async () => {
     if (!feedback) return;
@@ -27,7 +29,7 @@ const FeedbackPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center">
       <p className="text-title-regular my-4">Feedback/Bugs</p>
-      {status === 'loading' && <LoadingSpinner />}
+      {status === 'loading' && <LoadingSpinner color={hexColor} secondaryColor={desatColor} />}
       {status === 'error' && <p className="mb-3 text-error-red">{error || 'An unknown error occurred.'}</p>}
       {status === 'success' && <p className={`mb-3 text-${color}`}>Successfully submitted feedback!</p>}
       <div className="flex flex-col mx-5">

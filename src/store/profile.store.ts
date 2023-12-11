@@ -58,6 +58,9 @@ export const profileSlice = createSlice({
     setAvatarModalOpen(state, action) {
       state.avatarModalOpen = action.payload;
     },
+    setUpdatedUser(state, action) {
+      state.updatedUser = action.payload;
+    },
     saveProfile(state) {
       const userData = {
         name: state.name,
@@ -112,6 +115,7 @@ export const {
   setHometown,
   setAvatar,
   setAvatarModalOpen,
+  setUpdatedUser,
   saveProfile,
   resetProfile,
 } = profileSlice.actions;

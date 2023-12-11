@@ -35,17 +35,8 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   const currentUserName = session?.user?.username;
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const { color, setThemeColor } = useThemeContext();
-  // const { settingsModalOpen, setSettingsModalOpen } = useNavbarContext();
+  const { color } = useThemeContext();
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
-  //const themeCookie = window?.localStorage?.getItem('gophish-theme');
-
-  // useEffect(() => {
-  //   const themeCookie = window?.localStorage?.getItem('gophish-theme');
-  //   if (themeCookie) {
-  //     setThemeColor(themeCookie as ThemeColor);
-  //   }
-  // }, [window]);
 
   const navLinks: NavLink[] = [
     {

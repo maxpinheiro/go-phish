@@ -74,7 +74,8 @@ export async function getTodaysShow(): Promise<ShowWithVenue | ResponseStatus.No
   const today = moment().tz(timezone);
   const todayStr = today.format('YYYY-MM-DD') as DateString;
 
-  const show = await prisma.show.findFirst({ where: { date: new Date(todayStr) }, include: { venue: true } });
+  //const show = await prisma.show.findFirst({ where: { date: new Date(todayStr) }, include: { venue: true } });
+  const show = await prisma.show.findFirst({ where: { venueId: 2 }, include: { venue: true } });
   if (!show) return ResponseStatus.NotFound;
   return superjson.parse<ShowWithVenue>(superjson.stringify(show));
 }

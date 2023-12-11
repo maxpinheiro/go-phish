@@ -1,13 +1,15 @@
 import React from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { useThemeContext } from '@/store/theme.store';
+import { desaturateColor } from '@/utils/color.util';
 
 interface LoadingOverlayProps {
   loadingMessage?: string;
 }
 
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ loadingMessage = 'Loading...' }) => {
-  const { color } = useThemeContext();
+  const { color, hexColor } = useThemeContext();
+  const desatColor = desaturateColor(hexColor, 0.5);
 
   return (
     <div
@@ -31,7 +33,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ loadingMessage = 'Loadi
           fontWeight: 'bold',
         }}
       >
-        <LoadingSpinner label=" " />
+        <LoadingSpinner label="" color={hexColor} secondaryColor={desatColor} />
         <p className={`text-center text-${color}`}>{loadingMessage}</p>
       </div>
     </div>

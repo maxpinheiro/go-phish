@@ -5,6 +5,7 @@ import LoadingSpinner from '../shared/LoadingSpinner';
 import CloseIcon from '@/media/CloseIcon.svg';
 import LoadingOverlay from '../shared/LoadingOverlay';
 import { useThemeContext } from '@/store/theme.store';
+import { desaturateColor } from '@/utils/color.util';
 
 interface SongSuggestModalProps {
   close: () => void;
@@ -14,7 +15,8 @@ const SongSuggestModal: React.FC<SongSuggestModalProps> = ({ close }) => {
   const [songInput, setSongInput] = useState<string | null>(null);
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error' | 'success'>('loaded');
   const [error, setError] = useState<string | null>(null);
-  const { color } = useThemeContext();
+  const { color, hexColor } = useThemeContext();
+  const desatColor = desaturateColor(hexColor, 0.5);
 
   const submitSuggestion = async () => {
     if (!songInput || songInput === '') return;
@@ -35,7 +37,7 @@ const SongSuggestModal: React.FC<SongSuggestModalProps> = ({ close }) => {
         <CloseIcon width={20} height={20} />
       </div>
       <p className="text-2xl text-center mb-4">Suggest a Song</p>
-      {status === 'loading' && <LoadingSpinner />}
+      {status === 'loading' && <LoadingSpinner color={hexColor} secondaryColor={desatColor} />}
       {status === 'error' && <p className="mb-3 text-error-red">{error || 'An unknown error occurred.'}</p>}
       {status === 'success' && <p className={`mb-3 text-${color}`}>Successfully suggested song!</p>}
       <p className="text-center px-2.5">

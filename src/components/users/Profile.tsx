@@ -5,9 +5,7 @@ import AboutMe from './AboutMe';
 import RunRecord from './RunRecord';
 import ProfileHeader from './ProfileHeader';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectEditing, selectError, setEditing } from '@/store/profile.store';
-import ErrorMessage from '../shared/ErrorMessage';
-import ReactModal from 'react-modal';
+import { resetProfile, selectEditing, selectUpdatedUser } from '@/store/profile.store';
 import EditProfileModal from './EditProfileModal';
 
 interface ProfileProps {
@@ -15,19 +13,19 @@ interface ProfileProps {
   runRecord: OrganizedRunItem[];
 }
 
-const Profile: React.FC<ProfileProps> = ({ user, runRecord }) => {
+const Profile: React.FC<ProfileProps> = ({ user: initUser, runRecord }) => {
   const editing = useSelector(selectEditing);
-  const clientError = useSelector(selectError);
+  const updatedUser = useSelector(selectUpdatedUser);
+  const user = updatedUser || initUser;
   const dispatch = useDispatch();
   return (
     <div className="flex flex-col w-full max-w-500 mt-2" id="user-info">
       <ProfileHeader user={user} />
-      {clientError && <ErrorMessage error={clientError} />}
       <div className="flex flex-col mx-4">
         <AboutMe user={user} />
         <RunRecord runRecord={runRecord} />
       </div>
-      {editing && <EditProfileModal closeModal={() => dispatch(setEditing(false))} />}
+      {editing && <EditProfileModal closeModal={() => dispatch(resetProfile())} />}
     </div>
   );
 };

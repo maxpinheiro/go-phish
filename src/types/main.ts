@@ -7,6 +7,8 @@ export type DateString = `${number}-${number}-${number}`; // yyyy-mm-dd
 
 export type Color = `#${string}` | `rgb(${number}, ${number}, ${number})` | string;
 
+export type ColorType = 'hex' | 'rgb' | 'css';
+
 export interface AvatarConfigParsed {
   head: Color;
   torso: Color;

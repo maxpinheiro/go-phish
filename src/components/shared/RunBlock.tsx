@@ -16,7 +16,7 @@ const RunBlock: React.FC<RunBlockProps> = ({ run, showLocation = true, showLinks
 
   return (
     <div
-      className={`flex flex-col items-center space-y-2 rounded-lg border border-${color} w-5/6 max-w-[400px] px-2.5 py-4`}
+      className={`flex flex-col items-center space-y-2 rounded-lg border border-${color} w-5/6 max-w-[400px] px-2.5 py-4 shadow-md`}
       id={`run-block-${run.id}`}
     >
       <p className="text-2xl font-medium">{run.name}</p>
