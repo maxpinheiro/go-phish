@@ -33,7 +33,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ loadingMessage = 'Loadi
           fontWeight: 'bold',
         }}
       >
-        <LoadingSpinner label="" color={hexColor} secondaryColor={desatColor} />
+        <LoadingSpinner label="&nbsp;" color={hexColor} secondaryColor={desatColor} />
         <p className={`text-center text-${color}`}>{loadingMessage}</p>
       </div>
     </div>

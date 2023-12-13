@@ -43,6 +43,18 @@ function html(params: { url: string; host: string; theme: Theme }) {
     buttonText: theme.buttonText || '#fff',
   };
 
+  /**
+   * Hi [username],
+
+    Great news! We've just sent a single sign-in link to your email. To access your account, simply click on the link below:
+
+    [Insert Link]
+
+    If you did not request this, you can safely ignore this email. Your account security is important to us.
+
+    Go Phish
+   */
+
   return `
     <body style="background: ${color.background};">
       <table width="100%" border="0" cellspacing="20" cellpadding="0"

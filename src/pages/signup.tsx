@@ -11,66 +11,8 @@ import { getSession, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { InputHTMLAttributes, useEffect, useState } from 'react';
-
-interface InputFieldProps {
-  label: string;
-  value: string | null;
-  placeholder: string;
-  onChange: (val: string) => void;
-  hideField?: boolean;
-  showValidation?: boolean;
-  invalid?: boolean;
-  invalidMessage?: string;
-}
-
-const InputField: React.FC<InputFieldProps> = ({
-  label,
-  value,
-  placeholder,
-  onChange,
-  hideField = false,
-  showValidation = true,
-  invalid = false,
-  invalidMessage,
-}) => {
-  const { color } = useThemeContext();
-  const [showField, setShowField] = useState(!hideField);
-  const ValidationIcon = invalid ? CloseIcon : CheckIcon;
-
-  return (
-    <div className="flex flex-col w-full">
-      <div className="flex items-center mb-2">
-        <p className="">{label}</p>
-        {showValidation && (
-          <div className={`flex items-center ml-2 ${invalid ? 'text-red' : 'text-green'}`}>
-            <ValidationIcon width={18} height={18} />
-            {invalid && <p className="ml-0.5">{invalidMessage || 'Invalid field.'}</p>}
-          </div>
-        )}
-      </div>
-      <div className={`flex items-center flex-1 px-2 py-1 rounded-lg border border-${color} bg-${color}/10`}>
-        <input
-          className="flex-1 bg-transparent outline-none"
-          value={value || ''}
-          type={showField ? 'text' : 'password'}
-          placeholder={placeholder}
-          onChange={(e) => onChange(e.target.value)}
-        />
-        {hideField && (
-          <div className="cursor-pointer" onClick={() => setShowField((b) => !b)}>
-            {showField ? <EyeIcon /> : <EyeSlashIcon />}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const validEmail = (email: string) => {
-  return String(email).match(
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  );
-};
+import { isValidEmail } from '@/utils/utils';
+import InputField from '@/components/shared/InputField';
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context);
@@ -101,7 +43,7 @@ const Signup: React.FC = ({}) => {
   const { color } = useThemeContext();
   const { data: session, update } = useSession();
   const { email: providedEmail } = router.query;
-  const fieldsValid = username && password && password === passwordConfirm && email && validEmail(email);
+  const fieldsValid = username && password && password === passwordConfirm && email && isValidEmail(email);
 
   useEffect(() => {
     // check for email url param
@@ -119,7 +61,7 @@ const Signup: React.FC = ({}) => {
     if (!username || !password || !passwordConfirm || !email) {
       return alertError('Fields cannot be empty.');
     }
-    if (!validEmail(email)) {
+    if (!isValidEmail(email)) {
       return alertError('Invalid email.');
     }
 
@@ -192,7 +134,7 @@ const Signup: React.FC = ({}) => {
             value={email}
             placeholder="email"
             onChange={setEmail}
-            invalid={!validEmail(email || '')}
+            invalid={!isValidEmail(email || '')}
             invalidMessage="Invalid email format."
             showValidation={email !== null}
           />
