@@ -15,6 +15,7 @@ interface InputFieldProps {
   showValidation?: boolean;
   invalid?: boolean;
   invalidMessage?: string;
+  numLines?: number;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -27,6 +28,7 @@ const InputField: React.FC<InputFieldProps> = ({
   showValidation = false,
   invalid = false,
   invalidMessage,
+  numLines = 1,
 }) => {
   const { color } = useThemeContext();
   const [showField, setShowField] = useState(!hideField);
@@ -50,14 +52,24 @@ const InputField: React.FC<InputFieldProps> = ({
         )}
       </div>
       <div className={`flex items-center flex-1 px-2 py-1 rounded-lg border border-${color} bg-${color}/10`}>
-        <input
-          className="flex-1 bg-transparent outline-none"
-          value={value || ''}
-          type={showField ? 'text' : 'password'}
-          placeholder={placeholder}
-          onChange={(e) => onChange(e.target.value)}
-          onKeyDown={onKeyDown}
-        />
+        {numLines > 1 ? (
+          <textarea
+            className={`flex-1 bg-transparent outline-none resize-none`}
+            rows={numLines}
+            value={value || ''}
+            placeholder={placeholder}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        ) : (
+          <input
+            className="flex-1 bg-transparent outline-none"
+            value={value || ''}
+            type={showField ? 'text' : 'password'}
+            placeholder={placeholder}
+            onChange={(e) => onChange(e.target.value)}
+            onKeyDown={onKeyDown}
+          />
+        )}
         {hideField && (
           <div className="cursor-pointer" onClick={() => setShowField((b) => !b)}>
             {showField ? <EyeIcon /> : <EyeSlashIcon />}

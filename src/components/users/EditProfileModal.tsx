@@ -3,10 +3,8 @@ import {
   selectAvatar,
   selectBio,
   selectEditing,
-  selectError,
   selectHometown,
   selectName,
-  selectUpdatedUser,
   selectUserId,
   setAvatar,
   setBio,
@@ -17,7 +15,6 @@ import {
 } from '@/store/profile.store';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import TextInput from '../shared/TextInput';
 import { AvatarIconSized } from '../shared/Avatar/AvatarIcon';
 import EditIcon from '@/media/EditIcon.svg';
 import Modal from 'react-modal';
@@ -27,6 +24,7 @@ import { updateUser } from '@/client/user.client';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import { desaturateColor } from '@/utils/color.util';
 import { ResponseStatus } from '@/types/main';
+import InputField from '../shared/InputField';
 
 Modal.setAppElement('#__next');
 
@@ -113,19 +111,19 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ closeModal }) => {
           )}
         </div>
         <div className="flex flex-col space-y-4">
-          <TextInput
+          <InputField
             value={nameInput}
             onChange={(val) => dispatch(setName(val))}
             label="Name"
             placeholder="Enter name here"
           />
-          <TextInput
+          <InputField
             value={hometownInput}
             onChange={(val) => dispatch(setHometown(val))}
             label="Hometown"
             placeholder="Enter hometown here"
           />
-          <TextInput
+          <InputField
             value={bioInput}
             onChange={(val) => dispatch(setBio(val))}
             label="About Me"

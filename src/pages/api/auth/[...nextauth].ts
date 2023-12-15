@@ -1,9 +1,8 @@
 import NextAuth, { AuthOptions } from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { attemptLogin, getUserByEmail, getUserById } from '@/services/user.service';
+import { attemptLogin, getUserByEmail } from '@/services/user.service';
 import { AvatarConfig, ResponseStatus } from '@/types/main';
 import prisma from '@/services/db.service';
 import { sendVerificationRequest } from '@/services/mail.service';
@@ -74,7 +73,7 @@ export const authOptions: AuthOptions = {
         //check if user is in your database
         const dbUser = await getUserByEmail(user.email || '');
         if (dbUser === ResponseStatus.NotFound) {
-          return `/signup?email=${encodeURIComponent(user.email || '')}`;
+          return `/auth/signup?email=${encodeURIComponent(user.email || '')}`;
           //return false;
         }
         return true;

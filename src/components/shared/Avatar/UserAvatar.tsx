@@ -6,7 +6,7 @@ import React from 'react';
 export const UserAvatar: React.FC<AvatarConfig> = (config) => <UserAvatarSized {...config} size={20} />;
 
 export const UserAvatarSized: React.FC<AvatarConfig & { size: number }> = ({ background, torso, head, size }) => (
-  <svg width={size} height={size} viewBox="0 0 100 100" fill="none">
+  <svg width={size} height={size} viewBox="-1 -1 102 102" fill="none">
     <circle
       cx="50"
       cy="50"

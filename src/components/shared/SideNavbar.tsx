@@ -58,7 +58,7 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ currentUser, navLinks }) => {
             <Link href={`/api/auth/signin?callbackUrl=${router.asPath || '/shows'}`} onClick={() => clickLink()}>
               login
             </Link>
-            <Link href="/signup" onClick={() => clickLink()}>
+            <Link href="/auth/signup" onClick={() => clickLink()}>
               signup
             </Link>
           </div>

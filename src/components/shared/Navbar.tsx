@@ -96,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             ) : (
               <>
                 <Link href={`/api/auth/signin?callbackUrl=${router.asPath || '/shows'}`}>Login</Link>
-                <Link href={'/signup'}>Signup</Link>
+                <Link href={'/auth/signup'}>Signup</Link>
               </>
             )}
             {navLinks.map(
