@@ -2,6 +2,7 @@ import { AvatarConfig, AvatarType } from '@/types/main';
 import React from 'react';
 import { DonutAvatar, DonutAvatarSized } from './DonutAvatar';
 import { UserAvatar, UserAvatarSized } from './UserAvatar';
+import { FishAvatar, FishAvatarSized } from './FishAvatar';
 
 interface AvatarProps {
   type: AvatarType;
@@ -11,7 +12,7 @@ interface AvatarProps {
 const Avatars: Record<AvatarType, React.FC<AvatarConfig>> = {
   user: UserAvatar,
   donut: DonutAvatar,
-  fish: UserAvatar,
+  fish: FishAvatar,
   alien: UserAvatar,
 };
 
@@ -23,7 +24,7 @@ const AvatarIcon: React.FC<AvatarProps> = ({ type, config }) => {
 const SizedAvatars: Record<AvatarType, React.FC<AvatarConfig & { size: number }>> = {
   user: UserAvatarSized,
   donut: DonutAvatarSized,
-  fish: UserAvatarSized,
+  fish: FishAvatarSized,
   alien: UserAvatarSized,
 };
 

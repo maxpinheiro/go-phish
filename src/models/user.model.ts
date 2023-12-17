@@ -39,7 +39,7 @@ export const avatarColorLabels: Record<AvatarType, Record<keyof Omit<AvatarConfi
     background: 'donut',
   },
   fish: {
-    head: 'head',
+    head: 'face',
     torso: 'body',
     background: 'background',
   },
