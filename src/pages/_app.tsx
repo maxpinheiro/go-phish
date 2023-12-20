@@ -9,19 +9,28 @@ import { Provider } from 'react-redux';
 import { store } from '@/store/app.store';
 import { ThemeWrapper } from '@/store/theme.store';
 import Modal from 'react-modal';
+import { DefaultToastOptions, Toaster } from 'react-hot-toast';
 
 const raleway = Raleway({ subsets: ['latin'] });
 
 Modal.setAppElement('#__next');
-{
-  /* <Modal
-          isOpen={settingsModalOpen}
-          onRequestClose={() => setModalOpen(false)}
-          contentLabel="Settings"
-        >
-          {<SettingsModal close={() => setModalOpen(false)} />}
-        </Modal> */
-}
+
+const toastOptions: DefaultToastOptions = {
+  success: {
+    style: {
+      border: 'solid 1.5px green',
+      background: 'white',
+      color: 'green',
+    },
+  },
+  error: {
+    style: {
+      border: 'solid 1.5px red',
+      background: 'white',
+      color: 'red',
+    },
+  },
+};
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -29,6 +38,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
       <ThemeProvider attribute="class">
         <ThemeWrapper>
           <Provider store={store}>
+            <Toaster position="top-right" toastOptions={toastOptions} />
             <div className={`w-screen h-screen flex flex-col relative ${raleway.className}`}>
               <Navbar />
               <Component {...pageProps} />

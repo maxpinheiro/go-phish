@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import InputField from '@/components/shared/InputField';
 import { isValidEmail } from '@/utils/utils';
 import LoadingOverlay from '@/components/shared/LoadingOverlay';
+import toast from 'react-hot-toast';
 
 interface EmailLoginProps {
   onLogin: () => void;
@@ -12,13 +13,11 @@ interface EmailLoginProps {
 const EmailLogin: React.FC<EmailLoginProps> = ({ onLogin }) => {
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [emailRecipient, setEmailRecipient] = useState<string | null>(null);
   const { color } = useThemeContext();
 
   const showError = (message: string) => {
-    setError(message);
-    setTimeout(() => setError(null), 3000);
+    toast.error(message, { duration: 3000 });
   };
 
   const tryLogin = async (email: string | null) => {
@@ -53,7 +52,6 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ onLogin }) => {
           <p>Need assistance? Contact our support team at help@phishingphun.com.</p>
         </div>
       )}
-      {error && <p className="mt-4 text-red text-center">Error: {error}</p>}
       <button
         onClick={() => tryLogin(email)}
         disabled={loading}

@@ -13,6 +13,7 @@ import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface OnboardingProps {
   userId: number;
@@ -65,12 +66,10 @@ const Onboarding: React.FC<OnboardingProps> = ({ userId, username, initName, ini
   const [avatar, setAvatar] = useState<AvatarConfig>(initAvatar || defaultAvatar);
   const [avatarModalOpen, setAvatarModalOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const { color } = useThemeContext();
 
   const showError = (message: string) => {
-    setError(message);
-    setTimeout(() => setError(null), 3000);
+    toast.error(message, { duration: 3000 });
   };
 
   const openProfile = () => {
@@ -124,7 +123,6 @@ const Onboarding: React.FC<OnboardingProps> = ({ userId, username, initName, ini
           <InputField label="Hometown" value={hometown} placeholder="Hometown" onChange={setHometown} />
           <InputField label="About Me" value={bio || ''} placeholder="Enter bio here" onChange={setBio} numLines={3} />
         </div>
-        {error && <p className="mt-4 text-red text-center">Error: {error}</p>}
         <button
           onClick={saveUserInfo}
           disabled={loading}

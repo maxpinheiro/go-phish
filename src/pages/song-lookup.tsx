@@ -1,14 +1,14 @@
 import SongInput from '@/components/guesses/SongInput';
-import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import LoadingOverlay from '@/components/shared/LoadingOverlay';
 import { getSongById } from '@/services/phishnet.service';
 import { getAllSongs } from '@/services/song.service';
 import { useThemeContext } from '@/store/theme.store';
 import { PhishNetSong, ResponseStatus } from '@/types/main';
-import { desaturateColor } from '@/utils/color.util';
 import { Song } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface SongLookupPageProps {
   allSongs: Song[];
@@ -51,32 +51,27 @@ const SongInfoList = ({ song, data }: { song: Song; data: PhishNetSong }) => (
 );
 
 const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
-  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loaded');
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [songData, setSongData] = useState<PhishNetSong | null>(null);
-  const { color, hexColor } = useThemeContext();
-  const desatColor = desaturateColor(hexColor, 0.5);
+  const { color } = useThemeContext();
 
   const alertError = (errorMsg: string) => {
-    setStatus('error');
-    setError(errorMsg);
-    setTimeout(() => {
-      setStatus('loaded');
-      setError(null);
-    }, 5000);
+    toast.error(errorMsg, { duration: 3000 });
   };
 
   const selectSong = async (song: Song) => {
-    setStatus('loading');
+    setLoading(true);
     const songData = await getSongById(song.id);
     if (songData === ResponseStatus.UnknownError) {
-      return alertError('Could not find song data.');
+      alertError('Could not find song data.');
+      setLoading(false);
+      return;
     }
     console.log(songData);
     setSongData(songData);
     setSelectedSong(song);
-    setStatus('loaded');
+    setLoading(false);
   };
 
   return (
@@ -88,8 +83,8 @@ const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
       <div className="w-3/4 mb-5">
         <SongInput allSongs={allSongs} selectSong={selectSong} selectedSong={null} />
       </div>
-      {status === 'loading' && <LoadingSpinner color={hexColor} secondaryColor={desatColor} />}
-      {status === 'loaded' && songData && selectedSong && (
+      {loading && <LoadingOverlay />}
+      {songData && selectedSong && (
         <div className={`w-3/4 flex flex-col items-center border border-${color} rounded-lg px-5 py-4 space-y-2`}>
           <p className="text-xl font-regular">{songData.name}</p>
           <SongInfoList song={selectedSong} data={songData} />

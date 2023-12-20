@@ -1,12 +1,10 @@
 import LoadingOverlay from '@/components/shared/LoadingOverlay';
-import EyeIcon from '@/media/Eye.svg';
-import EyeSlashIcon from '@/media/EyeSlash.svg';
 import { useThemeContext } from '@/store/theme.store';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import InputField from '@/components/shared/InputField';
+import toast from 'react-hot-toast';
 
 interface CredentialsLoginProps {
   onLogin: () => void;
@@ -16,12 +14,10 @@ const CredentialsLogin: React.FC<CredentialsLoginProps> = ({ onLogin }) => {
   const [username, setUsername] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const { color } = useThemeContext();
 
   const showError = (message: string) => {
-    setError(message);
-    setTimeout(() => setError(null), 3000);
+    toast.error(message, { duration: 3000 });
   };
 
   const tryLogin = async (username: string | null, password: string | null) => {
@@ -64,7 +60,6 @@ const CredentialsLogin: React.FC<CredentialsLoginProps> = ({ onLogin }) => {
           onEnter={onEnter}
         />
       </div>
-      {error && <p className="mt-4 text-red text-center">Error: {error}</p>}
       <button
         onClick={() => tryLogin(username, password)}
         disabled={loading}

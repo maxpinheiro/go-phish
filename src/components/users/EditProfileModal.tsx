@@ -25,6 +25,7 @@ import LoadingSpinner from '../shared/LoadingSpinner';
 import { desaturateColor } from '@/utils/color.util';
 import { ResponseStatus } from '@/types/main';
 import InputField from '../shared/InputField';
+import toast from 'react-hot-toast';
 
 Modal.setAppElement('#__next');
 
@@ -44,11 +45,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ closeModal }) => {
   const dispatch = useDispatch();
   const [avatarModalOpen, setAvatarModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const showError = (message: string) => {
-    setError(message);
-    setTimeout(() => setError(null), 5000);
+    toast.error(message, { duration: 3000 });
   };
 
   const saveProfile = async () => {
@@ -94,7 +93,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ closeModal }) => {
             </div>
           </div>
         )}
-        {error && <p className="my-2 text-red text-center">Error: {error || 'unknown error'}</p>}
         <p className="text-2xl mx-auto mt-4">Edit Profile</p>
         <div className="relative my-5 mx-auto">
           <AvatarIconSized type={avatar.type || 'user'} config={avatar} size={100} />

@@ -9,6 +9,7 @@ import { signIn } from 'next-auth/react';
 import { isValidEmail } from '@/utils/utils';
 import { attemptSignupClient } from '@/client/user.client';
 import { ResponseStatus } from '@/types/main';
+import toast from 'react-hot-toast';
 
 const SignUp: React.FC = () => {
   const router = useRouter();
@@ -17,12 +18,10 @@ const SignUp: React.FC = () => {
   const [passwordConfirm, setPasswordConfirm] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const { color } = useThemeContext();
 
   const showError = (message: string) => {
-    setError(message);
-    setTimeout(() => setError(null), 3000);
+    toast.error(message, { duration: 3000 });
   };
 
   const trySignup = async () => {
@@ -98,7 +97,6 @@ const SignUp: React.FC = () => {
           />
           <InputField label="Email:" value={email} placeholder="email" onChange={setEmail} onEnter={trySignup} />
         </div>
-        {error && <p className="mt-4 text-red text-center">Error: {error}</p>}
         <button
           onClick={trySignup}
           disabled={loading}

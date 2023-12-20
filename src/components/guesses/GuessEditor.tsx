@@ -11,6 +11,7 @@ import SongSuggestModal from './SongSuggestModal';
 import { createGuess, deleteGuess, fetchGuessesForUserForShow } from '@/client/guess.client';
 import LoadingOverlay from '../shared/LoadingOverlay';
 import { useThemeContext } from '@/store/theme.store';
+import toast from 'react-hot-toast';
 
 Modal.setAppElement('#__next');
 
@@ -52,19 +53,13 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
   const guessList: (Guess | null)[] = formatGuesses(guesses);
 
   const [selectedSong, setSelectedSong] = useState<string | null>(null);
-  const [status, setStatus] = useState<'loaded' | 'loading' | 'error'>('loaded');
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [suggestModalOpen, setModalOpen] = useState(false);
   const [helpTextOpen, setHelpTextOpen] = useState(true);
   const [missingTextOpen, setMissingTextOpen] = useState(true);
 
-  const alertError = (message: string) => {
-    setStatus('error');
-    setError(message);
-    setTimeout(() => {
-      setError(null);
-      setStatus('loaded');
-    }, 5000);
+  const showError = (message: string) => {
+    toast.error(message, { duration: 3000 });
   };
 
   const selectSong = (songId: string) => {
@@ -74,29 +69,29 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
   const submitGuess = async (songId: string, encore: boolean) => {
     const song = allSongs.find((s) => s.id === songId);
     if (!song || !currentUserId || !run || isNaN(showId)) return;
-    setStatus('loading');
+    setLoading(true);
     const result = await createGuess(currentUserId, run.id, showId, songId, song.name, encore);
     if (result === ResponseStatus.Conflict) {
-      alertError('You have already guesses this song for this show!');
+      showError('You have already guesses this song for this show!');
     } else if (result === ResponseStatus.UnknownError) {
-      alertError('An unknown error occurred when adding this guess.');
+      showError('An unknown error occurred when adding this guess.');
     } else {
       setGuesses((g) => [...g, result]);
-      setStatus('loaded');
     }
+    setLoading(false);
     setSelectedSong(null);
   };
 
   const subtractGuess = async (guessId: number | undefined) => {
     if (!guessId) return;
-    setStatus('loading');
+    setLoading(true);
     const result = await deleteGuess(guessId);
     if (result === ResponseStatus.Success) {
       setGuesses((g) => g.filter((guess) => guess.id !== guessId));
-      setStatus('loaded');
     } else {
-      setStatus('error');
+      showError('Could not remove guess');
     }
+    setLoading(false);
     setSelectedSong(null);
   };
 
@@ -104,7 +99,7 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
     let availableSlots = guessList.filter((g) => g === null).length;
     // if already full, can't add guesses
     if (availableSlots === 0) {
-      alertError('You have already made all of your guesses!');
+      showError('You have already made all of your guesses!');
     }
     const incompleteGuesses = guesses.filter((guess) => !guess.completed);
     for (let guess of incompleteGuesses) {
@@ -118,20 +113,22 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
       await submitGuess(guess.songId, guess.encore);
       availableSlots--;
     }
-    setStatus('loaded');
+    setLoading(false);
   };
 
   const getPreviousGuesses = async () => {
-    setStatus('loading');
+    setLoading(true);
     if (!show || !run || show.runNight === 0 || !currentUserId) return;
     const prevShow = runShows.find((s) => s.runNight === show.runNight - 1);
     if (!prevShow) {
-      alertError('No show found for night.');
+      showError('No show found for night.');
+      setLoading(false);
       return;
     }
     const guesses = await fetchGuessesForUserForShow(currentUserId, prevShow.id);
     if (guesses === ResponseStatus.NotFound) {
-      setStatus('error');
+      showError('Could not collect previous guesses.');
+      setLoading(false);
       return;
     }
     addIncompleteGuesses(guesses);
@@ -157,21 +154,7 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
           </div>
         </div>
       )}
-      {status === 'loading' && <LoadingOverlay />}
-      {status === 'error' && (
-        <div className="flex justify-center space-x-1">
-          <p className="text-center text-error-red">{error || 'An unknown error occurred.'}</p>
-          <p
-            className="text-error-red cursor-pointer"
-            onClick={() => {
-              setStatus('loaded');
-              setError(null);
-            }}
-          >
-            x
-          </p>
-        </div>
-      )}
+      {loading && <LoadingOverlay />}
       <div className="overflow-y-scroll max-w-[750px] mx-auto space-y-4 px-5 mt-4">
         {guessList.map((guess, idx) => (
           <div

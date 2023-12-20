@@ -9,6 +9,7 @@ import LoadingSpinner from '../../shared/LoadingSpinner';
 import { avatarColorLabels } from '@/models/user.model';
 import { useThemeContext } from '@/store/theme.store';
 import AvatarColorControls from './AvatarColorControls';
+import toast from 'react-hot-toast';
 
 interface AvatarEditorProps {
   initConfig: AvatarConfig;
@@ -24,21 +25,23 @@ const AvatarEditorModal: React.FC<AvatarEditorProps> = ({ initConfig, closeModal
   const desatColor = desaturateColor(hexColor, 0.5);
   const currentUserId = session?.user?.id;
   const [avatarConfig, setConfig] = useState<AvatarConfig>(initConfig);
-  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'loaded'>('loaded');
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const saveAvatar = () => {
+  const showError = (message: string) => {
+    toast.error(message, { duration: 3000 });
+  };
+
+  const saveAvatar = async () => {
     if (currentUserId === undefined) return;
-    setStatus('loading');
-    updateAvatarForUser(currentUserId, avatarConfig).then((result) => {
-      if (result === ResponseStatus.Success) {
-        closeModal(avatarConfig);
-      } else {
-        setError('An unknown error occurred.');
-        setStatus('error');
-        setTimeout(() => setStatus('loaded'), 5000);
-      }
-    });
+    setLoading(true);
+    const result = await updateAvatarForUser(currentUserId, avatarConfig);
+    if (result === ResponseStatus.Success) {
+      toast.success('Succesfully saved avatar.', { duration: 3000 });
+      closeModal(avatarConfig);
+    } else {
+      showError('An unknown error occurred.');
+    }
+    setLoading(false);
   };
 
   const randomColors = () => {
@@ -65,15 +68,13 @@ const AvatarEditorModal: React.FC<AvatarEditorProps> = ({ initConfig, closeModal
         <div className="cursor-pointer absolute top-4 right-4" onClick={() => closeModal(null)}>
           <CloseIcon width={24} height={24} className="fill-black dark:fill-white" />
         </div>
-        {status === 'loading' && (
+        {loading && (
           <div className="absolute top-0 left-0 right-0 bottom-0 bg-white/90 dark:bg-neutral-900/90">
             <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <LoadingSpinner color={hexColor} secondaryColor={desatColor} />
             </div>
           </div>
         )}
-        {status === 'success' && <p className="my-2">Succesfully saved avatar.</p>}
-        {status === 'error' && <p className="my-2">Error: {error || 'unknown error'}</p>}
         <p className="text-2xl mx-auto mt-4">Edit Avatar</p>
         <div className="flex items-center space-x-4 my-4">
           <p>Type: </p>

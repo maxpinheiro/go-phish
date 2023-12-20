@@ -1,37 +1,33 @@
 import { suggestFeedback } from '@/client/feedback.client';
-import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import LoadingOverlay from '@/components/shared/LoadingOverlay';
 import { useThemeContext } from '@/store/theme.store';
 import { ResponseStatus } from '@/types/main';
-import { desaturateColor } from '@/utils/color.util';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const FeedbackPage: React.FC = () => {
   const [feedback, setFeedback] = useState<string | null>(null);
-  const [status, setStatus] = useState<'loading' | 'loaded' | 'error' | 'success'>('loaded');
-  const [error, setError] = useState<string | null>(null);
-  const { color, hexColor } = useThemeContext();
-  const desatColor = desaturateColor(hexColor, 0.5);
+  const [loading, setLoading] = useState(false);
+  const { color } = useThemeContext();
 
   const submitFeedback = async () => {
     if (!feedback) return;
 
-    setStatus('loading');
+    setLoading(true);
     const result = await suggestFeedback(feedback);
     if (result === ResponseStatus.Success) {
-      setStatus('success');
-      setTimeout(() => setStatus('loaded'));
+      toast.success('Successfully submitted feedback!', { duration: 3000 });
+      setFeedback(null);
     } else {
-      setError('An unknown error occurred.');
-      setStatus('error');
+      toast.error('An unknown error occurred.', { duration: 3000 });
     }
+    setLoading(false);
   };
 
   return (
     <div className="flex flex-col items-center">
       <p className="text-title-regular my-4">Feedback/Bugs</p>
-      {status === 'loading' && <LoadingSpinner color={hexColor} secondaryColor={desatColor} />}
-      {status === 'error' && <p className="mb-3 text-error-red">{error || 'An unknown error occurred.'}</p>}
-      {status === 'success' && <p className={`mb-3 text-${color}`}>Successfully submitted feedback!</p>}
+      {loading && <LoadingOverlay />}
       <div className="flex flex-col mx-5">
         <p className="">
           Please let us know if you find any bugs or have any other feedback on how we can improve the site!
@@ -45,7 +41,7 @@ const FeedbackPage: React.FC = () => {
         />
         <button
           onClick={submitFeedback}
-          disabled={status === 'loading'}
+          disabled={loading}
           className={`border border-${color} rounded-lg w-max mx-auto px-3 py-1.5`}
         >
           <p className="">Submit</p>
