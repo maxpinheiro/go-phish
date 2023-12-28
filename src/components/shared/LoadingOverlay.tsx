@@ -17,24 +17,24 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ loadingMessage = 'Loadi
         position: 'absolute',
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh',
-        paddingTop: '30vh',
+        bottom: 0,
+        right: 0,
         backgroundColor: 'rgba(255, 255, 255, 0.75)',
+        zIndex: 4200,
       }}
     >
       <div
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
+          position: 'fixed',
+          top: '50vh',
+          left: '50vw',
           transform: 'translate(-50%, -50%)',
           fontSize: '28px',
           fontWeight: 'bold',
         }}
       >
         <LoadingSpinner label="&nbsp;" color={hexColor} secondaryColor={desatColor} />
-        <p className={`text-center text-${color}`}>{loadingMessage}</p>
+        <p className={`text-center text-${color} font-medium`}>{loadingMessage}</p>
       </div>
     </div>
   );

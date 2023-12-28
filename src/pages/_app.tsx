@@ -39,7 +39,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
         <ThemeWrapper>
           <Provider store={store}>
             <Toaster position="top-right" toastOptions={toastOptions} />
-            <div className={`w-screen h-screen flex flex-col relative ${raleway.className}`}>
+            <div className={`w-screen min-h-screen flex flex-col relative ${raleway.className}`}>
               <Navbar />
               <Component {...pageProps} />
             </div>

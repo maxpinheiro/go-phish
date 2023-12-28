@@ -1,5 +1,6 @@
 import { Guess, Run, Show, User } from '@prisma/client';
 import { guessSorter } from './utils';
+import { PreviousGuess } from '@/components/guesses/GuessSelectorModal';
 
 export type OrganizedRunItem = { run: Run; points: number; scores: Guess[] };
 
@@ -82,4 +83,23 @@ export const organizedGuessesForNight = (guesses: OrganizedGuesses, shows: Show[
     }))
     .filter((group) => group.guesses.complete.length + group.guesses.incomplete.length > 0)
     .sort((a, b) => b.guesses.complete.length - a.guesses.complete.length);
+};
+
+export const removeDuplicateSongGuesses = (guesses: Guess[]): Guess[] => {
+  const uniques: Guess[] = [];
+  const uniqueSongIds: string[] = [];
+  for (let guess of guesses) {
+    if (!uniqueSongIds.includes(guess.songId)) {
+      uniques.push(guess);
+      uniqueSongIds.push(guess.songId);
+    }
+  }
+  return uniques;
+};
+
+export const sortIncompleteGuesses = (guesses: PreviousGuess[]): PreviousGuess[] => {
+  let sortedGuesses = [...guesses];
+  sortedGuesses.sort((a, b) => (a.encore ? (b.encore ? 0 : 1) : b.encore ? -1 : 0));
+  sortedGuesses.sort((a, b) => (a.encore || b.encore ? 0 : a.showId - b.showId));
+  return sortedGuesses;
 };

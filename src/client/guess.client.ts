@@ -73,13 +73,32 @@ export const fetchGuessesForUserForShow = (
     const response = await fetch(`${apiRoot}/guesses?userId=${userId}&showId=${showId}`);
     if (response.status === 200) {
       const data = await response.json();
-      if (data.hasOwnProperty('data')) {
-        return data.data as Guess[];
+      if (data.hasOwnProperty('guesses')) {
+        resolve(data.guesses as Guess[]);
       } else {
-        return ResponseStatus.NotFound;
+        resolve(ResponseStatus.NotFound);
       }
     } else {
-      return ResponseStatus.NotFound;
+      resolve(ResponseStatus.NotFound);
+    }
+  });
+};
+
+export const fetchGuessesForUserForRun = (
+  userId: number,
+  runId: number
+): Promise<Guess[] | ResponseStatus.NotFound> => {
+  return new Promise(async (resolve) => {
+    const response = await fetch(`${apiRoot}/guesses?userId=${userId}&runId=${runId}`);
+    if (response.status === 200) {
+      const data = await response.json();
+      if (data.hasOwnProperty('guesses')) {
+        resolve(data.guesses as Guess[]);
+      } else {
+        resolve(ResponseStatus.NotFound);
+      }
+    } else {
+      resolve(ResponseStatus.NotFound);
     }
   });
 };

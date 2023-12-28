@@ -5,13 +5,14 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import CloseIcon from '@/media/CloseIcon.svg';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import SongInput from './SongInput';
 import SongSuggestModal from './SongSuggestModal';
-import { createGuess, deleteGuess, fetchGuessesForUserForShow } from '@/client/guess.client';
+import { createGuess, deleteGuess, fetchGuessesForUserForRun, fetchGuessesForUserForShow } from '@/client/guess.client';
 import LoadingOverlay from '../shared/LoadingOverlay';
 import { useThemeContext } from '@/store/theme.store';
 import toast from 'react-hot-toast';
+import GuessSlot from './GuessSlot';
+import GuessSelectorModal, { PreviousGuess } from './GuessSelectorModal';
+import { removeDuplicateSongGuesses, sortIncompleteGuesses } from '@/utils/guess.util';
 
 Modal.setAppElement('#__next');
 
@@ -22,6 +23,26 @@ interface GuessEditorProps {
   allGuesses: Guess[];
   allSongs: Song[];
 }
+
+const HelpText = ({ close }: { close: () => void }) => (
+  <div className="flex justify-center items-center space-x-1 mt-2.5">
+    <p className="text-center opacity-50">(Click on an open slot to input your guess)</p>
+    <div className="cursor-pointer" onClick={close}>
+      <CloseIcon width={16} height={16} className="fill-black opacity-50" />
+    </div>
+  </div>
+);
+
+const MissingText = ({ open, close }: { open: () => void; close: () => void }) => (
+  <div className="flex justify-center items-center space-x-1 mt-2.5">
+    <p className="text-center cursor-pointer opacity-50" onClick={open}>
+      Missing a Song?
+    </p>
+    <div className="cursor-pointer" onClick={close}>
+      <CloseIcon width={16} height={16} className="fill-black opacity-50 cursor-pointer" />
+    </div>
+  </div>
+);
 
 const formatGuesses = (allGuesses: Guess[]): (Guess | null)[] => {
   let guesses: Guess[] = allGuesses.filter((guess) => !guess.completed);
@@ -48,22 +69,21 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
   const showId = parseInt(router.query.showId?.toString() || '');
   const currentUserId = session?.user?.id;
   const { color } = useThemeContext();
+  const showNights: Record<number, number> = Object.fromEntries(runShows.map((s) => [s.id, s.runNight]));
 
   const [guesses, setGuesses] = useState<Guess[]>(allGuesses);
   const guessList: (Guess | null)[] = formatGuesses(guesses);
 
-  const [selectedSong, setSelectedSong] = useState<string | null>(null);
+  const [selectedSongId, setSelectedSongId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [suggestModalOpen, setModalOpen] = useState(false);
   const [helpTextOpen, setHelpTextOpen] = useState(true);
   const [missingTextOpen, setMissingTextOpen] = useState(true);
+  const [guessSelectorOpen, setGuessSelectorOpen] = useState(false);
+  const [previousGuesses, setPreviousGuesses] = useState<PreviousGuess[] | null>(null);
 
   const showError = (message: string) => {
     toast.error(message, { duration: 3000 });
-  };
-
-  const selectSong = (songId: string) => {
-    setSelectedSong((currId) => (currId === songId ? null : songId));
   };
 
   const submitGuess = async (songId: string, encore: boolean) => {
@@ -79,7 +99,7 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
       setGuesses((g) => [...g, result]);
     }
     setLoading(false);
-    setSelectedSong(null);
+    setSelectedSongId(null);
   };
 
   const subtractGuess = async (guessId: number | undefined) => {
@@ -92,17 +112,21 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
       showError('Could not remove guess');
     }
     setLoading(false);
-    setSelectedSong(null);
+    setSelectedSongId(null);
   };
 
-  const addIncompleteGuesses = async (guesses: Guess[]) => {
+  const canAddAllGuesses = (guesses: Guess[]): boolean => {
     let availableSlots = guessList.filter((g) => g === null).length;
-    // if already full, can't add guesses
-    if (availableSlots === 0) {
-      showError('You have already made all of your guesses!');
-    }
-    const incompleteGuesses = guesses.filter((guess) => !guess.completed);
-    for (let guess of incompleteGuesses) {
+    // cannot fill if encore present
+    if (guessList[guessList.length - 1] !== null && guesses.some((g) => g.encore)) return false;
+    // cannot fill two encores
+    if (guesses.filter((g) => g.encore).length > 1) return false;
+    return availableSlots >= guesses.length;
+  };
+
+  const fillIncompleteGuesses = async (guesses: Guess[]) => {
+    let availableSlots = guessList.filter((g) => g === null).length;
+    for (let guess of guesses) {
       // done if no available spot
       if (availableSlots === 0) break;
       // skip if song already guessed
@@ -113,10 +137,39 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
       await submitGuess(guess.songId, guess.encore);
       availableSlots--;
     }
-    setLoading(false);
+    toast.success('Successfully copied songs!', { duration: 3000 });
+    if (guessSelectorOpen) setGuessSelectorOpen(false);
   };
 
-  const getPreviousGuesses = async () => {
+  const addIncompleteGuesses = async (guesses: Guess[]) => {
+    let availableSlots = guessList.filter((g) => g === null).length;
+    // if already full, can't add guesses
+    if (availableSlots === 0) {
+      return showError('You have already made all of your guesses!');
+    }
+    if (guesses.length === 0) {
+      return showError('No incomplete guesses to copy!');
+    }
+
+    if (canAddAllGuesses(guesses)) {
+      // add all guesses automatically
+      await fillIncompleteGuesses(guesses);
+    } else {
+      // open guess-selection modal
+      setPreviousGuesses(
+        sortIncompleteGuesses(
+          guesses.map((guess) => ({
+            ...guess,
+            runNight: showNights[guess.showId],
+            songPoints: allSongs.find((s) => s.id === guess.songId)?.points || 0,
+          }))
+        )
+      );
+      setGuessSelectorOpen(true);
+    }
+  };
+
+  const copyPreviousGuesses = async () => {
     setLoading(true);
     if (!show || !run || show.runNight === 0 || !currentUserId) return;
     const prevShow = runShows.find((s) => s.runNight === show.runNight - 1);
@@ -131,79 +184,74 @@ const GuessEditor: React.FC<GuessEditorProps> = ({ run, show, runShows, allGuess
       setLoading(false);
       return;
     }
-    addIncompleteGuesses(guesses);
+    const currentSongs = guessList.map((g) => g?.songId);
+    const incompleteGuesses = guesses.filter((guess) => !guess.completed && !currentSongs.includes(guess.songId));
+    await addIncompleteGuesses(incompleteGuesses);
+    setLoading(false);
+  };
+
+  const copyAllPreviousGuesses = async () => {
+    if (!show || !run || !currentUserId) return;
+    setLoading(true);
+    const guesses = await fetchGuessesForUserForRun(currentUserId, run.id);
+    if (guesses === ResponseStatus.NotFound) {
+      showError('Could not collect previous guesses.');
+      setLoading(false);
+      return;
+    }
+    const currentSongs = guessList.map((g) => g?.songId);
+    let incompleteGuesses = guesses.filter(
+      (guess) => !guess.completed && guess.showId !== show.id && !currentSongs.includes(guess.songId)
+    );
+    // remove duplicates
+    incompleteGuesses = removeDuplicateSongGuesses(incompleteGuesses);
+    await addIncompleteGuesses(incompleteGuesses);
+    setLoading(false);
   };
 
   return (
     <div id="guess-list-page" className="mb-20">
-      {helpTextOpen && (
-        <div className="flex justify-center items-center space-x-1 mt-2.5">
-          <p className="text-center opacity-50">(Click on an open slot to input your guess)</p>
-          <div className="cursor-pointer" onClick={() => setHelpTextOpen(false)}>
-            <CloseIcon width={16} height={16} className="fill-black opacity-50" />
-          </div>
-        </div>
-      )}
-      {missingTextOpen && (
-        <div className="flex justify-center items-center space-x-1 mt-2.5">
-          <p className="text-center cursor-pointer opacity-50" onClick={() => setModalOpen(true)}>
-            Missing a Song?
-          </p>
-          <div className="cursor-pointer" onClick={() => setMissingTextOpen(false)}>
-            <CloseIcon width={16} height={16} className="fill-black opacity-50 cursor-pointer" />
-          </div>
-        </div>
-      )}
       {loading && <LoadingOverlay />}
       <div className="overflow-y-scroll max-w-[750px] mx-auto space-y-4 px-5 mt-4">
         {guessList.map((guess, idx) => (
-          <div
-            key={idx}
-            className={`flex items-center justify-between w-full space-x-1 ${guess === null ? 'align-start' : ''}`}
-          >
-            <div className="flex h-full items-center">
-              <p className="m-0">{idx < guessList.length - 1 ? `Song ${idx + 1}` : 'Encore'}:</p>
-            </div>
-            {guess !== null ? (
-              <div
-                className={`bg-${color} bg-opacity-10 border border-${color} rounded-xl flex-1 py-1 px-2.5 ${
-                  guess === null && selectedSong !== null ? 'song-choice-highlight' : ''
-                }`}
-                onClick={() =>
-                  guess === null && selectedSong !== null ? submitGuess(selectedSong, idx === guessList.length - 1) : {}
-                }
-              >
-                <p className="m-0 ">{guess?.songName}&nbsp;</p>
-              </div>
-            ) : (
-              <SongInput
-                selectedSong={selectedSong}
-                selectSong={(song) => submitGuess(song.id, idx === guessList.length - 1)}
-                allSongs={allSongs}
-              />
-            )}
-            <div
-              style={guess === null ? { opacity: 0.25, userSelect: 'none' } : { cursor: 'cursor-pointer' }}
-              onClick={() => (guess !== null ? subtractGuess(guess.id) : {})}
-            >
-              <CloseIcon />
-            </div>
-          </div>
+          <GuessSlot
+            key={`slot-${idx}`}
+            guess={guess}
+            slotIdx={idx}
+            numSlots={guessList.length}
+            selectedSongId={selectedSongId}
+            submitGuess={submitGuess}
+            subtractGuess={subtractGuess}
+            allSongs={allSongs}
+          />
         ))}
       </div>
-      {
-        <p onClick={getPreviousGuesses} className={`text-center text-${color} cursor-pointer my-4`}>
-          Copy Incomplete Guesses From Previous Night
+      {show.runNight > 1 && (
+        <p onClick={copyPreviousGuesses} className={`text-center text-${color} cursor-pointer my-4`}>
+          Copy Last Night&apos;s Incomplete Guesses
         </p>
-      }
+      )}
+      <p onClick={copyAllPreviousGuesses} className={`text-center text-${color} cursor-pointer my-4`}>
+        Copy All Incomplete Guesses From Run
+      </p>
+      {helpTextOpen && <HelpText close={() => setHelpTextOpen(false)} />}
+      {missingTextOpen && <MissingText open={() => setModalOpen(true)} close={() => setMissingTextOpen(false)} />}
       <Modal
         isOpen={suggestModalOpen}
         onRequestClose={() => setModalOpen(false)}
         contentLabel="Song Suggestion"
         style={{ content: { top: '62px', left: '12px', right: '12px', bottom: '12px' } }}
       >
-        {show && show.runNight > 0 && <SongSuggestModal close={() => setModalOpen(false)} />}
+        {show.runNight > 0 && <SongSuggestModal close={() => setModalOpen(false)} />}
       </Modal>
+      {guessSelectorOpen && previousGuesses && (
+        <GuessSelectorModal
+          close={() => setGuessSelectorOpen(false)}
+          currentGuesses={guessList}
+          previousGuesses={previousGuesses}
+          submitGuesses={fillIncompleteGuesses}
+        />
+      )}
     </div>
   );
 };

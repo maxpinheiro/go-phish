@@ -3,13 +3,13 @@ import { ResponseStatus } from '@/types/main';
 
 import { deleteGuess, getGuessById } from '@/services/guess.service';
 
-const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {
     case 'GET':
-      handleGet(req, res);
+      await handleGet(req, res);
       break;
     case 'DELETE':
-      handleDelete(req, res);
+      await handleDelete(req, res);
       break;
     default:
       res.status(503).json({ error: 'Invalid request method.' });
@@ -18,38 +18,36 @@ const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
 };
 
 // GET /guesses/:guessId : get specific guess
-const handleGet = (req: NextApiRequest, res: NextApiResponse<{}>) => {
+const handleGet = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   const guessId = parseInt(req.query.guessId?.toString() || '');
   if (isNaN(guessId)) {
     res.status(400).json({ error: 'Missing/invalid guess id.' });
     return;
   }
   console.log(`GET => /guesses/${guessId}`);
-  getGuessById(guessId).then((guess) => {
-    if (guess) {
-      res.status(200).json({ guess });
-    } else {
-      res.status(500).json('Unknown internal error');
-    }
-  });
+  const guess = await getGuessById(guessId);
+  if (guess) {
+    res.status(200).json({ guess });
+  } else {
+    res.status(500).json('Unknown internal error');
+  }
 };
 
 // DELETE /guesses/:guessId : delete existing guess
-const handleDelete = (req: NextApiRequest, res: NextApiResponse<{}>) => {
+const handleDelete = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   const guessId = parseInt(req.query.guessId?.toString() || '');
   if (isNaN(guessId)) {
     res.status(400).json({ error: 'Missing/invalid guess id.' });
     return;
   }
   console.log(`DELETE => /guesses/${guessId}`);
-  deleteGuess(guessId).then((result) => {
-    if (result === ResponseStatus.NotFound) {
-      res.status(404).json({ error: 'Guess not found.' });
-      return;
-    }
+  const result = await deleteGuess(guessId);
+  if (result === ResponseStatus.NotFound) {
+    res.status(404).json({ error: 'Guess not found.' });
+    return;
+  }
 
-    res.status(204);
-  });
+  res.status(200).send('Succesfully deleted guess.');
 };
 
 export default handler;
