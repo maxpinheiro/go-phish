@@ -1,23 +1,21 @@
-import { scoreGuessesForShow } from '@/client/guess.client';
-import SetlistBuilder from '@/components/admin/SetlistBuilder';
-import ShowSelector from '@/components/admin/ShowSelector';
+import ShowModerator from '@/components/admin/ShowModerator';
 import ErrorMessage from '@/components/shared/ErrorMessage';
-import { ShowWithVenue } from '@/models/show.model';
-import { getAllShows, getShowsByQuery, getShowsWithVenueByQuery, getTodaysShow } from '@/services/show.service';
+import { ShowWithVenueAndRun } from '@/models/show.model';
+import { getAllShowsWithVenuesAndRuns, getTodaysShow } from '@/services/show.service';
 import { getAllSongs } from '@/services/song.service';
-import { ResponseStatus, SetlistSong } from '@/types/main';
-import { dateToDateString } from '@/utils/date.util';
-import { Show, Song } from '@prisma/client';
+import { useThemeContext } from '@/store/theme.store';
+import { ResponseStatus, ShowGroupRun } from '@/types/main';
+import { organizeShowsByRun } from '@/utils/show.util';
+import { Song } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
-import Link from 'next/link';
 import React, { useState } from 'react';
 
 interface AdminPageProps {
   error?: string;
-  shows?: ShowWithVenue[];
-  todayShow?: ShowWithVenue;
+  shows?: ShowGroupRun[];
+  todayShow?: ShowWithVenueAndRun;
   allSongs?: Song[];
 }
 
@@ -28,32 +26,25 @@ export const getServerSideProps: GetServerSideProps<AdminPageProps> = async (con
     return { props: { error: 'You must be have admin priviliges to view this page!' } };
   }
 
-  const showData = await getShowsWithVenueByQuery({}, { date: 'desc' });
+  //const showData = await getShowsWithVenueByQuery({}, { date: 'desc' });
+  const showData = await getAllShowsWithVenuesAndRuns();
+  showData.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   const shows = JSON.parse(JSON.stringify(showData));
+  const showsByRun = organizeShowsByRun(shows);
+  showsByRun.forEach((showGroup) => showGroup.shows.sort((a, b) => b.runNight - a.runNight));
   let today = await getTodaysShow();
   const todayShow = today === ResponseStatus.NotFound ? null : JSON.parse(JSON.stringify(today));
 
   const songs = await getAllSongs();
 
-  return { props: { shows, todayShow, allSongs: songs } };
+  return { props: { shows: showsByRun, todayShow, allSongs: songs } };
 };
 
-const Admin: React.FC<AdminPageProps> = ({ shows, todayShow, allSongs, error: initError }) => {
-  const [selectedShow, selectShow] = useState<ShowWithVenue | null>(null);
-  const [status, setStatus] = useState<'select' | 'build' | 'loading' | 'success' | 'error'>('select');
-  const [error, setError] = useState<string | undefined>(initError);
+type AdminSection = 'shows' | 'users';
 
-  const submitSongs = async (songs: SetlistSong[]) => {
-    if (!selectedShow) return;
-    setStatus('loading');
-    const res = await scoreGuessesForShow(selectedShow.id, songs);
-    if (res === ResponseStatus.Success) {
-      setStatus('success');
-    } else {
-      setError('an unknown error occurred while scoring guesses.');
-      setStatus('error');
-    }
-  };
+const Admin: React.FC<AdminPageProps> = ({ shows, todayShow, allSongs, error }) => {
+  const [openSection, setOpenSection] = useState<AdminSection | null>(null);
+  const { color } = useThemeContext();
 
   if (error || !shows || !allSongs) return <ErrorMessage error={error} />;
 
@@ -63,42 +54,21 @@ const Admin: React.FC<AdminPageProps> = ({ shows, todayShow, allSongs, error: in
         <title>Admin | Go Phish</title>
       </Head>
       <div className="flex flex-col items-center">
-        {status === 'select' && (
-          <ShowSelector
-            shows={shows}
-            todayShow={todayShow}
-            selectShow={(show) => {
-              selectShow(show);
-              setStatus('build');
-            }}
-          />
-        )}
-        {status === 'success' && (
-          <div className="flex flex-col items-center my-4">
-            <p className="my-4">Successfully scored guesses.</p>
-            <Link href={`/scores/run/${selectedShow?.runId}?night=${selectedShow?.runNight || ''}`}>
-              View Leaderboard
-            </Link>
-          </div>
-        )}
-        {status === 'build' && selectedShow && (
+        {openSection === null && (
           <>
-            <div className="flex items-center mt-4">
-              <p>
-                {dateToDateString(selectedShow.timestamp)} - {selectedShow.venue.name}
-              </p>
+            <p className="text-title-regular my-4">Admin</p>
+            <div className={`flex flex-col items-center space-y-4 text-${color} text-lg`}>
+              <button className="" onClick={() => setOpenSection('shows')}>
+                Moderate Shows
+              </button>
+              {/* <button className="" onClick={() => setOpenSection('shows')}>
+                Add/Remove Users
+              </button> */}
             </div>
-            <div
-              className="my-2.5 cursor-pointer opacity-50"
-              onClick={() => {
-                selectShow(null);
-                setStatus('build');
-              }}
-            >
-              Choose Different Show
-            </div>
-            <SetlistBuilder show={selectedShow} submit={submitSongs} allSongs={allSongs} />
           </>
+        )}
+        {openSection === 'shows' && (
+          <ShowModerator shows={shows} todayShow={todayShow} allSongs={allSongs} back={() => setOpenSection(null)} />
         )}
       </div>
     </>

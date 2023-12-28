@@ -2,7 +2,7 @@ import GuessList from '@/components/guesses/GuessList';
 import ErrorMessage from '@/components/shared/ErrorMessage';
 import { RunInfo } from '@/components/shared/RunInfo';
 import { ResponseStatus } from '@/types/main';
-import { BackArrow } from '@/pages';
+import BackArrow from '@/components/shared/BackArrow';
 import { getGuessesForRun } from '@/services/guess.service';
 import { getRunById, getRunWithVenue } from '@/services/run.service';
 import { getShowsForRun, getShowsForRunWithVenue } from '@/services/show.service';

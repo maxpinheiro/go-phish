@@ -12,7 +12,7 @@ import ErrorMessage from '@/components/shared/ErrorMessage';
 import { RunWithVenue } from '@/models/run.model';
 import { ShowWithVenue } from '@/models/show.model';
 import RunBlock from '@/components/shared/RunBlock';
-import { BackArrow } from '.';
+import BackArrow from '@/components/shared/BackArrow';
 import { useThemeContext } from '@/store/theme.store';
 
 interface TodayPageProps {

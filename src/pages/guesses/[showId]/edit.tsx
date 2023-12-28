@@ -2,7 +2,7 @@ import GuessEditor from '@/components/guesses/GuessEditor';
 import ErrorMessage from '@/components/shared/ErrorMessage';
 import { ShowInfo } from '@/components/shared/RunInfo';
 import { ResponseStatus } from '@/types/main';
-import { BackArrow } from '@/pages';
+import BackArrow from '@/components/shared/BackArrow';
 import { getGuessesForUserForShow } from '@/services/guess.service';
 import { getRunWithVenue } from '@/services/run.service';
 import { getShowWithVenue, getShowsForRunWithVenue } from '@/services/show.service';

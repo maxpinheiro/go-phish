@@ -112,6 +112,11 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
                   </Link>
                 )
             )}
+            {currentUser?.admin && (
+              <Link href="/admin" className="hidden md:block">
+                Admin
+              </Link>
+            )}
             <div
               className="cursor-pointer items-center hidden md:flex"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}

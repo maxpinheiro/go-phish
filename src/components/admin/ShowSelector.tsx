@@ -1,35 +1,55 @@
-import { ShowWithVenue } from '@/models/show.model';
+import { ShowWithVenueAndRun } from '@/models/show.model';
+import { useThemeContext } from '@/store/theme.store';
+import { ShowGroupRun } from '@/types/main';
 import { dateToDateString } from '@/utils/date.util';
-import { Show } from '@prisma/client';
 import React from 'react';
 
 interface ShowSelectorProps {
-  shows: ShowWithVenue[];
-  todayShow?: ShowWithVenue;
-  selectShow: (show: ShowWithVenue) => void;
+  shows: ShowGroupRun[];
+  todayShow?: ShowWithVenueAndRun;
+  selectShow: (show: ShowWithVenueAndRun) => void;
 }
 
-const ShowItem: React.FC<{ show: ShowWithVenue; select: (s: ShowWithVenue) => void }> = ({ show, select }) => (
+const ShowItem: React.FC<{ show: ShowWithVenueAndRun; select: (s: ShowWithVenueAndRun) => void }> = ({
+  show,
+  select,
+}) => (
   <div className="w-full cursor-pointer" onClick={() => select(show)}>
     <p className="">
-      {dateToDateString(show.date)} - {show.venue.name}, Night {show.runNight}
+      {dateToDateString(show.date)} - Night {show.runNight}
     </p>
   </div>
 );
 
-const ShowSelector: React.FC<ShowSelectorProps> = ({ shows, todayShow, selectShow }) => (
-  <div className="flex flex-col items-center max-w-500 space-y-2">
-    <p className="mt-4">Select a Show:</p>
-    {todayShow && (
-      <div className="flex flex-col items-center space-x-2">
-        <p>Today&apos;s Show:</p>
-        <ShowItem show={todayShow} select={selectShow} />
+const ShowSelector: React.FC<ShowSelectorProps> = ({ shows, todayShow, selectShow }) => {
+  const { color } = useThemeContext();
+
+  return (
+    <div className="flex flex-col items-center max-w-500 space-y-2">
+      {todayShow && (
+        <div
+          className={`flex flex-col items-center space-y-2 px-6 py-4 border border-${color} rounded-lg shadow-sm cursor-pointer`}
+          onClick={() => selectShow(todayShow)}
+        >
+          <p>Today&apos;s Show:</p>
+          <ShowItem show={todayShow} select={selectShow} />
+        </div>
+      )}
+      <p className="">All Shows:</p>
+      <div className="flex flex-col items-center space-y-4 pb-10">
+        {shows.map((showGroup, idx) => (
+          <div className="flex flex-col items-center" key={`showgroup-${idx}`}>
+            <p className="font-semibold my-2">{showGroup.runName}</p>
+            <div className="flex flex-col items-center space-y-2">
+              {showGroup.shows.map((show) => (
+                <ShowItem show={show} select={selectShow} key={`showitem${show.id}`} />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
-    )}
-    {shows.map((show, idx) => (
-      <ShowItem show={show} select={selectShow} key={`showitem${idx}`} />
-    ))}
-  </div>
-);
+    </div>
+  );
+};
 
 export default ShowSelector;

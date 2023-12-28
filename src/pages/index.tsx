@@ -1,36 +1,9 @@
-import LeftArrow from '@/media/LeftArrow.svg';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React from 'react';
 import HomeBackground from '@/media/Home.svg';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useThemeContext } from '@/store/theme.store';
-
-interface BackArrowProps {
-  link?: string;
-  className?: string;
-  svgClass?: string;
-  width?: number;
-  height?: number;
-  children?: JSX.Element;
-}
-export const BackArrow: React.FC<BackArrowProps> = ({
-  link,
-  className = 'cursor-pointer',
-  svgClass = '',
-  width,
-  height,
-  children,
-}) => {
-  const router = useRouter();
-  return (
-    <div onClick={() => router.push(link || '/shows')} className={className}>
-      <LeftArrow width={width} height={height} className={svgClass} />
-      {children}
-    </div>
-  );
-};
 
 const HomePage: React.FC = ({}) => {
   const { data: session } = useSession();

@@ -1,4 +1,4 @@
-import { ShowWithVenue } from '@/models/show.model';
+import { ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
 import { Show, User, Venue } from '@prisma/client';
 
 // main
@@ -79,7 +79,7 @@ export interface ShowGroupRun {
   runId: number;
   runName: string;
   runDates: DateString[];
-  shows: ShowWithVenue[];
+  shows: ShowWithVenueAndRun[];
 }
 
 export interface ShowGroupYear {

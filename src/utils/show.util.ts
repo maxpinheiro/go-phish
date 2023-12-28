@@ -1,8 +1,7 @@
-import { DateString, ShowGroupRun, ShowGroupYear, ShowGroupVenue } from '@/types/main';
-import { Show, Run, Venue } from '@prisma/client';
-import { dateToDateString, getYearFromDate } from './date.util';
+import { ShowGroupRun, ShowGroupYear, ShowGroupVenue } from '@/types/main';
+import { Run, Venue } from '@prisma/client';
+import { dateToDateString } from './date.util';
 import { ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
-import { RunWithVenue } from '@/models/run.model';
 import moment from 'moment';
 
 export const formatShowDate = (show: ShowWithVenue, format: string): string => {
@@ -10,7 +9,7 @@ export const formatShowDate = (show: ShowWithVenue, format: string): string => {
 };
 
 export const organizeShowsByRun = (shows: ShowWithVenueAndRun[]): ShowGroupRun[] => {
-  let showsByRun: Record<number, ShowWithVenue[]> = {};
+  let showsByRun: Record<number, ShowWithVenueAndRun[]> = {};
   let runsById: Record<number, Run> = {};
   shows.forEach((show) => {
     if (!(show.runId in showsByRun)) {

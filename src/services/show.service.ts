@@ -67,15 +67,17 @@ export const getShowsWithVenueByQuery = async (
   return superjson.parse<ShowWithVenue[]>(superjson.stringify(shows));
 };
 
-export async function getTodaysShow(): Promise<ShowWithVenue | ResponseStatus.NotFound> {
+export async function getTodaysShow(): Promise<ShowWithVenueAndRun | ResponseStatus.NotFound> {
   //const today = new Date();
   //const todayStr = today.toISOString().split('T')[0] as Date;
   const timezone = moment.tz.guess(true);
   const today = moment().tz(timezone);
   const todayStr = today.format('YYYY-MM-DD') as DateString;
 
-  //const show = await prisma.show.findFirst({ where: { date: new Date(todayStr) }, include: { venue: true } });
-  const show = await prisma.show.findFirst({ where: { venueId: 2 }, include: { venue: true } });
+  const show = await prisma.show.findFirst({
+    where: { date: new Date(todayStr) },
+    include: { venue: true, run: true },
+  });
   if (!show) return ResponseStatus.NotFound;
-  return superjson.parse<ShowWithVenue>(superjson.stringify(show));
+  return superjson.parse<ShowWithVenueAndRun>(superjson.stringify(show));
 }

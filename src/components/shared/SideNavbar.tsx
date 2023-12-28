@@ -75,6 +75,11 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ currentUser, navLinks }) => {
             {link.label}
           </Link>
         ))}
+        {currentUser?.admin && (
+          <Link href="/admin" onClick={() => clickLink(() => {})} className="w-max">
+            Admin
+          </Link>
+        )}
       </div>
     </div>
   );

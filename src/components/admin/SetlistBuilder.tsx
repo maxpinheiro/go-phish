@@ -2,23 +2,27 @@ import { DateString, ResponseStatus, SetlistSong } from '@/types/main';
 import CloseIcon from '@/media/CloseIcon.svg';
 import React, { useState } from 'react';
 import SongInput from '../guesses/SongInput';
-import { toTitleCase } from '@/utils/utils';
-import { Show, Song } from '@prisma/client';
-import moment from 'moment-timezone';
-import { dateToDateString } from '@/utils/date.util';
+import { Song } from '@prisma/client';
 import { getSetlistForDate } from '@/client/setlist.client';
 import { useThemeContext } from '@/store/theme.store';
+import CheckboxInput from '../shared/CheckboxInput';
+import toast from 'react-hot-toast';
+import LoadingOverlay from '../shared/LoadingOverlay';
+import { ShowWithVenueAndRun } from '@/models/show.model';
+import { formatShowDate } from '@/utils/show.util';
+import { scoreGuessesForShow } from '@/client/guess.client';
+import Link from 'next/link';
 
 interface SetlistBuilderProps {
-  show: Show;
-  submit: (songs: SetlistSong[]) => void;
+  show: ShowWithVenueAndRun;
   allSongs: Song[];
 }
 
-const SetlistBuilder: React.FC<SetlistBuilderProps> = ({ show, submit, allSongs }) => {
+const SetlistBuilder: React.FC<SetlistBuilderProps> = ({ show, allSongs }) => {
   const [setlist, setSetList] = useState<SetlistSong[]>([]);
   const [encore, setEncore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [scoredShows, setScoredShows] = useState(false);
   const { color } = useThemeContext();
 
   const selectSong = (songId: string, name: string, encore: boolean) => {
@@ -29,53 +33,80 @@ const SetlistBuilder: React.FC<SetlistBuilderProps> = ({ show, submit, allSongs 
     setSetList((list) => list.filter((s) => s.id !== songId));
   };
 
-  const fetchSetlist = () => {
-    const date = dateToDateString(show.timestamp);
-    getSetlistForDate(date).then((songs) => {
-      if (songs === ResponseStatus.NotFound) {
-        setError(`could not find setlist for date ${date}`);
-      } else if (songs === ResponseStatus.UnknownError) {
-        setError('unknown error');
-      } else {
-        setSetList(songs);
-      }
-    });
+  const fetchSetlist = async () => {
+    const date = formatShowDate(show, 'YYYY-MM-DD') as DateString;
+    setLoading(true);
+    const songs = await getSetlistForDate(date);
+    if (songs === ResponseStatus.NotFound) {
+      toast.error(`Could not find setlist for date ${date}`, { duration: 3000 });
+    } else if (songs === ResponseStatus.UnknownError) {
+      toast.error('An unknown error occurred', { duration: 3000 });
+    } else {
+      setSetList(songs);
+    }
+    setLoading(false);
+  };
+
+  const submitSongs = async (songs: SetlistSong[]) => {
+    setLoading(true);
+    const res = await scoreGuessesForShow(show.id, songs);
+    if (res === ResponseStatus.Success) {
+      setScoredShows(true);
+    } else {
+      toast.error('An unknown error occurred while scoring guesses.', { duration: 5000 });
+    }
+    setLoading(false);
   };
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="cursor-pointer" onClick={fetchSetlist}>
-        <p className="">Fetch Setlist</p>
-      </div>
-      <div className="flex items-center my-3">
-        <p className="mr-1">Encore: </p>
-        <input type="checkbox" checked={encore} onChange={() => setEncore((b) => !b)} />
-      </div>
-      <div className="flex flex-col items-center w-full max-w-300">
-        <div className="w-3/4">
-          <SongInput
-            selectSong={(song) => selectSong(song.id, song.name, encore)}
-            selectedSong={null}
-            allSongs={allSongs}
-          />
+      {scoredShows ? (
+        <div className="flex flex-col items-center my-4">
+          <p className="my-4">Successfully scored guesses.</p>
+          <Link href={`/scores/run/${show.runId}?night=${show.runNight || ''}`}>View Leaderboard</Link>
         </div>
-      </div>
-      <div className="flex flex-col items-center w-full max-w-300">
-        {setlist.map((song, idx) => (
-          <div key={idx} className="flex justify-between w-full py-1">
-            <p>{idx + 1}.</p>
-            <p className="">
-              {song.name} {song.encore ? ' (e)' : ''}
-            </p>
-            <div className="cursor-pointer" onClick={() => deleteSong(song.id)}>
-              <CloseIcon width={16} height={16} className="fill-black opacity-50" />
+      ) : (
+        <>
+          <div className="flex items-center space-x-2">
+            <p className="">Encore: </p>
+            <CheckboxInput checked={encore} onToggle={() => setEncore((b) => !b)} />
+          </div>
+          <div className="flex flex-col items-center w-full my-4">
+            <div className="w-full">
+              <SongInput
+                selectSong={(song) => selectSong(song.id, song.name, encore)}
+                selectedSong={null}
+                allSongs={allSongs}
+              />
             </div>
           </div>
-        ))}
-      </div>
-      <button className={`cursor-pointer border-b border-${color} px-1 py-1 my-2.5`} onClick={() => submit(setlist)}>
-        Submit
-      </button>
+          <div className="flex flex-col items-center w-full px-2">
+            {setlist.map((song, idx) => (
+              <div key={idx} className="flex justify-between w-full py-1 space-x-2">
+                <p>{idx + 1}.</p>
+                <p className="flex-1">
+                  {song.name} {song.encore ? ' (e)' : ''}
+                </p>
+                <div className="cursor-pointer" onClick={() => deleteSong(song.id)}>
+                  <CloseIcon width={16} height={16} className="fill-black opacity-50" />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col items-center w-full mt-10 mb-10 space-y-4">
+            <button
+              className={`w-full border border-${color} rounded-lg text-${color} py-2 rounded-lg`}
+              onClick={fetchSetlist}
+            >
+              Fetch Setlist
+            </button>
+            <button className={`w-full bg-${color} text-white py-2 rounded-lg`} onClick={() => submitSongs(setlist)}>
+              Submit
+            </button>
+          </div>
+        </>
+      )}
+      {loading && <LoadingOverlay />}
     </div>
   );
 };
