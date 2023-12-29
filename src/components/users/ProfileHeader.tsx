@@ -14,8 +14,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
   const myProfile = currentUserId === user.id;
-
-  const [avatar, setAvatar] = useState<AvatarConfig>(JSON.parse(JSON.stringify(user.avatar)) || defaultAvatar);
+  const avatar: AvatarConfig = JSON.parse(JSON.stringify(user.avatar)) || defaultAvatar;
 
   return (
     <div className="flex items-center mx-2.5 my-2.5">

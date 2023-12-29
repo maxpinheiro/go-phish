@@ -34,7 +34,7 @@ const AvatarColorControls: React.FC<AvatarColorControlsProps> = ({ avatarConfig,
         if (!labels[part]) return null;
         return (
           <>
-            <div className="flex justify-between items-center w-3/4 space-x-2.5">
+            <div className="flex justify-between items-center w-3/4 space-x-2.5" key={`colorlabel${part}`}>
               <p className="flex-1 text-center">{toTitleCase(labels[part]!)}:</p>
               <p className="flex-1 text-center" style={{ backgroundColor: color, color: foregroundColor(color) }}>
                 {color}
@@ -57,6 +57,7 @@ const AvatarColorControls: React.FC<AvatarColorControlsProps> = ({ avatarConfig,
                 color={color}
                 onChange={(color) => setPart(part, color.hex as Color)}
                 onChangeComplete={(color) => setPart(part, color.hex as Color)}
+                key={`colorpicker${part}`}
               />
             )}
           </>

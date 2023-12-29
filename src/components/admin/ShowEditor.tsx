@@ -9,6 +9,7 @@ import { Song } from '@prisma/client';
 import LoadingOverlay from '../shared/LoadingOverlay';
 import { useThemeContext } from '@/store/theme.store';
 import BackArrow from '../shared/BackArrow';
+import { formatShowDate } from '@/utils/show.util';
 
 interface ShowEditorProps {
   show: ShowWithVenueAndRun;
@@ -26,9 +27,7 @@ const ShowEditor: React.FC<ShowEditorProps> = ({ show, allSongs, back }) => {
   const [openSection, setOpenSection] = useState<ShowEditorSection | null>(null);
   const { color } = useThemeContext();
 
-  const showTitle = `${moment(show.timestamp).tz('UTC').format('MM/DD/YYYY')} - ${show.run.name}, Night ${
-    show.runNight
-  }`;
+  const showTitle = `${formatShowDate(show, 'MM/DD/YYYY')} - ${show.run.name}, Night ${show.runNight}`;
 
   return (
     <div className="flex flex-col items-center w-full">

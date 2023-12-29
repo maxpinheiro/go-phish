@@ -47,7 +47,7 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ onLogin }) => {
         <div className="flex flex-col items-center text-justify space-y-2 mt-6">
           <p>
             A login email has been sent to {emailRecipient}. Please check your email to access your account. If you
-            don't see the email in your inbox, don't forget to check your spam folder.{' '}
+            don&apos;t see the email in your inbox, don&apos;t forget to check your spam folder.
           </p>
           <p>Need assistance? Contact our support team at help@phishingphun.com.</p>
         </div>

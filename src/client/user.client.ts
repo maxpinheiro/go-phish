@@ -78,7 +78,7 @@ export const attemptSignupClient = (
 export const updateAvatarForUser = (
   userId: number,
   config: AvatarConfig
-): Promise<ResponseStatus.Success | ResponseStatus.Unauthorized | ResponseStatus.UnknownError> => {
+): Promise<User | ResponseStatus.Unauthorized | ResponseStatus.UnknownError> => {
   return new Promise(async (resolve) => {
     try {
       const response = await fetch(`${apiRoot}/users/${userId}/avatar`, {
@@ -90,7 +90,12 @@ export const updateAvatarForUser = (
         body: JSON.stringify(config),
       });
       if (response.ok || response.status === 200) {
-        resolve(ResponseStatus.Success);
+        const data = await response.json();
+        if (data.hasOwnProperty('user')) {
+          resolve(data.user);
+        } else {
+          resolve(ResponseStatus.UnknownError);
+        }
       } else if (response.status === 401) {
         // incorrect username (username not found)
         resolve(ResponseStatus.Unauthorized);

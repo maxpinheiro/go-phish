@@ -78,13 +78,13 @@ export async function updateUserAvatar(
   torso: string,
   background: string,
   type?: AvatarType
-): Promise<ResponseStatus.Success | ResponseStatus.NotFound> {
+): Promise<User | ResponseStatus.NotFound> {
   try {
-    await prisma.user.update({
+    const newUser = await prisma.user.update({
       where: { id: userId },
       data: { avatar: { head, torso, background, type: type || 'user' } },
     });
-    return ResponseStatus.Success;
+    return newUser;
   } catch (e) {
     console.log(e);
     return ResponseStatus.NotFound;

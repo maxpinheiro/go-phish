@@ -77,6 +77,7 @@ const RunGuesses: React.FC<RunGuessContainerProps> = ({ run, shows, guesses, err
   const router = useRouter();
   const { night: runNight } = router.query;
   const selectedNight = parseInt(runNight?.toString() || '');
+  const { color } = useThemeContext();
 
   if (error || !run || !shows || !guesses) {
     return <ErrorMessage error={error} />;
@@ -89,7 +90,6 @@ const RunGuesses: React.FC<RunGuessContainerProps> = ({ run, shows, guesses, err
   const nightNumbers: number[] = shows.map((show) => show.runNight).sort();
   const nightShow: Show | undefined = shows.find((s) => s.runNight === selectedNight);
   const organizedGuesses = isNaN(selectedNight) ? guesses : organizedGuessesForNight(guesses, shows, selectedNight);
-  const { color } = useThemeContext();
 
   const chooseNight = (night: number | string) => {
     if (night === 'total') {

@@ -10,6 +10,8 @@ import { avatarColorLabels } from '@/models/user.model';
 import { useThemeContext } from '@/store/theme.store';
 import AvatarColorControls from './AvatarColorControls';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { setUpdatedUser } from '@/store/profile.store';
 
 interface AvatarEditorProps {
   initConfig: AvatarConfig;
@@ -26,6 +28,7 @@ const AvatarEditorModal: React.FC<AvatarEditorProps> = ({ initConfig, closeModal
   const currentUserId = session?.user?.id;
   const [avatarConfig, setConfig] = useState<AvatarConfig>(initConfig);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const showError = (message: string) => {
     toast.error(message, { duration: 3000 });
@@ -35,11 +38,14 @@ const AvatarEditorModal: React.FC<AvatarEditorProps> = ({ initConfig, closeModal
     if (currentUserId === undefined) return;
     setLoading(true);
     const result = await updateAvatarForUser(currentUserId, avatarConfig);
-    if (result === ResponseStatus.Success) {
-      toast.success('Succesfully saved avatar.', { duration: 3000 });
-      closeModal(avatarConfig);
-    } else {
+    if (result === ResponseStatus.Unauthorized) {
+      showError('You are not authorized to edit this user!.');
+    } else if (result === ResponseStatus.UnknownError) {
       showError('An unknown error occurred.');
+    } else {
+      toast.success('Succesfully saved avatar.', { duration: 3000 });
+      dispatch(setUpdatedUser(result));
+      closeModal(avatarConfig);
     }
     setLoading(false);
   };
@@ -65,7 +71,10 @@ const AvatarEditorModal: React.FC<AvatarEditorProps> = ({ initConfig, closeModal
       <div
         className={`flex flex-col items-center w-full h-full rounded-lg bg-white dark:bg-neutral-900 border border-black px-5 py-2 relative text-black dark:text-white`}
       >
-        <div className="cursor-pointer absolute top-4 right-4" onClick={() => closeModal(null)}>
+        <div
+          className="cursor-pointer absolute top-4 right-4"
+          onClick={() => closeModal(avatarConfig === initConfig ? null : avatarConfig)}
+        >
           <CloseIcon width={24} height={24} className="fill-black dark:fill-white" />
         </div>
         {loading && (

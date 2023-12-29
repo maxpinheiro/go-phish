@@ -91,7 +91,6 @@ export const profileSlice = createSlice({
       state.avatar = defaultAvatar;
       state.avatarModalOpen = false;
       state.editing = false;
-      state.updatedUser = null;
       state.error = null;
     },
   },

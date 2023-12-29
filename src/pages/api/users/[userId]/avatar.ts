@@ -4,10 +4,10 @@ import { updateUserAvatar } from '@/services/user.service';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]';
 
-const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {
     case 'PUT':
-      handlePut(req, res);
+      await handlePut(req, res);
       break;
     default:
       res.status(503).json({ error: 'Invalid request method.' });
@@ -29,13 +29,12 @@ const handlePut = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
     res.status(400).json({ error: 'Missing avatar config' });
     return;
   }
-  updateUserAvatar(userId, head, torso, background, type).then((result) => {
-    if (result === ResponseStatus.Success) {
-      res.status(200).json('success');
-    } else {
-      res.status(500).json('Unknown internal error');
-    }
-  });
+  const result = await updateUserAvatar(userId, head, torso, background, type);
+  if (result === ResponseStatus.NotFound) {
+    res.status(500).json('Could not find user with id.');
+  } else {
+    res.status(200).json({ user: result });
+  }
 };
 
 export default handler;

@@ -1,5 +1,4 @@
 import ErrorMessage from '@/components/shared/ErrorMessage';
-import UserInfo from '@/components/users/UserInfo';
 import { ResponseStatus } from '@/types/main';
 import { getScoresForUser } from '@/services/guess.service';
 import { getRunsByIds } from '@/services/run.service';
