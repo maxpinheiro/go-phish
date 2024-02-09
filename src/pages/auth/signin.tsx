@@ -4,6 +4,26 @@ import EmailLogin from './EmailLogin';
 import CredentialsLogin from './CredentialsLogin';
 import { useRouter } from 'next/router';
 import { useThemeContext } from '@/store/theme.store';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+
+export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+  const session = await getSession(context);
+  const username = session?.user?.username;
+
+  // redirect to profile if already logged in
+  if (username) {
+    return {
+      redirect: {
+        destination: `/users/${username}`,
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
 
 const SignIn: React.FC = () => {
   const router = useRouter();
