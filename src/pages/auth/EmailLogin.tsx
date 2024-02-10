@@ -9,9 +9,10 @@ import EnvelopeOpenIcon from '@/media/EnvelopeOpen.svg';
 
 interface EmailLoginProps {
   onLogin: () => void;
+  toggleLoginType: () => void;
 }
 
-const EmailLogin: React.FC<EmailLoginProps> = ({ onLogin }) => {
+const EmailLogin: React.FC<EmailLoginProps> = ({ toggleLoginType }) => {
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [emailRecipient, setEmailRecipient] = useState<string | null>(null);
@@ -50,7 +51,7 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ onLogin }) => {
     <>
       {emailRecipient ? (
         <div className="flex flex-col items-center text-justify space-y-4 mt-6">
-          <EnvelopeOpenIcon className={`fill-${color} mb-2`} width={80} height={80} />
+          <EnvelopeOpenIcon className={`fill-${color} mb-4`} width={80} height={80} />
           <p>
             A login email has been sent to <b className="font-semibold">{emailRecipient}</b>. Please check your email to
             access your account.
@@ -68,14 +69,19 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ onLogin }) => {
           </p>
         </div>
       ) : (
-        <InputField
-          label="Email:"
-          value={email}
-          placeholder="email"
-          onChange={setEmail}
-          onEnter={() => tryLogin(email)}
-          showValidation={false}
-        />
+        <>
+          <button className={`w-full text-right text-${color} mb-4`} onClick={toggleLoginType}>
+            Sign in with Credentials
+          </button>
+          <InputField
+            label="Email:"
+            value={email}
+            placeholder="email"
+            onChange={setEmail}
+            onEnter={() => tryLogin(email)}
+            showValidation={false}
+          />
+        </>
       )}
       <button
         onClick={() => (emailRecipient ? setEmailRecipient(null) : tryLogin(email))}
