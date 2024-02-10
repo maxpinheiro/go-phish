@@ -10,6 +10,7 @@
     "lint": "next lint",
     "generate": "yarn prisma generate",
     "migrate": "yarn prisma migrate",
+    "migrate:dev": "yarn prisma migrate dev",
     "seed": "yarn prisma seed",
     "check-songs": "yarn ts-node src/scripts/checkSongs.ts",
     "collect-songs": "yarn ts-node src/scripts/collectSongInfo.ts"

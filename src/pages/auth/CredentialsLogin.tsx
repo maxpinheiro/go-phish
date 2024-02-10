@@ -8,9 +8,10 @@ import toast from 'react-hot-toast';
 
 interface CredentialsLoginProps {
   onLogin: () => void;
+  toggleLoginType: () => void;
 }
 
-const CredentialsLogin: React.FC<CredentialsLoginProps> = ({ onLogin }) => {
+const CredentialsLogin: React.FC<CredentialsLoginProps> = ({ onLogin, toggleLoginType }) => {
   const [username, setUsername] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,6 +45,9 @@ const CredentialsLogin: React.FC<CredentialsLoginProps> = ({ onLogin }) => {
   return (
     <>
       <div className="flex flex-col space-y-4 w-full">
+        <button className={`w-full text-right text-${color}`} onClick={toggleLoginType}>
+          Sign in with Email
+        </button>
         <InputField
           label="Username:"
           value={username}
