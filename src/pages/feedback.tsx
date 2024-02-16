@@ -16,8 +16,8 @@ const FeedbackConfirmation = ({ resubmit }: { resubmit: () => void }) => {
         site.
       </p>
       <p className="mt-10">
-        We'll review your message as soon as possible. If you provided contact information, we'll be sure to follow up
-        if necessary.
+        We&apos;ll review your message as soon as possible. If you provided contact information, we&apos;ll be sure to
+        follow up if necessary.
       </p>
       <button onClick={resubmit} className={`bg-${color} text-white rounded-lg w-full mx-auto px-3 py-2 mt-12`}>
         <p className="">Submit More Feedback</p>
