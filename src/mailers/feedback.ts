@@ -41,7 +41,7 @@ function html(feedback: string, contactInfo?: string) {
           Feedback Received:
         </p>
         <p
-          style="padding-top: 8px; font-size: 14px; font-weight: 300; color: ${color.text};">
+          style="padding-top: 4px; font-size: 14px; font-weight: 300; color: ${color.text};">
           ${feedback}
         </p>
         <p
