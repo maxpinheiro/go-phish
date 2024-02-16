@@ -1,6 +1,7 @@
 import { SendVerificationRequestParams } from 'next-auth/providers';
 import { createTransport } from 'nodemailer';
 import verificationRequestMailer from '@/mailers/verification_request';
+import feedbackMailer from '@/mailers/feedback';
 
 /**
  * Sends an sign-in email with a magic link.
@@ -87,7 +88,7 @@ export async function sendSongSuggestEmail(song: string): Promise<boolean> {
   }
 }
 
-export async function sendFeedbackEmail(feedback: string): Promise<boolean> {
+export async function sendFeedbackEmail(feedback: string, contactInfo?: string): Promise<boolean> {
   const emailBody = `Feedback: ${feedback}`;
   const emailHtml = `<p>Feedback: <b>${feedback}</b></p>`;
 
@@ -105,11 +106,11 @@ export async function sendFeedbackEmail(feedback: string): Promise<boolean> {
   try {
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"The Helping Friendly Bot" <help@phishingfun.com>',
+      from: process.env.EMAIL_FROM,
       to: 'maxpinheiro181@gmail.com',
-      subject: `GoPhish Feedback Submitted`,
-      text: emailBody,
-      html: emailHtml,
+      subject: feedbackMailer.subject(feedback, contactInfo),
+      text: feedbackMailer.text(feedback, contactInfo),
+      html: feedbackMailer.html(feedback, contactInfo),
     });
     return true;
   } catch (e) {

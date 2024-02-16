@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendFeedbackEmail, sendSongSuggestEmail } from '@/services/mail.service';
 
-const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {
     case 'POST':
-      handlePost(req, res);
+      await handlePost(req, res);
       break;
     default:
       res.status(503).json({ error: 'Invalid request method.' });
@@ -21,7 +21,8 @@ const handlePost = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
     return;
   }
   const feedback = body.feedback?.toString();
-  const success = await sendFeedbackEmail(feedback);
+  const contactInfo = body.contactInfo?.toString();
+  const success = await sendFeedbackEmail(feedback, contactInfo);
   if (success) {
     res.status(200).send('success');
   } else {
