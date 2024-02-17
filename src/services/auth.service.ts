@@ -3,6 +3,8 @@ import { randomBytes } from 'crypto';
 
 import prisma from '@/services/db.service';
 import moment from 'moment-timezone';
+import { VerificationToken } from '@prisma/client';
+import superjson from 'superjson';
 
 export async function createVerificationTokenForUser(
   email: string,
@@ -22,5 +24,23 @@ export async function createVerificationTokenForUser(
   } catch (e) {
     console.log(e);
     return ResponseStatus.UnknownError;
+  }
+}
+
+export async function fetchVerificationToken(token: string): Promise<VerificationToken | ResponseStatus.NotFound> {
+  const verificationToken = await prisma.verificationToken.findFirst({ where: { token } });
+  if (!verificationToken) return ResponseStatus.NotFound;
+  return superjson.parse<VerificationToken>(superjson.stringify(verificationToken));
+}
+
+export async function deleteVerificationToken(
+  token: string
+): Promise<ResponseStatus.Success | ResponseStatus.NotFound> {
+  try {
+    await prisma.verificationToken.delete({ where: { token } });
+    return ResponseStatus.Success;
+  } catch (e) {
+    console.log(e);
+    return ResponseStatus.NotFound;
   }
 }
