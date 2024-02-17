@@ -9,7 +9,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   if (username === undefined) {
     return {
       redirect: {
-        destination: '/login',
+        destination: '/auth/signin',
         permanent: false,
       },
     };

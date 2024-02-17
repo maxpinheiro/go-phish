@@ -2,6 +2,7 @@ import { SendVerificationRequestParams } from 'next-auth/providers';
 import { createTransport } from 'nodemailer';
 import verificationRequestMailer from '@/mailers/verification_request';
 import feedbackMailer from '@/mailers/feedback';
+import resetPasswordMailer from '@/mailers/resetPassword.mailer';
 
 /**
  * Sends an sign-in email with a magic link.
@@ -89,9 +90,6 @@ export async function sendSongSuggestEmail(song: string): Promise<boolean> {
 }
 
 export async function sendFeedbackEmail(feedback: string, contactInfo?: string): Promise<boolean> {
-  const emailBody = `Feedback: ${feedback}`;
-  const emailHtml = `<p>Feedback: <b>${feedback}</b></p>`;
-
   // create reusable transporter object using the default SMTP transport
   let transporter = createTransport({
     host: process.env.EMAIL_SERVER_HOST,
@@ -111,6 +109,34 @@ export async function sendFeedbackEmail(feedback: string, contactInfo?: string):
       subject: feedbackMailer.subject(feedback, contactInfo),
       text: feedbackMailer.text(feedback, contactInfo),
       html: feedbackMailer.html(feedback, contactInfo),
+    });
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
+export async function sendPasswordResetEmail(email: string, token: string, username: string): Promise<boolean> {
+  // create reusable transporter object using the default SMTP transport
+  let transporter = createTransport({
+    host: process.env.EMAIL_SERVER_HOST,
+    port: parseInt(process.env.EMAIL_SERVER_PORT || '25'),
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_SERVER_USERNAME,
+      pass: process.env.EMAIL_SERVER_PASSWORD,
+    },
+  });
+
+  try {
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: resetPasswordMailer.subject({ token, username }),
+      text: resetPasswordMailer.text({ token, username }),
+      html: resetPasswordMailer.html({ token, username }),
     });
     return true;
   } catch (e) {
