@@ -51,6 +51,36 @@ module.exports = {
             fontWeight: '700',
           },
         ],
+        'subtitle-light': [
+          '26px',
+          {
+            fontWeight: '300',
+          },
+        ],
+        'subtitle-regular': [
+          '26px',
+          {
+            fontWeight: '400',
+          },
+        ],
+        'subtitle-medium': [
+          '26px',
+          {
+            fontWeight: '500',
+          },
+        ],
+        'subtitle-semibold': [
+          '26px',
+          {
+            fontWeight: '600',
+          },
+        ],
+        'subtitle-bold': [
+          '26px',
+          {
+            fontWeight: '700',
+          },
+        ],
       },
     },
   },

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
-import EmailLogin from './EmailLogin';
-import CredentialsLogin from './CredentialsLogin';
+import CredentialsLogin from '@/components/auth/login/CredentialsLogin';
+import EmailLogin from '@/components/auth/login/EmailLogin';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';

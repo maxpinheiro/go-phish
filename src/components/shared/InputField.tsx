@@ -16,6 +16,7 @@ interface InputFieldProps {
   invalid?: boolean;
   invalidMessage?: string;
   numLines?: number;
+  addOnClass?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -29,6 +30,7 @@ const InputField: React.FC<InputFieldProps> = ({
   invalid = false,
   invalidMessage,
   numLines = 1,
+  addOnClass = '',
 }) => {
   const { color } = useThemeContext();
   const [showField, setShowField] = useState(!hideField);
@@ -41,7 +43,7 @@ const InputField: React.FC<InputFieldProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className={`flex flex-col w-full ${addOnClass}`}>
       <div className="flex items-center mb-2">
         <p className="">{label}</p>
         {showValidation && (

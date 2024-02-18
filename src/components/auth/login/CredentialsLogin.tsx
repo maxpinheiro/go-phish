@@ -62,18 +62,19 @@ const CredentialsLogin: React.FC<CredentialsLoginProps> = ({ onLogin, toggleLogi
           hideField
           onChange={setPassword}
           onEnter={onEnter}
+          addOnClass="pt-1"
         />
       </div>
+      <Link href="/forgot-password" className={`w-full text-left text-${color} mt-5`}>
+        Forgot password?
+      </Link>
       <button
         onClick={() => tryLogin(username, password)}
         disabled={loading}
-        className={`auth-button w-full bg-${color} text-white rounded-lg py-2 mt-10 mb-4`}
+        className={`auth-button w-full bg-${color} text-white rounded-lg py-2 mt-6 mb-4`}
       >
         <p className="text-lg">Sign In</p>
       </button>
-      <Link href="/forgot-password" className="text-center cursor-pointer mt-2">
-        Forgot username/password?
-      </Link>
       <div className="flex items-center space-x-2 mt-6">
         <p>New to GoPhish?</p>
         <Link href="/auth/signup" className={`font-semibold text-${color}`}>
