@@ -1,7 +1,6 @@
 import { ResponseStatus } from '@/types/main';
 import { Guess } from '@prisma/client';
 import prisma from '@/services/db.service';
-import { parseObj } from '@/utils/utils';
 import superjson from 'superjson';
 
 export async function getAllGuesses(): Promise<Guess[]> {
@@ -120,30 +119,44 @@ export async function deleteGuess(guessId: number): Promise<Guess | ResponseStat
   }
 }
 
+type SongInstance = {
+  id: string;
+  encore: boolean;
+  points: number;
+};
+
 export async function scoreGuesses(
   guesses: Guess[],
-  songs: { id: string; encore: boolean; points: number }[]
+  songs: SongInstance[]
 ): Promise<ResponseStatus.Success | ResponseStatus.UnknownError> {
-  const setlistIds = songs.map((song) => song.id);
-  return new Promise(async (resolve) => {
-    for (let guess of guesses) {
-      if (setlistIds.includes(guess.songId)) {
-        const song = songs.find((s) => s.id === guess.songId);
-        if (!song) continue;
-        const correctEncore = song.encore && guess.encore;
-        const points = song.points + (correctEncore ? 3 : 0);
-        try {
-          const guesss = await prisma.guess.findUnique({ where: { id: guess.id } });
-          const newGuess = await prisma.guess.update({
-            where: { id: guess.id },
-            data: { points, completed: true },
-          });
-        } catch (e) {
-          console.log(e);
-          resolve(ResponseStatus.UnknownError);
-        }
-      }
+  try {
+    const guessScores = scoresForGuesses(guesses, songs);
+    const correctGuesses = guesses.filter((g) => guessScores[g.id]);
+    await prisma.$transaction(
+      correctGuesses.map((guess) =>
+        prisma.guess.update({
+          where: { id: guess.id },
+          data: { points: guessScores[guess.id] || 0, completed: true },
+        })
+      )
+    );
+    return ResponseStatus.Success;
+  } catch (e) {
+    console.log(e);
+    return ResponseStatus.UnknownError;
+  }
+}
+
+function scoresForGuesses(guesses: Guess[], songs: SongInstance[]): Record<string, number> {
+  let guessScores: Record<string, number> = {};
+  const songData = Object.fromEntries(songs.map((song) => [song.id, song]));
+  for (let guess of guesses) {
+    const song = songData[guess.songId];
+    if (song) {
+      const correctEncore = song.encore && guess.encore;
+      const points = song.points + (correctEncore ? 3 : 0);
+      guessScores[guess.id] = points;
     }
-    resolve(ResponseStatus.Success);
-  });
+  }
+  return guessScores;
 }
