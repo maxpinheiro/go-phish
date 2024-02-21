@@ -76,10 +76,7 @@ export const getSetlistForShowDate = async (
     } else {
       return setlist.data.map((song) => ({
         id: song.slug,
-        name: song.slug
-          .split('-')
-          .map((s) => toTitleCase(s))
-          .join(' '),
+        name: song.song,
         encore: song.set === 'e',
       }));
     }
