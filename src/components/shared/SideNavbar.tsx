@@ -49,13 +49,13 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ currentUser, navLinks }) => {
             <Link href={`/users/${currentUser.username}`} className="text-lg" onClick={() => clickLink()}>
               {currentUser.username}
             </Link>
-            <Link href="/api/auth/signout" className="text-sm">
+            <Link href="/auth/signout" className="text-sm">
               sign out
             </Link>
           </div>
         ) : (
           <div className="flex items-center flex-1 justify-around">
-            <Link href={`/api/auth/signin?callbackUrl=${router.asPath || '/shows'}`} onClick={() => clickLink()}>
+            <Link href={`/auth/signin?callbackUrl=${router.asPath || '/shows'}`} onClick={() => clickLink()}>
               login
             </Link>
             <Link href="/auth/signup" onClick={() => clickLink()}>

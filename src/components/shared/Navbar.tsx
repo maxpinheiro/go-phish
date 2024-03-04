@@ -95,7 +95,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
               <Link href={`/users/${currentUserName}`}>{currentUserName}</Link>
             ) : (
               <>
-                <Link href={`/api/auth/signin?callbackUrl=${router.asPath || '/shows'}`}>Login</Link>
+                <Link href={`/auth/signin?callbackUrl=${router.asPath || '/shows'}`}>Login</Link>
                 <Link href={'/auth/signup'}>Signup</Link>
               </>
             )}

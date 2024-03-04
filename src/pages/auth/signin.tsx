@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import CredentialsLogin from '@/components/auth/login/CredentialsLogin';
-import EmailLogin from '@/components/auth/login/EmailLogin';
-import { useRouter } from 'next/router';
+import React from 'react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
+import Head from 'next/head';
+import LoginContainer from '@/components/auth/login/LoginContainer';
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context);
@@ -24,32 +22,15 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   };
 };
 
-type LoginType = 'credentials' | 'email';
-
-const SignIn: React.FC = () => {
-  const router = useRouter();
-  const redirect = router.query.redirect;
-  const [loginType, setLoginType] = useState<LoginType>('credentials');
-
-  const onLogin = () => {
-    router.push(redirect ? `/${redirect}` : '/shows');
-  };
-
+const SignInPage: React.FC = () => {
   return (
     <>
       <Head>
         <title>Login | Go Phish</title>
       </Head>
-      <div></div>
-      <div className="flex flex-col items-center px-6">
-        <p className="text-4xl my-5">Login</p>
-        {loginType === 'credentials' && (
-          <CredentialsLogin onLogin={onLogin} toggleLoginType={() => setLoginType('email')} />
-        )}
-        {loginType === 'email' && <EmailLogin onLogin={onLogin} toggleLoginType={() => setLoginType('credentials')} />}
-      </div>
+      <LoginContainer />
     </>
   );
 };
 
-export default SignIn;
+export default SignInPage;

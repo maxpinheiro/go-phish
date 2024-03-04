@@ -8,12 +8,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetProfile, selectEditing, selectUpdatedUser } from '@/store/profile.store';
 import EditProfileModal from './EditProfileModal';
 
-interface ProfileProps {
+interface ProfileContainerProps {
   user: User;
   runRecord: OrganizedRunItem[];
 }
 
-const Profile: React.FC<ProfileProps> = ({ user: initUser, runRecord }) => {
+const ProfileContainer: React.FC<ProfileContainerProps> = ({ user: initUser, runRecord }) => {
   const editing = useSelector(selectEditing);
   const updatedUser = useSelector(selectUpdatedUser);
   const user = updatedUser || initUser;
@@ -30,4 +30,4 @@ const Profile: React.FC<ProfileProps> = ({ user: initUser, runRecord }) => {
   );
 };
 
-export default Profile;
+export default ProfileContainer;

@@ -1,36 +1,22 @@
-import GuessEditor from '@/components/guesses/GuessEditor';
 import ErrorMessage from '@/components/shared/ErrorMessage';
-import { ShowInfo } from '@/components/shared/RunInfo';
 import { ResponseStatus } from '@/types/main';
-import BackArrow from '@/components/shared/BackArrow';
 import { getGuessesForUserForShow } from '@/services/guess.service';
 import { getRunWithVenue } from '@/services/run.service';
 import { getShowWithVenue, getShowsForRunWithVenue } from '@/services/show.service';
-import { Guess, Song } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
 import moment from 'moment';
 import { formatShowDate } from '@/utils/show.util';
-import { ShowWithVenue } from '@/models/show.model';
-import { RunWithVenue } from '@/models/run.model';
 import { getAllSongs } from '@/services/song.service';
-import { useThemeContext } from '@/store/theme.store';
+import GuessEditorContainer, { GuessEditorContainerProps } from '@/components/guesses/editor/GuessEditorContainer';
 
-interface GuessEditorContainerProps {
-  run?: RunWithVenue;
-  show?: ShowWithVenue;
-  runShows?: ShowWithVenue[];
-  currentGuesses?: Guess[];
-  allSongs?: Song[];
+type GuessEditorPageProps = Partial<GuessEditorContainerProps> & {
   error?: string;
-  forbiddenReason?: string | null; // valid data, but cannot edit for some reason
-}
+};
 
-export const getServerSideProps: GetServerSideProps<GuessEditorContainerProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps<GuessEditorPageProps> = async (context) => {
   const session = await getSession(context);
   const currentUserId = session?.user?.id;
   const showId = parseInt(context.query.showId?.toString() || '');
@@ -94,7 +80,7 @@ export const getServerSideProps: GetServerSideProps<GuessEditorContainerProps> =
   };
 };
 
-const GuessEditorContainer: React.FC<GuessEditorContainerProps> = ({
+const GuessEditorPage: React.FC<GuessEditorPageProps> = ({
   run,
   show,
   runShows,
@@ -103,10 +89,6 @@ const GuessEditorContainer: React.FC<GuessEditorContainerProps> = ({
   error,
   forbiddenReason,
 }) => {
-  const router = useRouter();
-  const showId = parseInt(router.query.showId?.toString() || '');
-  const { color } = useThemeContext();
-
   if (error || !run || !show || runShows === undefined || currentGuesses === undefined || !allSongs) {
     return <ErrorMessage error={error} />;
   }
@@ -116,38 +98,16 @@ const GuessEditorContainer: React.FC<GuessEditorContainerProps> = ({
       <Head>
         <title>{run.name} - Edit Guesses | Go Phish</title>
       </Head>
-      <div id="guess-editor-page">
-        <div className="flex flex-col items-center">
-          <div className="flex justify-center w-full max-w-500 relative mt-4">
-            <p className="text-2xl font-light mt-3 mb-2">Guesses</p>
-            <div className="flex items-center space-x-2 absolute top-2 left-2 -translate-y-1/2 ">
-              <BackArrow
-                width={16}
-                height={16}
-                className="cursor-pointer flex items-center space-x-2"
-                svgClass="fill-black dark:fill-white"
-              >
-                <p className="">Shows</p>
-              </BackArrow>
-            </div>
-            <div className="absolute top-2 right-2 -translate-y-1/2">
-              <Link href={`/guesses/run/${run.id}?night=${show.runNight}`} className={`text-${color} my-2.5`}>
-                All Guesses
-              </Link>
-            </div>
-          </div>
-        </div>
-        <ShowInfo show={show} run={run} runShows={runShows} large />
-        {forbiddenReason ? (
-          <p className="text-center mt-8">{forbiddenReason}</p>
-        ) : (
-          <div className="w-full">
-            <GuessEditor run={run} show={show} runShows={runShows} allGuesses={currentGuesses} allSongs={allSongs} />
-          </div>
-        )}
-      </div>
+      <GuessEditorContainer
+        run={run}
+        show={show}
+        runShows={runShows}
+        currentGuesses={currentGuesses}
+        allSongs={allSongs}
+        forbiddenReason={forbiddenReason}
+      />
     </>
   );
 };
 
-export default GuessEditorContainer;
+export default GuessEditorPage;

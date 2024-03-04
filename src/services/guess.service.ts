@@ -130,7 +130,7 @@ export async function scoreGuesses(
   songs: SongInstance[]
 ): Promise<ResponseStatus.Success | ResponseStatus.UnknownError> {
   try {
-    const guessScores = scoresForGuesses(guesses, songs);
+    const guessScores = _scoresForGuesses(guesses, songs);
     const correctGuesses = guesses.filter((g) => guessScores[g.id]);
     await prisma.$transaction(
       correctGuesses.map((guess) =>
@@ -147,7 +147,20 @@ export async function scoreGuesses(
   }
 }
 
-function scoresForGuesses(guesses: Guess[], songs: SongInstance[]): Record<string, number> {
+/**
+ * Calculates the points for each guess based on the provided song list.
+ * Currently, points are calculated based on the instantaneous points
+ * of each song, and whether it is a matching encore (+3)
+ *
+ * NB: since we can have varying scores for a particular song over time,
+ * we should be also be storing the instantaneous points and other
+ * instrumentation (current gap etc.)
+ *
+ * @param guesses the guesses to score
+ * @param songs the instances of songs played (the setlist)
+ * @returns a record mapping each guess to its score
+ */
+function _scoresForGuesses(guesses: Guess[], songs: SongInstance[]): Record<string, number> {
   let guessScores: Record<string, number> = {};
   const songData = Object.fromEntries(songs.map((song) => [song.id, song]));
   for (let guess of guesses) {
