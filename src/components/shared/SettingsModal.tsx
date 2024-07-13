@@ -1,6 +1,6 @@
-import React from 'react';
-import { ThemeColor, useThemeContext } from '@/store/theme.store';
 import CloseIcon from '@/media/CloseIcon.svg';
+import { ThemeColor, useThemeContext } from '@/store/theme.store';
+import React from 'react';
 import DropdownInput from './DropdownInput';
 
 interface SettingsModalProps {

@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { ResponseStatus } from '@/types/main';
 import { getAllShows, getShowsForRun } from '@/services/show.service';
+import { ResponseStatus } from '@/types/main';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

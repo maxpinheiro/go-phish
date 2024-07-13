@@ -1,5 +1,5 @@
-import React from 'react';
 import { User } from '@prisma/client';
+import React from 'react';
 
 interface AboutMeProps {
   user: User;

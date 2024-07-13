@@ -1,10 +1,10 @@
-import { Color, ResponseStatus, AvatarConfig, AvatarType, SignupResponse } from '@/types/main';
-import { User, Prisma } from '@prisma/client';
+import { AvatarType, ResponseStatus } from '@/types/main';
+import { Prisma, User } from '@prisma/client';
 import superjson from 'superjson';
 //import { testUsers } from "../testData/users";
 
-import prisma from '@/services/db.service';
 import { UserWithGuesses } from '@/models/user.model';
+import prisma from '@/services/db.service';
 
 // TODO: protect certain fields (password, email)
 

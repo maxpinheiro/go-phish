@@ -1,10 +1,10 @@
-import { Action, createSlice } from '@reduxjs/toolkit';
-import { AppState } from './app.store';
-import { HYDRATE } from 'next-redux-wrapper';
-import { User } from '@prisma/client';
-import { AvatarConfig, ResponseStatus } from '@/types/main';
 import { updateUser } from '@/client/user.client';
 import { defaultAvatar } from '@/models/user.model';
+import { AvatarConfig, ResponseStatus } from '@/types/main';
+import { User } from '@prisma/client';
+import { createSlice } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
+import { AppState } from './app.store';
 
 // Type for our state
 export interface ProfileState {

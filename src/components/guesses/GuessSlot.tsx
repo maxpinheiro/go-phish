@@ -1,8 +1,8 @@
+import CloseIcon from '@/media/CloseIcon.svg';
+import { useThemeContext } from '@/store/theme.store';
 import { Guess, Song } from '@prisma/client';
 import React from 'react';
-import CloseIcon from '@/media/CloseIcon.svg';
 import SongInput from './SongInput';
-import { useThemeContext } from '@/store/theme.store';
 
 interface GuessSlotProps {
   guess: Guess | null;

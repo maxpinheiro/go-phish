@@ -1,6 +1,6 @@
-import React from 'react';
-import Head from 'next/head';
 import ForgotPasswordContainer from '@/components/auth/forgotPassword/ForgotPasswordContainer';
+import Head from 'next/head';
+import React from 'react';
 
 const ForgotPassword: React.FC = ({}) => {
   return (

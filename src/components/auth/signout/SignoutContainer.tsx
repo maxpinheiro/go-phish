@@ -1,8 +1,7 @@
-import React from 'react';
-import Head from 'next/head';
+import { useThemeContext } from '@/store/theme.store';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useThemeContext } from '@/store/theme.store';
+import React from 'react';
 
 const SignOutContainer: React.FC = () => {
   const router = useRouter();

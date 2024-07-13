@@ -1,12 +1,9 @@
 import SongInput from '@/components/guesses/SongInput';
 import LoadingOverlay from '@/components/shared/LoadingOverlay';
 import { getSongById } from '@/services/phishnet.service';
-import { getAllSongs } from '@/services/song.service';
 import { useThemeContext } from '@/store/theme.store';
 import { PhishNetSong, ResponseStatus } from '@/types/main';
 import { Song } from '@prisma/client';
-import { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 

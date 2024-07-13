@@ -1,6 +1,6 @@
-import React from 'react';
-import { useThemeContext } from '@/store/theme.store';
 import CheckIcon from '@/media/CheckIcon.svg';
+import { useThemeContext } from '@/store/theme.store';
+import React from 'react';
 
 interface CheckboxInputProps {
   checked: boolean;

@@ -1,11 +1,11 @@
-import React from 'react';
-import Head from 'next/head';
-import { GetServerSideProps } from 'next';
-import ShowsContainer from '@/components/shows/ShowsContainer';
 import ErrorMessage from '@/components/shared/ErrorMessage';
+import ShowsContainer from '@/components/shows/ShowsContainer';
 import { getAllShowsWithVenuesAndRuns } from '@/services/show.service';
 import { ShowGroupRun, ShowGroupVenue, ShowGroupYear } from '@/types/main';
 import { organizeShowsByRun, organizeShowsByVenue, organizeShowsByYear } from '@/utils/show.util';
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import React from 'react';
 
 interface ShowsProps {
   showsByRun: ShowGroupRun[];

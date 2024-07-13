@@ -1,8 +1,8 @@
 import { AvatarConfig, AvatarType } from '@/types/main';
 import React from 'react';
 import { DonutAvatar, DonutAvatarSized } from './DonutAvatar';
-import { UserAvatar, UserAvatarSized } from './UserAvatar';
 import { FishAvatar, FishAvatarSized } from './FishAvatar';
+import { UserAvatar, UserAvatarSized } from './UserAvatar';
 
 interface AvatarProps {
   type: AvatarType;

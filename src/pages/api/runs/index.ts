@@ -1,5 +1,5 @@
+import { getAllRuns } from '@/services/run.service';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getAllRuns, getRunById } from '@/services/run.service';
 
 const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

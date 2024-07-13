@@ -1,11 +1,11 @@
 import { ShowWithVenueAndRun } from '@/models/show.model';
-import React, { useState } from 'react';
-import ShowSelector from './ShowSelector';
 import { ShowGroupRun } from '@/types/main';
-import BackArrow from '../shared/BackArrow';
 import { Song } from '@prisma/client';
-import ShowEditor from './ShowEditor';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import BackArrow from '../shared/BackArrow';
+import ShowEditor from './ShowEditor';
+import ShowSelector from './ShowSelector';
 
 interface ShowModeratorProps {
   shows: ShowGroupRun[];

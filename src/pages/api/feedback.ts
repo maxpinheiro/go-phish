@@ -1,5 +1,5 @@
+import { sendFeedbackEmail } from '@/services/mail.service';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { sendFeedbackEmail, sendSongSuggestEmail } from '@/services/mail.service';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

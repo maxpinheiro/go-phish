@@ -1,6 +1,6 @@
-import React from 'react';
-import Head from 'next/head';
 import SignOutContainer from '@/components/auth/signout/SignoutContainer';
+import Head from 'next/head';
+import React from 'react';
 
 const SignOutPage: React.FC = () => {
   return (

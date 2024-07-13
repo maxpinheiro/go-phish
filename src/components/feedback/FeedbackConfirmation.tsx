@@ -1,6 +1,5 @@
-import React from 'react';
-import { useThemeContext } from '@/store/theme.store';
 import CheckIcon from '@/media/CheckIcon.svg';
+import { useThemeContext } from '@/store/theme.store';
 
 const FeedbackConfirmation = ({ resubmit }: { resubmit: () => void }) => {
   const { color } = useThemeContext();

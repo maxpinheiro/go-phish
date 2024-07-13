@@ -1,6 +1,6 @@
+import { getUserById } from '@/services/user.service';
 import { ResponseStatus } from '@/types/main';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getUserById, updateUserAvatar } from '@/services/user.service';
 
 const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

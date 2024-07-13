@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { ResponseStatus } from '@/types/main';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { deleteGuess, getGuessById } from '@/services/guess.service';
 

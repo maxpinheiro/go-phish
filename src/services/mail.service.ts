@@ -1,8 +1,8 @@
-import { SendVerificationRequestParams } from 'next-auth/providers';
-import { createTransport } from 'nodemailer';
-import verificationRequestMailer from '@/mailers/verification_request';
 import feedbackMailer from '@/mailers/feedback';
 import resetPasswordMailer from '@/mailers/resetPassword.mailer';
+import verificationRequestMailer from '@/mailers/verification_request';
+import { SendVerificationRequestParams } from 'next-auth/providers';
+import { createTransport } from 'nodemailer';
 
 /**
  * Sends an sign-in email with a magic link.

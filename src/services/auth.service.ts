@@ -2,8 +2,8 @@ import { ResponseStatus } from '@/types/main';
 import { randomBytes } from 'crypto';
 
 import prisma from '@/services/db.service';
-import moment from 'moment-timezone';
 import { VerificationToken } from '@prisma/client';
+import moment from 'moment-timezone';
 import superjson from 'superjson';
 
 export async function createVerificationTokenForUser(

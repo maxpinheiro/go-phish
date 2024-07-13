@@ -1,5 +1,4 @@
-import { AvatarConfig, DateString, ResponseStatus, SetlistSong } from '@/types/main';
-import { User } from '@prisma/client';
+import { DateString, ResponseStatus, SetlistSong } from '@/types/main';
 import { apiRoot } from './user.client';
 
 export const getSetlistForDate = (

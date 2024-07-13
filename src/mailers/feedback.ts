@@ -1,5 +1,3 @@
-import { Theme } from 'next-auth';
-
 /** Email Text body (fallback for email clients that don't render HTML, e.g. feature phones) */
 function subject(feedback: string, contactInfo?: string) {
   return 'GoPhish Feedback Submitted';

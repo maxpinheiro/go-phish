@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
+import { resetPassword } from '@/client/auth.client';
 import ResetPasswordForm from '@/components/auth/resetPassword/ResetPasswordForm';
 import LoadingOverlay from '@/components/shared/LoadingOverlay';
-import { resetPassword } from '@/client/auth.client';
 import { ResponseStatus } from '@/types/main';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface ResetPasswordContainerProps {
   token: string;

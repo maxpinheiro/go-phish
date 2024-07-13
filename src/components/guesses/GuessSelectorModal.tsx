@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import CloseIcon from '@/media/CloseIcon.svg';
 import { useThemeContext } from '@/store/theme.store';
 import { Guess } from '@prisma/client';
+import React, { useState } from 'react';
 import CheckboxInput from '../shared/CheckboxInput';
 
 export type PreviousGuess = Guess & {

@@ -1,6 +1,6 @@
-import React from 'react';
 import EnvelopeOpenIcon from '@/media/EnvelopeOpen.svg';
 import { useThemeContext } from '@/store/theme.store';
+import React from 'react';
 
 interface ForgotPasswordConfirmationProps {
   emailRecipient: string;

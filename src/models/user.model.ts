@@ -1,5 +1,5 @@
-import { Guess, User } from '@prisma/client';
 import { AvatarConfig, AvatarType } from '@/types/main';
+import { Guess, User } from '@prisma/client';
 
 export type UserWithGuesses = User & {
   guesses: Guess[];

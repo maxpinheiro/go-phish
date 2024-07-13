@@ -1,15 +1,10 @@
-import { scoreGuessesForShow } from '@/client/guess.client';
 import { ShowWithVenueAndRun } from '@/models/show.model';
-import { SetlistSong } from '@/types/main';
-import moment from 'moment-timezone';
-import React, { useState } from 'react';
-import toast from 'react-hot-toast';
-import SetlistBuilder from './SetlistBuilder';
-import { Song } from '@prisma/client';
-import LoadingOverlay from '../shared/LoadingOverlay';
 import { useThemeContext } from '@/store/theme.store';
-import BackArrow from '../shared/BackArrow';
 import { formatShowDate } from '@/utils/show.util';
+import { Song } from '@prisma/client';
+import React, { useState } from 'react';
+import BackArrow from '../shared/BackArrow';
+import SetlistBuilder from './SetlistBuilder';
 
 interface ShowEditorProps {
   show: ShowWithVenueAndRun;

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { ShowGroupRun, ShowGroupYear, ShowGroupVenue } from '@/types/main';
-import { toTitleCase } from '@/utils/utils';
-import ShowList from '@/components/shows/ShowList';
 import RadioGroup, { RadioOption } from '@/components/shared/RadioGroup';
+import ShowList from '@/components/shows/ShowList';
+import { ShowGroupRun, ShowGroupVenue, ShowGroupYear } from '@/types/main';
+import { toTitleCase } from '@/utils/utils';
+import React, { useState } from 'react';
 
 export type FilterType = 'run' | 'year' | 'venue';
 const filterTypes: FilterType[] = ['run', 'year', 'venue'];

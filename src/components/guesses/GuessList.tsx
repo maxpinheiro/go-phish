@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import DropDownIcon from '@/media/Dropdown.svg';
+import { useThemeContext } from '@/store/theme.store';
+import { AvatarConfig } from '@/types/main';
 import { OrganizedGuesses } from '@/utils/guess.util';
 import { Show } from '@prisma/client';
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import React, { useState } from 'react';
 import AvatarIcon from '../shared/Avatar/AvatarIcon';
-import { AvatarConfig } from '@/types/main';
 import ToggleDropdown from '../shared/ToggleDropdown';
-import { useThemeContext } from '@/store/theme.store';
 
 interface GuessListProps {
   organizedGuesses: OrganizedGuesses;

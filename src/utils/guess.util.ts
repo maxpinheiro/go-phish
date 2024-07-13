@@ -1,6 +1,6 @@
+import { PreviousGuess } from '@/components/guesses/GuessSelectorModal';
 import { Guess, Run, Show, User } from '@prisma/client';
 import { guessSorter } from './utils';
-import { PreviousGuess } from '@/components/guesses/GuessSelectorModal';
 
 export type OrganizedRunItem = { run: Run; points: number; scores: Guess[] };
 

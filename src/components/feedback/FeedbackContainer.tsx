@@ -1,10 +1,10 @@
+import { suggestFeedback } from '@/client/feedback.client';
+import FeedbackConfirmation from '@/components/feedback/FeedbackConfirmation';
+import FeedbackForm from '@/components/feedback/FeedbackForm';
+import LoadingOverlay from '@/components/shared/LoadingOverlay';
+import { ResponseStatus } from '@/types/main';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import FeedbackForm from '@/components/feedback/FeedbackForm';
-import FeedbackConfirmation from '@/components/feedback/FeedbackConfirmation';
-import LoadingOverlay from '@/components/shared/LoadingOverlay';
-import { suggestFeedback } from '@/client/feedback.client';
-import { ResponseStatus } from '@/types/main';
 
 const FeedbackContainer: React.FC = () => {
   const [submittedFeedback, setSubmittedFeedback] = useState(false);

@@ -1,6 +1,6 @@
+import { shiftColorValue } from '@/utils/color.util';
 import React from 'react';
 import { SVGProps } from './LeftArrow.svg';
-import { shiftColorValue } from '@/utils/color.util';
 
 const NotFoundIcon: React.FC<SVGProps & { hexColor?: string }> = ({
   width = 192,

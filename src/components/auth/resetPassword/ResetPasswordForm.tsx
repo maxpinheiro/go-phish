@@ -1,7 +1,7 @@
+import InputField from '@/components/shared/InputField';
+import { useThemeContext } from '@/store/theme.store';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useThemeContext } from '@/store/theme.store';
-import InputField from '@/components/shared/InputField';
 
 interface ResetPasswordFormProps {
   submit: (password: string) => void;

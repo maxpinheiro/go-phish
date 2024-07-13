@@ -1,11 +1,11 @@
+import BackArrow from '@/components/shared/BackArrow';
+import RunBlock from '@/components/shared/RunBlock';
 import NotFoundIcon from '@/media/404.svg';
-import Link from 'next/link';
-import React from 'react';
 import { RunWithVenue } from '@/models/run.model';
 import { ShowWithVenue } from '@/models/show.model';
-import RunBlock from '@/components/shared/RunBlock';
-import BackArrow from '@/components/shared/BackArrow';
 import { useThemeContext } from '@/store/theme.store';
+import Link from 'next/link';
+import React from 'react';
 
 export interface TodayContainerProps {
   notFound: boolean;

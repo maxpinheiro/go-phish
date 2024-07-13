@@ -1,12 +1,12 @@
-import { ResponseStatus } from '@/types/main';
+import ErrorMessage from '@/components/shared/ErrorMessage';
+import TodayContainer, { TodayContainerProps } from '@/components/shows/TodayContainer';
+import { getRunWithVenue } from '@/services/run.service';
 import { getTodaysShow } from '@/services/show.service';
+import { ResponseStatus } from '@/types/main';
+import moment from 'moment-timezone';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import { getRunWithVenue } from '@/services/run.service';
-import moment from 'moment-timezone';
-import ErrorMessage from '@/components/shared/ErrorMessage';
-import TodayContainer, { TodayContainerProps } from '@/components/shows/TodayContainer';
 
 interface TodayPageProps extends TodayContainerProps {
   error?: string;

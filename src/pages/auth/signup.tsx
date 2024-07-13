@@ -1,6 +1,6 @@
-import React from 'react';
-import Head from 'next/head';
 import SignUpContainer from '@/components/auth/signup/SignupContainer';
+import Head from 'next/head';
+import React from 'react';
 
 const SignUpPage: React.FC = () => {
   return (

@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { AvatarPart } from './AvatarEditor';
-import { AvatarConfig, AvatarType, Color } from '@/types/main';
-import { avatarParts } from './AvatarEditor';
-import { avatarColorLabels } from '@/models/user.model';
-import { toTitleCase } from '@/utils/utils';
-import { foregroundColor, randomHex } from '@/utils/color.util';
 import CheckIcon from '@/media/CheckIcon.svg';
 import EditIcon from '@/media/EditIcon.svg';
 import ShuffleIcon from '@/media/ShuffleIcon.svg';
+import { avatarColorLabels } from '@/models/user.model';
+import { AvatarConfig, Color } from '@/types/main';
+import { foregroundColor, randomHex } from '@/utils/color.util';
+import { toTitleCase } from '@/utils/utils';
+import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
+import { AvatarPart, avatarParts } from './AvatarEditor';
 
 interface AvatarColorControlsProps {
   avatarConfig: AvatarConfig;

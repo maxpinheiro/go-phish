@@ -1,16 +1,16 @@
+import RunScoreContainer, { RunScoreContainerProps } from '@/components/scores/run/RunScoreContainer';
 import ErrorMessage from '@/components/shared/ErrorMessage';
-import { ResponseStatus } from '@/types/main';
 import { getGuessesForRun } from '@/services/guess.service';
 import { getRunWithVenue } from '@/services/run.service';
 import { getShowsForRunWithVenue } from '@/services/show.service';
 import { getUsersByIds } from '@/services/user.service';
+import { ResponseStatus } from '@/types/main';
 import { rankScoresByUser } from '@/utils/guess.util';
 import { organizeArrayByField, parseObj } from '@/utils/utils';
 import { Guess } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import RunScoreContainer, { RunScoreContainerProps } from '@/components/scores/run/RunScoreContainer';
 
 type RunScorePageProps = Partial<RunScoreContainerProps> & {
   error?: string;

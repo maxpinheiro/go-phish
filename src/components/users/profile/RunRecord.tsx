@@ -1,11 +1,10 @@
 import DropDownIcon from '@/media/Dropdown.svg';
+import { useThemeContext } from '@/store/theme.store';
 import { OrganizedRunItem } from '@/utils/guess.util';
 import { toTitleCase } from '@/utils/utils';
-import { Guess, Run } from '@prisma/client';
 import moment from 'moment';
 import React, { useState } from 'react';
 import ToggleDropdown from '../shared/ToggleDropdown';
-import { useThemeContext } from '@/store/theme.store';
 
 interface RunRecordProps {
   runRecord: OrganizedRunItem[];

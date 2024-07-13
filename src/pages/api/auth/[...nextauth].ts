@@ -1,11 +1,11 @@
+import prisma from '@/services/db.service';
+import { sendVerificationRequest } from '@/services/mail.service';
+import { attemptLogin, getUserByEmail } from '@/services/user.service';
+import { AvatarConfig, ResponseStatus } from '@/types/main';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import EmailProvider from 'next-auth/providers/email';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { attemptLogin, getUserByEmail } from '@/services/user.service';
-import { AvatarConfig, ResponseStatus } from '@/types/main';
-import prisma from '@/services/db.service';
-import { sendVerificationRequest } from '@/services/mail.service';
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,

@@ -1,9 +1,9 @@
-import React from 'react';
-import Head from 'next/head';
-import { useSession } from 'next-auth/react';
 import ErrorMessage from '@/components/shared/ErrorMessage';
 import { useThemeContext } from '@/store/theme.store';
+import { useSession } from 'next-auth/react';
+import Head from 'next/head';
 import Link from 'next/link';
+import React from 'react';
 
 const Admin: React.FC = () => {
   const { data: session } = useSession();

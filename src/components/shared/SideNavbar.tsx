@@ -1,12 +1,12 @@
-import React from 'react';
-import { User as SessionUser } from 'next-auth';
-import { AvatarConfig } from '@/types/main';
-import { AvatarIconSized } from './Avatar/AvatarIcon';
-import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
 import { selectSideNavOpen, setSideNavOpen } from '@/store/settings.store';
-import { useRouter } from 'next/router';
 import { useThemeContext } from '@/store/theme.store';
+import { AvatarConfig } from '@/types/main';
+import { User as SessionUser } from 'next-auth';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AvatarIconSized } from './Avatar/AvatarIcon';
 import { NavLink } from './Navbar';
 
 interface SideNavbarProps {

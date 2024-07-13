@@ -1,9 +1,9 @@
+import InputField from '@/components/shared/InputField';
 import LoadingOverlay from '@/components/shared/LoadingOverlay';
 import { useThemeContext } from '@/store/theme.store';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import InputField from '@/components/shared/InputField';
 import toast from 'react-hot-toast';
 
 interface CredentialsLoginProps {

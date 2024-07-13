@@ -1,10 +1,10 @@
-import React from 'react';
-import Head from 'next/head';
+import Container, { OnboardingContainerProps } from '@/components/users/onboarding/OnboardingContainer';
+import { getUserById } from '@/services/user.service';
+import { AvatarConfig } from '@/types/main';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import { getUserById } from '@/services/user.service';
-import Container, { OnboardingContainerProps } from '@/components/users/onboarding/OnboardingContainer';
-import { AvatarConfig } from '@/types/main';
+import Head from 'next/head';
+import React from 'react';
 
 export const getServerSideProps: GetServerSideProps<OnboardingContainerProps> = async (context) => {
   const session = await getSession(context);

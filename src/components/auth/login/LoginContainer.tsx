@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import CredentialsLogin from '@/components/auth/login/CredentialsLogin';
 import EmailLogin from '@/components/auth/login/EmailLogin';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 type LoginType = 'credentials' | 'email';
 

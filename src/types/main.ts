@@ -1,5 +1,5 @@
-import { ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
-import { Show, User, Venue } from '@prisma/client';
+import { ShowWithVenueAndRun } from '@/models/show.model';
+import { Venue } from '@prisma/client';
 
 // main
 

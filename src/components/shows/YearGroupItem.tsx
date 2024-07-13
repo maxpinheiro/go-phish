@@ -1,9 +1,9 @@
+import { useThemeContext } from '@/store/theme.store';
 import { ShowGroupYear } from '@/types/main';
-import { dateToDateString, formatDateRange } from '@/utils/date.util';
+import { formatDateRange } from '@/utils/date.util';
+import { formatShowDate } from '@/utils/show.util';
 import React from 'react';
 import ShowLinks from './ShowLinks';
-import { formatShowDate } from '@/utils/show.util';
-import { useThemeContext } from '@/store/theme.store';
 
 interface YearGroupItemProps {
   idx: number;

@@ -1,6 +1,6 @@
+import FeedbackContainer from '@/components/feedback/FeedbackContainer';
 import Head from 'next/head';
 import React from 'react';
-import FeedbackContainer from '@/components/feedback/FeedbackContainer';
 
 const FeedbackPage: React.FC = () => {
   return (

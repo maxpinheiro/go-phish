@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import { useThemeContext } from '@/store/theme.store';
-import InputField from '@/components/shared/InputField';
-import Link from 'next/link';
-import LoadingOverlay from '@/components/shared/LoadingOverlay';
-import { signIn } from 'next-auth/react';
-import { isValidEmail } from '@/utils/utils';
 import { attemptSignupClient } from '@/client/user.client';
+import InputField from '@/components/shared/InputField';
+import LoadingOverlay from '@/components/shared/LoadingOverlay';
+import { useThemeContext } from '@/store/theme.store';
 import { ResponseStatus } from '@/types/main';
+import { isValidEmail } from '@/utils/utils';
+import { signIn } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const SignUpContainer: React.FC = () => {

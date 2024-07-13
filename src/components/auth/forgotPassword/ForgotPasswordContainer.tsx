@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import toast from 'react-hot-toast';
+import { requestPasswordResetEmail } from '@/client/auth.client';
 import ForgotPasswordConfirmation from '@/components/auth/forgotPassword/ForgotPasswordConfirmation';
 import ForgotPasswordForm from '@/components/auth/forgotPassword/ForgotPasswordForm';
 import LoadingOverlay from '@/components/shared/LoadingOverlay';
 import { ResponseStatus } from '@/types/main';
 import { isValidEmail } from '@/utils/utils';
-import { requestPasswordResetEmail } from '@/client/auth.client';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const ForgotPasswordContainer: React.FC = ({}) => {
   const [loading, setLoading] = useState(false);
