@@ -1,6 +1,5 @@
 import LeaderboardInfo from '@/components/scores/Leaderboard';
 import { RunInfo } from '@/components/shared/RunInfo';
-import BackArrow from '@/components/shared/BackArrow';
 import { RankedUserScores, rankedUserScoresForNight } from '@/utils/guess.util';
 import { Show } from '@prisma/client';
 import Link from 'next/link';
@@ -10,6 +9,8 @@ import { RunWithVenue } from '@/models/run.model';
 import { ShowWithVenue } from '@/models/show.model';
 import RadioGroup, { RadioOption } from '@/components/shared/RadioGroup';
 import { useThemeContext } from '@/store/theme.store';
+import TitleBar from '@/components/shared/TitleBar';
+import BackLink from '@/components/shared/BackLink';
 
 export interface RunScoreContainerProps {
   run: RunWithVenue;
@@ -28,6 +29,7 @@ const RunScoreContainer: React.FC<RunScoreContainerProps> = ({ run, shows, ranke
   const organizedScores = isNaN(selectedNight)
     ? rankedUserScores
     : rankedUserScoresForNight(rankedUserScores, shows, selectedNight);
+  const guessesUrl = `/guesses/run/${run.id}${nightShow ? `?night=${nightShow.runNight}` : ''}`;
 
   const chooseNight = (night: number | string) => {
     if (night === 'total') {
@@ -46,29 +48,16 @@ const RunScoreContainer: React.FC<RunScoreContainerProps> = ({ run, shows, ranke
 
   return (
     <div id="leaderboard-page">
-      <div className="flex flex-col items-center pb-4">
-        <div className="flex justify-between items-center w-full max-w-500 p-4">
-          <div className="flex items-center space-x-2 ">
-            <BackArrow
-              width={16}
-              height={16}
-              link="/shows"
-              className="cursor-pointer flex items-center space-x-2"
-              svgClass="fill-black dark:fill-white"
-            >
-              <p className="">Shows</p>
-            </BackArrow>
-          </div>
-          <p className="text-2xl font-light">Leaderboard</p>
-          <div className="">
-            <Link
-              href={`/guesses/run/${run.id}${nightShow ? `?night=${nightShow.runNight}` : ''}`}
-              className={`text-${color} my-2.5`}
-            >
+      <div className="flex flex-col items-center pb-10">
+        <TitleBar
+          left={<BackLink link="/shows" text="Shows" />}
+          center="Leaderboard"
+          right={
+            <Link href={guessesUrl} className={`text-${color}`}>
               All Guesses
             </Link>
-          </div>
-        </div>
+          }
+        />
         <RunInfo run={run} large showLocation />
         <RadioGroup
           options={nightRadioOptions}
