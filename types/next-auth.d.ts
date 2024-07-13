@@ -1,6 +1,6 @@
-import NextAuth, { Account, DefaultSession } from 'next-auth';
-import { User as UserModel } from '@prisma/client';
 import { AvatarConfig } from '@/types/main';
+import { User as UserModel } from '@prisma/client';
+import { Account, DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
   /**

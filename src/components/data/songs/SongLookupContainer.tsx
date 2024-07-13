@@ -1,25 +1,15 @@
 import SongInput from '@/components/guesses/SongInput';
 import LoadingOverlay from '@/components/shared/LoadingOverlay';
 import { getSongById } from '@/services/phishnet.service';
-import { getAllSongs } from '@/services/song.service';
 import { useThemeContext } from '@/store/theme.store';
 import { PhishNetSong, ResponseStatus } from '@/types/main';
 import { Song } from '@prisma/client';
-import { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
-interface SongLookupPageProps {
+export interface SongLookupContainerProps {
   allSongs: Song[];
 }
-
-export const getServerSideProps: GetServerSideProps<SongLookupPageProps> = async () => {
-  const allSongs = await getAllSongs();
-  return {
-    props: { allSongs },
-  };
-};
 
 /**
  * 
@@ -50,7 +40,7 @@ const SongInfoList = ({ song, data }: { song: Song; data: PhishNetSong }) => (
   </>
 );
 
-const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
+const SongLookupContainer: React.FC<SongLookupContainerProps> = ({ allSongs }) => {
   const [loading, setLoading] = useState(false);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [songData, setSongData] = useState<PhishNetSong | null>(null);
@@ -68,7 +58,6 @@ const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
       setLoading(false);
       return;
     }
-    console.log(songData);
     setSongData(songData);
     setSelectedSong(song);
     setLoading(false);
@@ -76,9 +65,6 @@ const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <Head>
-        <title>Song Lookup | Go Phish</title>
-      </Head>
       <p className="text-title-regular my-5">Song Lookup</p>
       <div className="w-3/4 mb-5">
         <SongInput allSongs={allSongs} selectSong={selectSong} selectedSong={null} />
@@ -94,4 +80,4 @@ const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
   );
 };
 
-export default SongLookupPage;
+export default SongLookupContainer;

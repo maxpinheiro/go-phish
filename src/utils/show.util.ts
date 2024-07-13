@@ -1,8 +1,8 @@
-import { ShowGroupRun, ShowGroupYear, ShowGroupVenue } from '@/types/main';
-import { Run, Venue } from '@prisma/client';
-import { dateToDateString } from './date.util';
 import { ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
+import { ShowGroupRun, ShowGroupVenue, ShowGroupYear } from '@/types/main';
+import { Run, Venue } from '@prisma/client';
 import moment from 'moment';
+import { dateToDateString } from './date.util';
 
 export const formatShowDate = (show: ShowWithVenue, format: string): string => {
   return moment(show.timestamp).tz(show.venue.tz_id).format(format);

@@ -1,9 +1,9 @@
 import { ResponseStatus } from '@/types/main';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { getUserByEmail } from '../../services/user.service';
 import { createVerificationTokenForUser } from '@/services/auth.service';
 import { sendPasswordResetEmail } from '@/services/mail.service';
+import { getUserByEmail } from '../../services/user.service';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

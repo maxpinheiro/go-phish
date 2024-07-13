@@ -1,11 +1,11 @@
+import InputField from '@/components/shared/InputField';
+import LoadingOverlay from '@/components/shared/LoadingOverlay';
+import EnvelopeOpenIcon from '@/media/EnvelopeOpen.svg';
 import { useThemeContext } from '@/store/theme.store';
+import { isValidEmail } from '@/utils/utils';
 import { signIn } from 'next-auth/react';
 import React, { useState } from 'react';
-import InputField from '@/components/shared/InputField';
-import { isValidEmail } from '@/utils/utils';
-import LoadingOverlay from '@/components/shared/LoadingOverlay';
 import toast from 'react-hot-toast';
-import EnvelopeOpenIcon from '@/media/EnvelopeOpen.svg';
 
 interface EmailLoginProps {
   onLogin: () => void;

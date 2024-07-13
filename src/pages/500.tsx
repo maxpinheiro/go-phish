@@ -1,6 +1,5 @@
-import React from 'react';
-import Head from 'next/head';
 import { useThemeContext } from '@/store/theme.store';
+import Head from 'next/head';
 
 export default function Custom500Page() {
   const { color } = useThemeContext();

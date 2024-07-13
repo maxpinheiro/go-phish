@@ -1,8 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { ResponseStatus } from '@/types/main';
 import { getGuessesForShow, scoreGuesses } from '@/services/guess.service';
 import { getSongsByIds } from '@/services/song.service';
-import { Song } from '@prisma/client';
+import { ResponseStatus } from '@/types/main';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

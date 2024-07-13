@@ -1,11 +1,11 @@
 //import { testShows } from "../testData/shows";
-import { ResponseStatus, DateString } from '@/types/main';
-import { Run, Show } from '@prisma/client';
+import { DateString, ResponseStatus } from '@/types/main';
+import { Show } from '@prisma/client';
 import moment from 'moment-timezone';
 import superjson from 'superjson';
 
-import prisma from '@/services/db.service';
 import { ShowOrderByQuery, ShowQuery, ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
+import prisma from '@/services/db.service';
 
 //let shows: Show.Type[] = [...testShows];
 

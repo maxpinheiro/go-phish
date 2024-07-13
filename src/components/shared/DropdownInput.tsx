@@ -1,6 +1,6 @@
 import DropDownIcon from '@/media/Dropdown.svg';
 import { useThemeContext } from '@/store/theme.store';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export type Option<T> = {
   label: string;

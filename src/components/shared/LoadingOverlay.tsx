@@ -1,7 +1,7 @@
-import React from 'react';
-import LoadingSpinner from './LoadingSpinner';
 import { useThemeContext } from '@/store/theme.store';
 import { desaturateColor } from '@/utils/color.util';
+import React from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 interface LoadingOverlayProps {
   loadingMessage?: string;

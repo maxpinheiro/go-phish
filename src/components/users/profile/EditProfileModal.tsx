@@ -1,4 +1,6 @@
+import { updateUser } from '@/client/user.client';
 import CloseIcon from '@/media/CloseIcon.svg';
+import EditIcon from '@/media/EditIcon.svg';
 import {
   selectAvatar,
   selectBio,
@@ -13,19 +15,17 @@ import {
   setName,
   setUpdatedUser,
 } from '@/store/profile.store';
+import { useThemeContext } from '@/store/theme.store';
+import { ResponseStatus } from '@/types/main';
+import { desaturateColor } from '@/utils/color.util';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { AvatarIconSized } from '../shared/Avatar/AvatarIcon';
-import EditIcon from '@/media/EditIcon.svg';
-import Modal from 'react-modal';
-import AvatarEditorModal from './AvatarEditor/AvatarEditor';
-import { useThemeContext } from '@/store/theme.store';
-import { updateUser } from '@/client/user.client';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import { desaturateColor } from '@/utils/color.util';
-import { ResponseStatus } from '@/types/main';
 import InputField from '../shared/InputField';
-import toast from 'react-hot-toast';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import AvatarEditorModal from './AvatarEditor/AvatarEditor';
 
 Modal.setAppElement('#__next');
 

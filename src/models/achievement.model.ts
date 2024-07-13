@@ -18,8 +18,7 @@ export const achievements: Achievement[] = [
   {
     id: 'perfect-score',
     name: 'Perfect Score',
-    description:
-      'Correctly guess all songs on a single night (including the encore in the correct position).',
+    description: 'Correctly guess all songs on a single night (including the encore in the correct position).',
   },
   {
     id: 'triple-nipple',

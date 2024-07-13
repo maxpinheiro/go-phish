@@ -1,5 +1,3 @@
-import { SongTag } from '@/types/main';
-
 // const songsWithTags: Record<string, SongTag[]> = {
 //   '2001': ['number'],
 //   '46 Days': ['number'],

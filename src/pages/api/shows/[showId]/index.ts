@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { getShowById } from '@/services/show.service';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

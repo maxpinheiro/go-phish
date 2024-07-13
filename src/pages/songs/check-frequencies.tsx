@@ -1,14 +1,11 @@
-import ErrorMessage from '@/components/shared/ErrorMessage';
 import { scrapeSongFrequency } from '@/services/phishnet.service';
 import { getAllSongs } from '@/services/song.service';
 import { useThemeContext } from '@/store/theme.store';
 import { ResponseStatus } from '@/types/main';
-import { setDifference } from '@/utils/utils';
-import { Show, Song } from '@prisma/client';
+import { Song } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import Head from 'next/head';
-import React, { useState } from 'react';
+import React from 'react';
 
 const zip = <A, B>(a: A[], b: B[]): [A, B][] => a.map((k, i) => [k, b[i]]);
 

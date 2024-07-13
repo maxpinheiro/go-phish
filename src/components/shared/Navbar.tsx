@@ -1,21 +1,16 @@
 import MoonIcon from '@/media/MoonIcon.svg';
 import SunIcon from '@/media/SunIcon.svg';
-import BarsIcon from '@/media/BarsIcon.svg';
-import CloseIcon from '@/media/CloseIcon.svg';
+import { useThemeContext } from '@/store/theme.store';
+import { User as SessionUser } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
-import { User as SessionUser } from 'next-auth';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectSideNavOpen, setSideNavOpen } from '@/store/settings.store';
-import SideNavbar from './SideNavbar';
 import NavMenu from './NavMenu';
-import { ThemeColor, useThemeContext } from '@/store/theme.store';
-import { useNavbarContext } from '@/store/navbar.store';
 import SettingsModal from './SettingsModal';
+import SideNavbar from './SideNavbar';
 
 Modal.setAppElement('#__next');
 
@@ -95,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
               <Link href={`/users/${currentUserName}`}>{currentUserName}</Link>
             ) : (
               <>
-                <Link href={`/api/auth/signin?callbackUrl=${router.asPath || '/shows'}`}>Login</Link>
+                <Link href={`/auth/signin?callbackUrl=${router.asPath || '/shows'}`}>Login</Link>
                 <Link href={'/auth/signup'}>Signup</Link>
               </>
             )}

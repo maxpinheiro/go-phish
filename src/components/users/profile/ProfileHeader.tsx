@@ -1,10 +1,10 @@
+import { defaultAvatar } from '@/models/user.model';
 import { AvatarConfig } from '@/types/main';
 import { User } from '@prisma/client';
 import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { AvatarIconSized } from '../shared/Avatar/AvatarIcon';
 import ProfileControls from './ProfileControls';
-import { defaultAvatar } from '@/models/user.model';
 
 interface ProfileHeaderProps {
   user: User;

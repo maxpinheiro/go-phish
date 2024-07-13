@@ -1,12 +1,10 @@
+import { useThemeContext } from '@/store/theme.store';
 import { ShowGroupVenue } from '@/types/main';
-import { dateToDateString, formatDateRange } from '@/utils/date.util';
+import { formatDateRange } from '@/utils/date.util';
+import { formatShowDate } from '@/utils/show.util';
 import { toTitleCase } from '@/utils/utils';
-import Link from 'next/link';
 import React from 'react';
 import ShowLinks from './ShowLinks';
-import moment from 'moment-timezone';
-import { formatShowDate } from '@/utils/show.util';
-import { useThemeContext } from '@/store/theme.store';
 
 interface VenueGroupItemProps {
   idx: number;

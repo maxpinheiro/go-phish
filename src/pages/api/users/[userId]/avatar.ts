@@ -1,6 +1,6 @@
+import { updateUserAvatar } from '@/services/user.service';
 import { ResponseStatus } from '@/types/main';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { updateUserAvatar } from '@/services/user.service';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]';
 

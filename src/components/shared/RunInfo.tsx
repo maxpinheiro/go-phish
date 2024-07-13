@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { dateToDateString, dateToString, formatDateRange } from '@/utils/date.util';
-import { Run, Show } from '@prisma/client';
-import { formatShowDate } from '@/utils/show.util';
-import { ShowWithVenue } from '@/models/show.model';
 import { RunWithVenue } from '@/models/run.model';
+import { ShowWithVenue } from '@/models/show.model';
+import { dateToDateString, formatDateRange } from '@/utils/date.util';
+import { formatShowDate } from '@/utils/show.util';
 
 interface RunInfoProps {
   run: RunWithVenue;

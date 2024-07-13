@@ -1,10 +1,10 @@
 import { suggestSong } from '@/client/song.client';
+import CloseIcon from '@/media/CloseIcon.svg';
+import { useThemeContext } from '@/store/theme.store';
 import { ResponseStatus } from '@/types/main';
 import React, { useState } from 'react';
-import CloseIcon from '@/media/CloseIcon.svg';
-import LoadingOverlay from '../shared/LoadingOverlay';
-import { useThemeContext } from '@/store/theme.store';
 import toast from 'react-hot-toast';
+import LoadingOverlay from '../shared/LoadingOverlay';
 
 interface SongSuggestModalProps {
   close: () => void;

@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import DropDownIcon from '@/media/Dropdown.svg';
 import AvatarIcon from '@/components/shared/Avatar/AvatarIcon';
-import { Guess, User } from '@prisma/client';
-import { AvatarConfig } from '@/types/main';
 import { defaultAvatar } from '@/models/user.model';
+import { AvatarConfig } from '@/types/main';
+import { Guess, User } from '@prisma/client';
 import Link from 'next/link';
+import React, { useState } from 'react';
 import ToggleDropdown from '../shared/ToggleDropdown';
 
 interface LeaderboardInfoProps {

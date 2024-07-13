@@ -1,5 +1,5 @@
+import { createUser, getAllUsers, getUserByEmail, getUsersByIds } from '@/services/user.service';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getAllUsers, createUser, getUsersByIds, getUserByEmail } from '@/services/user.service';
 
 const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

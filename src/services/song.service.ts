@@ -1,6 +1,6 @@
+import prisma from '@/services/db.service';
 import { ResponseStatus } from '@/types/main';
 import { Song } from '@prisma/client';
-import prisma from '@/services/db.service';
 import superjson from 'superjson';
 
 export async function getAllSongs(): Promise<Song[]> {

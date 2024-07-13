@@ -1,4 +1,4 @@
-import { Run, Venue, Prisma } from '@prisma/client';
+import { Prisma, Run, Venue } from '@prisma/client';
 
 export type RunQuery = Prisma.RunWhereInput;
 

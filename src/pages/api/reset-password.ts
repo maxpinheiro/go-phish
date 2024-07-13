@@ -1,8 +1,8 @@
+import { deleteVerificationToken, fetchVerificationToken } from '@/services/auth.service';
 import { ResponseStatus } from '@/types/main';
+import moment from 'moment-timezone';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getUserByEmail, updateUser } from '../../services/user.service';
-import { deleteVerificationToken, fetchVerificationToken } from '@/services/auth.service';
-import moment from 'moment-timezone';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

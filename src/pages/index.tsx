@@ -1,9 +1,9 @@
-import Head from 'next/head';
-import React from 'react';
 import HomeBackground from '@/media/Home.svg';
-import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import { useThemeContext } from '@/store/theme.store';
+import { useSession } from 'next-auth/react';
+import Head from 'next/head';
+import Link from 'next/link';
+import React from 'react';
 
 const HomePage: React.FC = ({}) => {
   const { data: session } = useSession();

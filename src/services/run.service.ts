@@ -3,8 +3,8 @@ import { ResponseStatus } from '@/types/main';
 import { Run } from '@prisma/client';
 import superjson from 'superjson';
 
-import prisma from '@/services/db.service';
 import { RunWithVenue } from '@/models/run.model';
+import prisma from '@/services/db.service';
 
 //let runs: Run.Type[] = [...testRuns];
 

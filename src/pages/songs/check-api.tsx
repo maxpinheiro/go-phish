@@ -2,8 +2,6 @@ import ErrorMessage from '@/components/shared/ErrorMessage';
 import { getAllSongs as getAllPhishNetSongs } from '@/services/phishnet.service';
 import { getAllSongs } from '@/services/song.service';
 import { PhishNetSong, ResponseStatus } from '@/types/main';
-import { setDifference } from '@/utils/utils';
-import { Show, Song } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';

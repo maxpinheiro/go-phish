@@ -1,17 +1,17 @@
 import { updateAvatarForUser } from '@/client/user.client';
+import CloseIcon from '@/media/CloseIcon.svg';
+import { avatarColorLabels } from '@/models/user.model';
+import { setUpdatedUser } from '@/store/profile.store';
+import { useThemeContext } from '@/store/theme.store';
 import { AvatarConfig, AvatarType, avatarTypes, ResponseStatus } from '@/types/main';
 import { desaturateColor, randomHex } from '@/utils/color.util';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
-import { AvatarIconSized } from '../../shared/Avatar/AvatarIcon';
-import CloseIcon from '@/media/CloseIcon.svg';
-import LoadingSpinner from '../../shared/LoadingSpinner';
-import { avatarColorLabels } from '@/models/user.model';
-import { useThemeContext } from '@/store/theme.store';
-import AvatarColorControls from './AvatarColorControls';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-import { setUpdatedUser } from '@/store/profile.store';
+import { AvatarIconSized } from '../../shared/Avatar/AvatarIcon';
+import LoadingSpinner from '../../shared/LoadingSpinner';
+import AvatarColorControls from './AvatarColorControls';
 
 interface AvatarEditorProps {
   initConfig: AvatarConfig;

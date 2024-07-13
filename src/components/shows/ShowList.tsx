@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { ShowGroupRun, ShowGroupYear, ShowGroupVenue } from '@/types/main';
 import { FilterType } from '@/pages/shows';
+import { ShowGroupRun, ShowGroupVenue, ShowGroupYear } from '@/types/main';
+import React, { useState } from 'react';
 import RunGroupItem from './RunGroupItem';
-import YearGroupItem from './YearGroupItem';
 import VenueGroupItem from './VenueGroupItem';
+import YearGroupItem from './YearGroupItem';
 
 interface ShowListProps {
   filterType: FilterType;
@@ -12,12 +12,7 @@ interface ShowListProps {
   showsByVenue: ShowGroupVenue[];
 }
 
-const ShowList: React.FC<ShowListProps> = ({
-  filterType,
-  showsByRun,
-  showsByYear,
-  showsByVenue,
-}) => {
+const ShowList: React.FC<ShowListProps> = ({ filterType, showsByRun, showsByYear, showsByVenue }) => {
   const [openRunId, setOpenRunId] = useState<string | number | null>(null);
   const [openShowId, setOpenShowId] = useState<number | 'total' | null>(null);
 

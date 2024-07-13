@@ -1,16 +1,15 @@
 import ErrorMessage from '@/components/shared/ErrorMessage';
-import { ResponseStatus } from '@/types/main';
+import ProfileContainer from '@/components/users/profile/ProfileContainer';
 import { getScoresForUser } from '@/services/guess.service';
 import { getRunsByIds } from '@/services/run.service';
-import { getUserById, getUserByUsername } from '@/services/user.service';
+import { getUserByUsername } from '@/services/user.service';
+import { ResponseStatus } from '@/types/main';
 import { OrganizedRunItem, organizeRunRecord } from '@/utils/guess.util';
 import { organizeArrayByField } from '@/utils/utils';
-import { Guess, Run, User } from '@prisma/client';
+import { Guess, User } from '@prisma/client';
 import { GetServerSideProps } from 'next';
-import React, { useEffect } from 'react';
 import Head from 'next/head';
-import Profile from '@/components/users/Profile';
-import { getSession } from 'next-auth/react';
+import React from 'react';
 
 interface ProfilePageProps {
   user?: User;
@@ -19,9 +18,6 @@ interface ProfilePageProps {
 }
 
 export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (context) => {
-  const session = await getSession(context);
-  console.log('profile page session');
-  console.log(session);
   const username = context.params?.username?.toString();
   if (!username) {
     return {
@@ -66,7 +62,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, scoreRecord, error }) =
         <title>{user.username} | Go Phish</title>
       </Head>
       <div className="flex flex-col items-center">
-        <Profile user={user} runRecord={scoreRecord} />
+        <ProfileContainer user={user} runRecord={scoreRecord} />
       </div>
     </>
   );

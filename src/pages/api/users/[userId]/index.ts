@@ -1,7 +1,7 @@
-import { ResponseStatus } from '@/types/main';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { getUserById, updateUser } from '@/services/user.service';
+import { ResponseStatus } from '@/types/main';
 import { Prisma } from '@prisma/client';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = (req: NextApiRequest, res: NextApiResponse<{}>) => {
   switch (req.method) {

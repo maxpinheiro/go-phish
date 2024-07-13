@@ -1,15 +1,15 @@
-import '@/styles/globals.css';
-import '@/styles/navmenu.styles.scss';
-import type { AppProps } from 'next/app';
-import { SessionProvider } from 'next-auth/react';
-import { Raleway } from 'next/font/google';
 import Navbar from '@/components/shared/Navbar';
-import { ThemeProvider } from 'next-themes';
-import { Provider } from 'react-redux';
 import { store } from '@/store/app.store';
 import { ThemeWrapper } from '@/store/theme.store';
-import Modal from 'react-modal';
+import '@/styles/globals.css';
+import '@/styles/navmenu.styles.scss';
+import { SessionProvider } from 'next-auth/react';
+import { ThemeProvider } from 'next-themes';
+import type { AppProps } from 'next/app';
+import { Raleway } from 'next/font/google';
 import { DefaultToastOptions, Toaster } from 'react-hot-toast';
+import Modal from 'react-modal';
+import { Provider } from 'react-redux';
 
 const raleway = Raleway({ subsets: ['latin'] });
 

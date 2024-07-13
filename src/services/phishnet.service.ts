@@ -1,8 +1,7 @@
-import { PhishNetSong, ResponseStatus, SetlistSong } from '@/types/main';
 import { PhishNet } from '@/models/phishnet.model';
-import * as cheerio from 'cheerio';
-import { toTitleCase } from '@/utils/utils';
+import { PhishNetSong, ResponseStatus, SetlistSong } from '@/types/main';
 import { Song } from '@prisma/client';
+import * as cheerio from 'cheerio';
 
 const apiRoot = 'https://api.phish.net/v5';
 const API_KEY = process.env.PHISHNET_API_KEY || '';

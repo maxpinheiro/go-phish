@@ -1,8 +1,8 @@
+import { useThemeContext } from '@/store/theme.store';
 import { ShowGroupRun } from '@/types/main';
 import { formatDateRange } from '@/utils/date.util';
 import React from 'react';
 import ShowLinks from './ShowLinks';
-import { useThemeContext } from '@/store/theme.store';
 
 /**
  * A collection of shows within a single run.
