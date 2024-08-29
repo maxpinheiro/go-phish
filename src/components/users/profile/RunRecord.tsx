@@ -4,7 +4,7 @@ import { OrganizedRunItem } from '@/utils/guess.util';
 import { toTitleCase } from '@/utils/utils';
 import moment from 'moment';
 import React, { useState } from 'react';
-import ToggleDropdown from '../shared/ToggleDropdown';
+import ToggleDropdown from '../../shared/ToggleDropdown';
 
 interface RunRecordProps {
   runRecord: OrganizedRunItem[];

@@ -65,7 +65,7 @@ const RunScoreContainer: React.FC<RunScoreContainerProps> = ({ run, shows, ranke
           select={(nightNumber) => chooseNight(nightNumber)}
           containerClass="mt-4"
         />
-        <LeaderboardInfo rankedUserScores={organizedScores} />
+        <LeaderboardInfo rankedUserScores={organizedScores} nightShow={nightShow || null} />
       </div>
     </div>
   );
