@@ -22,10 +22,10 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { AvatarIconSized } from '../shared/Avatar/AvatarIcon';
-import InputField from '../shared/InputField';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import AvatarEditorModal from './AvatarEditor/AvatarEditor';
+import { AvatarIconSized } from '../../shared/Avatar/AvatarIcon';
+import InputField from '../../shared/InputField';
+import LoadingSpinner from '../../shared/LoadingSpinner';
+import AvatarEditorModal from '../AvatarEditor/AvatarEditor';
 
 Modal.setAppElement('#__next');
 

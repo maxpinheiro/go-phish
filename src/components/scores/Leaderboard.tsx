@@ -1,19 +1,39 @@
 import AvatarIcon from '@/components/shared/Avatar/AvatarIcon';
+import { GuessWithShow } from '@/models/guess.model';
 import { defaultAvatar } from '@/models/user.model';
 import { AvatarConfig } from '@/types/main';
-import { Guess, User } from '@prisma/client';
+import { RankedUserScores } from '@/utils/guess.util';
+import { Show } from '@prisma/client';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 import ToggleDropdown from '../shared/ToggleDropdown';
 
-interface LeaderboardInfoProps {
-  rankedUserScores: { user: User; points: number; guesses: Guess[] }[];
+interface LeaderboardGuessItemProps {
+  guess: GuessWithShow;
+  showRunNight?: boolean;
 }
 
-const LeaderboardInfo: React.FC<LeaderboardInfoProps> = ({ rankedUserScores }) => {
-  const [openUserIds, setOpenUserIds] = useState<number[]>([]);
-  const toggleUser = (userId: number) =>
-    setOpenUserIds((ids) => (ids.includes(userId) ? ids.filter((id) => id !== userId) : [...ids, userId]));
+const LeaderboardGuessItem: React.FC<LeaderboardGuessItemProps> = ({ guess, showRunNight }) => (
+  <div className="flex justify-between ">
+    <a href={`https://www.phish.net/song/${guess.songId}`} target="_blank">
+      <p className="m-0">
+        {guess.songName} {guess.encore && guess.points > 1 ? ' (e)' : ''}
+      </p>
+    </a>
+    <div className="flex items-center space-x-1">
+      {showRunNight ? <p className="m-0 opacity-50">N{guess.show.runNight} •</p> : null}
+      <p className="m-0">{`${guess.points} pts`}</p>
+    </div>
+  </div>
+);
+
+interface LeaderboardInfoProps {
+  rankedUserScores: RankedUserScores;
+  nightShow: Show | null;
+}
+
+const LeaderboardInfo: React.FC<LeaderboardInfoProps> = ({ rankedUserScores, nightShow }) => {
+  const isRunTotal = nightShow === null;
 
   if (rankedUserScores.length === 0) {
     return <p className="text-center mt-4">There are no scores for this show yet!</p>;
@@ -47,15 +67,8 @@ const LeaderboardInfo: React.FC<LeaderboardInfoProps> = ({ rankedUserScores }) =
             }
           >
             <div className="px-5 mr-0.5 space-y-2 mt-3">
-              {guesses.map((score) => (
-                <div key={score.id} className="flex justify-between ">
-                  <p className="m-0">
-                    {score.songName} {score.encore && score.points > 1 ? ' (e)' : ''}
-                  </p>
-                  <div className="flex items-center space-x-1">
-                    <p className="m-0">{`${score.points} pts`}</p>
-                  </div>
-                </div>
+              {guesses.map((guess) => (
+                <LeaderboardGuessItem guess={guess} key={`score-${guess.id}`} showRunNight={isRunTotal} />
               ))}
             </div>
           </ToggleDropdown>

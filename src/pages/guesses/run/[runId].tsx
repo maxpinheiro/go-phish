@@ -1,13 +1,13 @@
 import GuessRunContainer, { GuessRunContainerProps } from '@/components/guesses/run/GuessRunContainer';
 import ErrorMessage from '@/components/shared/ErrorMessage';
+import { GuessWithShow } from '@/models/guess.model';
 import { getGuessesForRun } from '@/services/guess.service';
 import { getRunWithVenue } from '@/services/run.service';
 import { getShowsForRunWithVenue } from '@/services/show.service';
 import { getUsersByIds } from '@/services/user.service';
 import { ResponseStatus } from '@/types/main';
-import { organizeGuessesByUser } from '@/utils/guess.util';
+import { buildGuessesWithShows, OrganizedGuessesWithShow, organizeGuessesByUser } from '@/utils/guess.util';
 import { organizeArrayByField, parseObj } from '@/utils/utils';
-import { Guess } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React from 'react';
@@ -44,7 +44,8 @@ export const getServerSideProps: GetServerSideProps<GuessRunPageProps> = async (
     };
   }
   guesses = JSON.parse(JSON.stringify(guesses, parseObj)) as typeof guesses;
-  const guessesByUser = organizeArrayByField<Guess>(guesses, 'userId');
+  const guessesWithShow = buildGuessesWithShows(guesses, shows);
+  const guessesByUser = organizeArrayByField<GuessWithShow>(guessesWithShow, 'userId');
   const userIds = Object.keys(guessesByUser).map((user) => parseInt(user));
   let users = await getUsersByIds(userIds);
   if (users === ResponseStatus.NotFound) {
@@ -54,8 +55,15 @@ export const getServerSideProps: GetServerSideProps<GuessRunPageProps> = async (
   }
   users = JSON.parse(JSON.stringify(users, parseObj)) as typeof users;
   const organizedGuesses = organizeGuessesByUser(guessesByUser, users);
+  const organizedGuessesWithShow: OrganizedGuessesWithShow = organizedGuesses.map((guess) => ({
+    ...guess,
+    guesses: {
+      complete: buildGuessesWithShows(guess.guesses.complete, shows),
+      incomplete: buildGuessesWithShows(guess.guesses.incomplete, shows),
+    },
+  }));
   return {
-    props: { run, shows, guesses: organizedGuesses },
+    props: { run, shows, guesses: organizedGuessesWithShow },
   };
 };
 

@@ -6,7 +6,7 @@ import TitleBar from '@/components/shared/TitleBar';
 import { RunWithVenue } from '@/models/run.model';
 import { ShowWithVenue } from '@/models/show.model';
 import { useThemeContext } from '@/store/theme.store';
-import { OrganizedGuesses, organizedGuessesForNight } from '@/utils/guess.util';
+import { organizedGuessesForNight, OrganizedGuessesWithShow } from '@/utils/guess.util';
 import { Show } from '@prisma/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import React from 'react';
 export interface GuessRunContainerProps {
   run: RunWithVenue;
   shows: ShowWithVenue[];
-  guesses: OrganizedGuesses;
+  guesses: OrganizedGuessesWithShow;
 }
 
 const GuessRunContainer: React.FC<GuessRunContainerProps> = ({ run, shows, guesses }) => {
