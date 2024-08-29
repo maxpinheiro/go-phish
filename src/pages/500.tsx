@@ -6,16 +6,18 @@ export default function Custom500Page() {
   return (
     <>
       <Head>
-        <title>Site Maintenance | GoPhish</title>
+        <title>Site Error | GoPhish</title>
       </Head>
       <div className="flex flex-col items-center px-4">
-        <p className={`text-4xl text-${color} font-semibold mt-12 mb-8`}>Site Maintenance</p>
-        <p className="text-md text-center">
-          We&apos;re all in the bathtub now, making some Bathub Gin. We will be back soon!
+        <p className={`text-4xl text-${color} font-semibold mt-12 mb-8`}>Site Error</p>
+        <p className="text-md text-center">Whoops! Looks like something went wrong.</p>
+        <p className="text-md">
+          Try refreshing the page or launching a new tab, or{' '}
+          <a href="mailto:support@phishingphun.com" className={`text-${color}`}>
+            contact support
+          </a>{' '}
+          if the isssue persists.
         </p>
-        <a href="https://phish.com/tours/" className={`text-lg text-${color} font-medium my-6`}>
-          View Upcoming Tours
-        </a>
       </div>
     </>
   );
