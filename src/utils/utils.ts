@@ -45,6 +45,21 @@ export const setDifference = <T>(aList: T[], bList: T[]): Set<T> => {
   return difference;
 };
 
+export const setDifferenceGen = function* <T>(aList: T[], bList: T[]): Generator<T> {
+  const setA = new Set(aList);
+  const setB = new Set(bList);
+
+  for (const v of setB.values()) {
+    if (!setA.delete(v)) {
+      yield v;
+    }
+  }
+
+  for (const v of setA.values()) {
+    yield v;
+  }
+};
+
 export const totalScoresForRuns = (organizedScores: Record<string, Guess[]>): Record<string, number> => {
   let scoresForRuns: Record<string, number> = {};
   Object.entries(organizedScores).forEach(([runId, scores]: [string, Guess[]]) => {

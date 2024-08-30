@@ -91,12 +91,17 @@ export const scrapeSongFrequency = async (song: Song): Promise<number | Response
     const $ = cheerio.load(body);
     const $text = $("p:contains('Since its debut')");
     const text = $text.text();
-    const totalCountMatch = text.match(/It was played (?<count>\d+(,\d+)*) time\(s\) at the following show\(s\)/);
-    const showsSinceDebutMatch = text.match(/There have been (?<count>\d+(,\d+)*) shows since the live debut/);
+    // named groups supported if upgrade to es2018
+    const totalCountMatch = text.match(/It was played (\d+(,\d+)*) time\(s\) at the following show\(s\)/);
+    const showsSinceDebutMatch = text.match(/There have been (\d+(,\d+)*) shows since the live debut/);
+    // const totalCountMatch = text.match(/It was played (?<count>\d+(,\d+)*) time\(s\) at the following show\(s\)/);
+    // const showsSinceDebutMatch = text.match(/There have been (?<count>\d+(,\d+)*) shows since the live debut/);
 
     if (totalCountMatch && showsSinceDebutMatch) {
-      const totalCount = parseInt(totalCountMatch['groups']?.count?.toString().replace(/,/g, '') || '');
-      const showsSinceDebut = parseInt(showsSinceDebutMatch['groups']?.count?.toString().replace(/,/g, '') || '');
+      const totalCount = parseInt(totalCountMatch[1]?.toString().replace(/,/g, '') || '');
+      const showsSinceDebut = parseInt(showsSinceDebutMatch[1]?.toString().replace(/,/g, '') || '');
+      // const totalCount = parseInt(totalCountMatch['groups']?.count?.toString().replace(/,/g, '') || '');
+      // const showsSinceDebut = parseInt(showsSinceDebutMatch['groups']?.count?.toString().replace(/,/g, '') || '');
       const frequency = totalCount / showsSinceDebut;
       let inverseFrequency = 1.0 / frequency;
       inverseFrequency = Math.floor(inverseFrequency * 1000) / 1000;
