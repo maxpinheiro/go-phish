@@ -1,26 +1,31 @@
-const cheerio = require('cheerio');
+import cheerio from 'cheerio';
 
-function roundHalf(num) {
+function roundHalf(num: number) {
   return Math.round(num * 2) / 2;
 }
 
-function sigmoid(z) {
+function sigmoid(z: number) {
   return 1 / (1 + Math.exp(-z / 3));
 }
 
-const collectSongFrequency = async (songId) => {
+const collectSongFrequency = async (songId: string) => {
   const res = await fetch(`https://phish.net/song/${songId}`);
   if (res.ok || res.status === 200) {
     const body = await res.text();
     const $ = cheerio.load(body);
     const $text = $("p:contains('Since its debut')");
     const text = $text.text();
-    const totalCountMatch = text.match(/It was played (?<count>\d+(,\d+)*) time\(s\) at the following show\(s\)/);
-    const showsSinceDebutMatch = text.match(/There have been (?<count>\d+(,\d+)*) shows since the live debut/);
+    // named groups supported if upgrade to es2018
+    const totalCountMatch = text.match(/It was played (\d+(,\d+)*) time\(s\) at the following show\(s\)/);
+    const showsSinceDebutMatch = text.match(/There have been (\d+(,\d+)*) shows since the live debut/);
+    // const totalCountMatch = text.match(/It was played (?<count>\d+(,\d+)*) time\(s\) at the following show\(s\)/);
+    // const showsSinceDebutMatch = text.match(/There have been (?<count>\d+(,\d+)*) shows since the live debut/);
 
     if (totalCountMatch && showsSinceDebutMatch) {
-      const totalCount = parseInt(totalCountMatch['groups']?.count?.toString().replace(/,/g, '') || '');
-      const showsSinceDebut = parseInt(showsSinceDebutMatch['groups']?.count?.toString().replace(/,/g, '') || '');
+      const totalCount = parseInt(totalCountMatch[1]?.toString().replace(/,/g, '') || '');
+      const showsSinceDebut = parseInt(showsSinceDebutMatch[1]?.toString().replace(/,/g, '') || '');
+      // const totalCount = parseInt(totalCountMatch['groups']?.count?.toString().replace(/,/g, '') || '');
+      // const showsSinceDebut = parseInt(showsSinceDebutMatch['groups']?.count?.toString().replace(/,/g, '') || '');
       const frequency = totalCount / showsSinceDebut;
       let inverseFrequency = 1.0 / frequency;
       inverseFrequency = Math.floor(inverseFrequency * 1000) / 1000;
