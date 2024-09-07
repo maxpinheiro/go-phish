@@ -7,6 +7,12 @@ export const parseObj = (_key: string, value: any) =>
 
 export const stringSimilarity = (string1: string, string2: string): number => compareTwoStrings(string1, string2);
 
+export const isUndfn = (val: any): val is undefined => val === undefined;
+
+export const allUndfn = (vals: any[]) => vals.every((val) => isUndfn(val));
+
+// export const removeAnyUndfn = <T>(vals: (T | undefined)[]): T[] => vals.filter(x => Array.isArray(x) ? x.every(v => !isUndfn(v)) : !isUndfn(x));
+
 export const mapRange = (value: number, oldStart: number, oldEnd: number, newStart: number, newEnd: number): number =>
   ((value - oldStart) * (newEnd - newStart)) / (oldEnd - oldStart) + newStart;
 
@@ -37,6 +43,8 @@ export const organizeArrayByField = <T extends Record<string, any>>(arr: T[], fi
   });
   return dict;
 };
+
+export const zip = <A, B>(a: A[], b: B[]): [A, B][] => a.map((k, i) => [k, b[i]]);
 
 export const setDifference = <T>(aList: T[], bList: T[]): Set<T> => {
   //let a = new Set(aList);

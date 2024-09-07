@@ -1,6 +1,5 @@
 import { PhishNet } from '@/models/phishnet.model';
 import { PhishNetSong, ResponseStatus, SetlistSong } from '@/types/main';
-import { Song } from '@prisma/client';
 import * as cheerio from 'cheerio';
 
 const apiRoot = 'https://api.phish.net/v5';
@@ -84,8 +83,8 @@ export const getSetlistForShowDate = async (
   }
 };
 
-export const scrapeSongFrequency = async (song: Song): Promise<number | ResponseStatus.NotFound> => {
-  const res = await fetch(`https://phish.net/song/${song.id}`);
+export const scrapeSongFrequency = async (songId: string): Promise<number | ResponseStatus.NotFound> => {
+  const res = await fetch(`https://phish.net/song/${songId}`);
   if (res.ok || res.status === 200) {
     const body = await res.text();
     const $ = cheerio.load(body);
@@ -107,7 +106,7 @@ export const scrapeSongFrequency = async (song: Song): Promise<number | Response
       inverseFrequency = Math.floor(inverseFrequency * 1000) / 1000;
       return inverseFrequency;
     } else {
-      console.log(`missing: ${song.name}`);
+      console.log(`missing: ${songId}`);
     }
     return -1;
   } else {

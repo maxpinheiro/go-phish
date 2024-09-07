@@ -1,7 +1,8 @@
 import { getAllSongs as getAllPhishNetSongs } from '@/services/phishnet.service';
 import { getAllSongs } from '@/services/song.service';
 import { ResponseStatus } from '@/types/main';
-import { setDifference, toTitleCase } from '@/utils/utils';
+import { toTitleCase } from '@/utils/utils';
+import { difference } from 'lodash';
 
 const crosslistSongs = async () => {
   const localSongs = await getAllSongs();
@@ -29,7 +30,8 @@ const crosslistSongs = async () => {
   const apiSongNames = apiSongs.map((s) => toTitleCase(s.name.toLowerCase().replace(/[,'\(\)\.]/g, '')));
   const localSongNames = localSongs.map((s) => toTitleCase(s.name.toLowerCase().replace(/[,'\(\)\.]/g, '')));
 
-  let missingLocalSongNames = Array.from(setDifference(apiSongNames, localSongNames));
+  // let missingLocalSongNames = Array.from(setDifference(apiSongNames, localSongNames));
+  let missingLocalSongNames = difference(apiSongNames, localSongNames);
   console.log(`Missing Songs (${missingLocalSongNames.length}):`);
   console.log(missingLocalSongNames.join('\n'));
 };
