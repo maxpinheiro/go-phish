@@ -1,5 +1,7 @@
+import { scrapeSongFrequency } from '@/services/phishnet.service';
+import { zip } from '@/utils/utils';
+
 const fs = require('fs');
-const cheerio = require('cheerio');
 
 enum ResponseStatus {
   Success = 200,
@@ -27,33 +29,6 @@ interface PrismaSong {
 }
 
 type SongData = Omit<PrismaSong, 'id'>;
-
-const scrapeSongFrequency = async (song: Song): Promise<number | ResponseStatus.NotFound> => {
-  const res = await fetch(`https://phish.net/song/${song.id}`);
-  if (res.ok || res.status === 200) {
-    const body = await res.text();
-    const $ = cheerio.load(body);
-    const $text = $("p:contains('Since its debut')");
-    const text = $text.text();
-    const totalCountMatch = text.match(/It was played (?<count>\d+(,\d+)*) time\(s\) at the following show\(s\)/);
-    const showsSinceDebutMatch = text.match(/There have been (?<count>\d+(,\d+)*) shows since the live debut/);
-
-    if (totalCountMatch && showsSinceDebutMatch) {
-      const totalCount = parseInt(totalCountMatch['groups']?.count?.toString().replace(/,/g, '') || '');
-      const showsSinceDebut = parseInt(showsSinceDebutMatch['groups']?.count?.toString().replace(/,/g, '') || '');
-      const frequency = totalCount / showsSinceDebut;
-      let inverseFrequency = 1.0 / frequency;
-      inverseFrequency = Math.floor(inverseFrequency * 1000) / 1000;
-      return inverseFrequency;
-    } else {
-      console.log(`missing: ${song.name}`);
-    }
-    return -1;
-    //return ResponseStatus.NotFound;
-  } else {
-    return ResponseStatus.NotFound;
-  }
-};
 
 const songsWithTags: Record<string, SongTag[]> = {
   '2001': ['number'],
@@ -397,8 +372,6 @@ const songList: Song[] = Object.entries(songsWithTags).map(([song, tags]) => ({
   tags,
 }));
 
-const zip = <A, B>(a: A[], b: B[]): [A, B][] => a.map((k, i) => [k, b[i]]);
-
 function roundHalf(num: number) {
   return Math.round(num * 2) / 2;
 }
@@ -414,7 +387,7 @@ const collectSongInfo = async () => {
   let min = 1000;
   for (let i = 0; i < songs.length && frequencies.length < songs.length; i += batchSize) {
     const songBatch = songs.slice(i, i + batchSize);
-    const freqs = await Promise.all(songBatch.map((song) => scrapeSongFrequency(song)));
+    const freqs = await Promise.all(songBatch.map((song) => scrapeSongFrequency(song.id)));
     const localMin = Math.min(...freqs.filter((f) => f > 0));
     min = Math.min(localMin, min);
     frequencies.push(...freqs);

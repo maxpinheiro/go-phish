@@ -1,3 +1,4 @@
+import { SongUpdateData } from '@/models/song.model';
 import prisma from '@/services/db.service';
 import { ResponseStatus } from '@/types/main';
 import { Song } from '@prisma/client';
@@ -20,4 +21,14 @@ export async function getSongsByIds(songIds: string[]): Promise<Song[] | Respons
   const songs = await prisma.song.findMany({ where: { id: { in: songIds } } });
   if (!songs) return ResponseStatus.NotFound;
   return superjson.parse<Song[]>(superjson.stringify(songs));
+}
+
+export async function updateSong(songId: string, data: SongUpdateData): Promise<Song> {
+  const song = await prisma.song.update({
+    where: {
+      id: songId,
+    },
+    data,
+  });
+  return song;
 }

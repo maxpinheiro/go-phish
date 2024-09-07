@@ -2,12 +2,11 @@ import { scrapeSongFrequency } from '@/services/phishnet.service';
 import { getAllSongs } from '@/services/song.service';
 import { useThemeContext } from '@/store/theme.store';
 import { ResponseStatus } from '@/types/main';
+import { zip } from '@/utils/utils';
 import { Song } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import React from 'react';
-
-const zip = <A, B>(a: A[], b: B[]): [A, B][] => a.map((k, i) => [k, b[i]]);
 
 function roundHalf(num: number) {
   return Math.round(num * 2) / 2;
@@ -46,7 +45,7 @@ export const getServerSideProps: GetServerSideProps<SongCheckerProps> = async (c
   let min = 1000;
   for (let i = 0; i < songs.length && frequencies.length < songs.length; i += batchSize) {
     const songBatch = songs.slice(i, i + batchSize);
-    const freqs = await Promise.all(songBatch.map((song) => scrapeSongFrequency(song)));
+    const freqs = await Promise.all(songBatch.map((song) => scrapeSongFrequency(song.id)));
     const localMin = Math.min(...freqs.filter((f) => f > 0));
     min = Math.min(localMin, min);
     frequencies.push(...freqs);

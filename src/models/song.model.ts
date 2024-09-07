@@ -1,3 +1,5 @@
+import { Song } from '@prisma/client';
+
 // const songsWithTags: Record<string, SongTag[]> = {
 //   '2001': ['number'],
 //   '46 Days': ['number'],
@@ -339,3 +341,5 @@
 //   name: song,
 //   tags,
 // }));
+
+export type SongUpdateData = Partial<Omit<Song, 'id'>>;
