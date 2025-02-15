@@ -2,12 +2,14 @@ import prisma from '@/services/db.service';
 import { scrapeSongFrequency } from '@/services/phishnet.service';
 import { getAllSongs } from '@/services/song.service';
 import { songPointsByFrequency } from '@/utils/score.util';
+import { promiseAllInBatches } from '@/utils/utils';
 import { Song } from '@prisma/client';
 import _ from 'lodash';
 
 const updateSongScores = async () => {
   const songs = await getAllSongs();
-  const songFrequencies = await Promise.all(songs.map((s) => scrapeSongFrequency(s.id)));
+  const songIds = songs.map((s) => s.id);
+  const songFrequencies = await promiseAllInBatches(songIds, scrapeSongFrequency);
   const songScores = songFrequencies.map((freq) => songPointsByFrequency(freq));
   const songInfo = _.zip(songs, songFrequencies, songScores) as [Song, number, number][];
   const updatedSongs = songInfo.filter(([song, _, score]) => song?.points !== score);

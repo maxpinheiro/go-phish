@@ -14,9 +14,10 @@
     "migrate:dev": "yarn prisma migrate dev",
     "prettier:fix": "yarn prettier . --write",
     "seed": "yarn prisma seed",
-    "check-songs": "yarn ts-node src/scripts/checkSongs.ts",
+    "check-songs": "yarn tsx src/scripts/checkSongs.ts",
     "check-song-score": "yarn tsx src/scripts/checkSongScore.ts",
-    "collect-songs": "yarn ts-node src/scripts/collectSongInfo.ts"
+    "collect-songs": "yarn tsx src/scripts/collectSongInfo.ts",
+    "update-song-scores": "yarn tsx src/scripts/updateSongScores.ts"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.6",

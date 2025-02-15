@@ -176,3 +176,23 @@ export const isValidEmail = (email: string): boolean => {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
 };
+
+/**
+ * Same as Promise.all(items.map(item => task(item))), but it waits for
+ * the first {batchSize} promises to finish before starting the next batch.
+ *
+ */
+export const promiseAllInBatches = async <A, B>(
+  items: A[],
+  task: (a: A) => Promise<B>,
+  batchSize = 50
+): Promise<B[]> => {
+  let position = 0;
+  let results: B[] = [];
+  while (position < items.length) {
+    const itemsForBatch = items.slice(position, position + batchSize);
+    results = [...results, ...(await Promise.all(itemsForBatch.map((item) => task(item))))];
+    position += batchSize;
+  }
+  return results;
+};
