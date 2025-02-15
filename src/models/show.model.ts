@@ -11,3 +11,5 @@ export type ShowWithVenue = Show & {
 export type ShowWithVenueAndRun = ShowWithVenue & {
   run: Run;
 };
+
+export type CreateShowData = Omit<Show, 'id'>;

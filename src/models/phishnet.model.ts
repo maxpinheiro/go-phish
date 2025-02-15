@@ -85,6 +85,21 @@ export namespace PhishNet {
     city: string;
     state: string;
     country: string;
+    tour_name: string;
+  };
+  export type ShowResponse = Response<Show[]>;
+  export const extractShowResponse = (data: any): ShowResponse | null => {
+    if (typeof data !== 'object' || data === null) {
+      return null;
+    }
+    if (!data.hasOwnProperty('error') || !data.hasOwnProperty('error_message') || !data.hasOwnProperty('data')) {
+      return null;
+    }
+    return {
+      error: Boolean(data.error),
+      error_message: data.error_message,
+      data: data.data,
+    };
   };
 
   export type SetlistSong = {

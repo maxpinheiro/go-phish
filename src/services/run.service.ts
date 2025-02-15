@@ -3,7 +3,7 @@ import { ResponseStatus } from '@/types/main';
 import { Run } from '@prisma/client';
 import superjson from 'superjson';
 
-import { RunWithVenue } from '@/models/run.model';
+import { CreateRunData, RunWithVenue } from '@/models/run.model';
 import prisma from '@/services/db.service';
 
 //let runs: Run.Type[] = [...testRuns];
@@ -33,6 +33,11 @@ export async function getRunsByIds(runIds: number[]): Promise<Run[] | ResponseSt
 
   const runs = await prisma.run.findMany({ where: { id: { in: runIds } } });
   return runs.length > 0 ? superjson.parse<Run[]>(superjson.stringify(runs)) : ResponseStatus.NotFound;
+}
+
+export async function createRun(data: CreateRunData): Promise<Run> {
+  const run = await prisma.run.create({ data });
+  return run;
 }
 
 /*

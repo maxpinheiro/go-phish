@@ -1,11 +1,16 @@
 import { PhishNet } from '@/models/phishnet.model';
-import { PhishNetSong, ResponseStatus, SetlistSong } from '@/types/main';
+import { PhishNetShow, PhishNetSong, ResponseStatus, SetlistSong } from '@/types/main';
+import { isPastDate } from '@/utils/date.util';
 import * as cheerio from 'cheerio';
 
 const apiRoot = 'https://api.phish.net/v5';
 const API_KEY = process.env.PHISHNET_API_KEY || '';
 
 export const getAllSongs = async (): Promise<PhishNetSong[] | ResponseStatus.UnknownError> => {
+  if (!API_KEY) {
+    console.log('Missing API key.');
+    return new Promise((resolve) => resolve(ResponseStatus.UnknownError));
+  }
   const res = await fetch(`${apiRoot}/songs.json?apikey=${API_KEY}`);
   if (res.ok || res.status === 200) {
     const data = await res.json();
@@ -13,7 +18,7 @@ export const getAllSongs = async (): Promise<PhishNetSong[] | ResponseStatus.Unk
     if (!songs) {
       return ResponseStatus.UnknownError;
     } else if (songs.error) {
-      console.log(songs.error_message);
+      console.log(`Unable to fetch songs from PhishNet: ${songs.error_message}`);
       return ResponseStatus.UnknownError;
     } else {
       return songs.data.map((song) => ({
@@ -33,6 +38,10 @@ export const getAllSongs = async (): Promise<PhishNetSong[] | ResponseStatus.Unk
 };
 
 export const getSongById = async (songId: string): Promise<PhishNetSong | ResponseStatus.UnknownError> => {
+  if (!API_KEY) {
+    console.log('Missing API key.');
+    return new Promise((resolve) => resolve(ResponseStatus.UnknownError));
+  }
   const res = await fetch(`${apiRoot}/songs/slug/${songId}.json?apikey=${API_KEY}`);
   if (res.ok || res.status === 200) {
     const data = await res.json();
@@ -40,7 +49,7 @@ export const getSongById = async (songId: string): Promise<PhishNetSong | Respon
     if (!song) {
       return ResponseStatus.UnknownError;
     } else if (song.error) {
-      console.log(song.error_message);
+      console.log(`Unable to fetch songs from PhishNet: ${song.error_message}`);
       return ResponseStatus.UnknownError;
     } else {
       return {
@@ -62,6 +71,10 @@ export const getSongById = async (songId: string): Promise<PhishNetSong | Respon
 export const getSetlistForShowDate = async (
   dateYMD: string // of the form YYYY-MM-DD
 ): Promise<SetlistSong[] | ResponseStatus.NotFound | ResponseStatus.UnknownError> => {
+  if (!API_KEY) {
+    console.log('Missing API key.');
+    return new Promise((resolve) => resolve(ResponseStatus.UnknownError));
+  }
   const res = await fetch(`${apiRoot}/setlists/showdate/${dateYMD}.json?apikey=${API_KEY}`);
   if (res.ok || res.status === 200) {
     const data = await res.json();
@@ -69,13 +82,47 @@ export const getSetlistForShowDate = async (
     if (!setlist) {
       return ResponseStatus.NotFound;
     } else if (setlist.error) {
-      console.log(setlist.error_message);
+      console.log(`Unable to fetch songs from PhishNet: ${setlist.error_message}`);
       return ResponseStatus.UnknownError;
     } else {
       return setlist.data.map((song) => ({
         id: song.slug,
         name: song.song,
         encore: song.set === 'e',
+      }));
+    }
+  } else {
+    return ResponseStatus.UnknownError;
+  }
+};
+
+export const getUpcomingShows = async (): Promise<
+  PhishNetShow[] | ResponseStatus.NotFound | ResponseStatus.UnknownError
+> => {
+  if (!API_KEY) {
+    console.log('Missing API key.');
+    return new Promise((resolve) => resolve(ResponseStatus.UnknownError));
+  }
+  const res = await fetch(`${apiRoot}/shows/artist/phish.json?order_by=showdate&apikey=${API_KEY}`);
+  if (res.ok || res.status === 200) {
+    const data = await res.json();
+    const shows = PhishNet.extractShowResponse(data);
+    if (!shows) {
+      return ResponseStatus.NotFound;
+    } else if (shows.error) {
+      console.log(`Unable to fetch songs from PhishNet: ${shows.error_message}`);
+      return ResponseStatus.UnknownError;
+    } else {
+      const upcomingShows = shows.data.filter((show) => !isPastDate(show.showdate));
+      return upcomingShows.map((show) => ({
+        showdate: show.showdate,
+        permalink: show.permalink,
+        setlist_notes: show.setlist_notes,
+        venue: show.venue,
+        city: show.city,
+        state: show.state,
+        country: show.country,
+        tour_name: show.tour_name,
       }));
     }
   } else {

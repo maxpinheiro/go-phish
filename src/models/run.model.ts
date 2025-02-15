@@ -7,3 +7,5 @@ export type RunOrderByQuery = Prisma.Enumerable<Prisma.RunOrderByWithRelationInp
 export type RunWithVenue = Run & {
   venue: Venue;
 };
+
+export type CreateRunData = Omit<Run, 'id'>;

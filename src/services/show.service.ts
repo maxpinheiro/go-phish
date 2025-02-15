@@ -4,7 +4,7 @@ import { Show } from '@prisma/client';
 import moment from 'moment-timezone';
 import superjson from 'superjson';
 
-import { ShowOrderByQuery, ShowQuery, ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
+import { CreateShowData, ShowOrderByQuery, ShowQuery, ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
 import prisma from '@/services/db.service';
 
 //let shows: Show.Type[] = [...testShows];
@@ -80,4 +80,9 @@ export async function getTodaysShow(): Promise<ShowWithVenueAndRun | ResponseSta
   });
   if (!show) return ResponseStatus.NotFound;
   return superjson.parse<ShowWithVenueAndRun>(superjson.stringify(show));
+}
+
+export async function createShow(data: CreateShowData): Promise<Show> {
+  const show = await prisma.show.create({ data });
+  return show;
 }

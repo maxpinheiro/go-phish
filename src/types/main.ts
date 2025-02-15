@@ -1,3 +1,4 @@
+import { PhishNet } from '@/models/phishnet.model';
 import { ShowWithVenueAndRun } from '@/models/show.model';
 import { Venue } from '@prisma/client';
 
@@ -51,6 +52,8 @@ export type PhishNetSong = {
 // }
 
 export type SetlistSong = { id: string; name: string; encore: boolean };
+
+export type PhishNetShow = PhishNet.Show;
 
 // misc data
 
