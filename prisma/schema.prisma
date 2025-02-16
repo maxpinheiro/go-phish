@@ -88,6 +88,7 @@ model Venue {
 model Run {
   id      Int        @id @default(autoincrement())
   name    String
+  slug    String     @default("")
   dates   DateTime[] @db.Date
   venueId Int
   venue   Venue      @relation(fields: [venueId], references: [id])
@@ -101,6 +102,7 @@ model Show {
   runId     Int
   run       Run      @relation(fields: [runId], references: [id])
   runNight  Int
+  slug      String   @default("")
   date      DateTime @db.Date
   timestamp DateTime @db.Timestamptz
   venueId   Int
