@@ -1,6 +1,9 @@
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { modelTypeDefs } from "./schema";
-import { GraphQLParseOptions, IResolvers, IResolverValidationOptions, SchemaExtensions, TypeSource } from '@graphql-tools/utils';
+import { IResolvers } from '@graphql-tools/utils';
+import { DataLoaders } from "./dataloader";
+import { User } from "@prisma/client";
+import { userResolvers } from "./resolvers/user.resolver";
 
 const queryTypeDefs = `
   type Query {
@@ -18,27 +21,22 @@ const queryTypeDefs = `
 
 const typeDefs = [modelTypeDefs, queryTypeDefs];
 
-type ResolverContext = {};
-type Resolver<Source, Args, Output> = (obj: Source, args: Args, context: ResolverContext, info: any) => null | undefined | Output[] | Output | Promise<Output[]> | Promise<Output>[];
+type Context = {
+  userId?: number;
+  loaders: DataLoaders;
+};
+
+export type Resolver<Source, Args, Output> = (root: Source, args: Args, context: Context, info: any) => null | undefined | Output[] | Output | Promise<Output> | Promise<Output[]> | Promise<Output>[];
+
+const meResolver: Resolver<any, any, User | null> = async (_, _args, { userId, loaders }) => {
+  if (!userId) return null;
+  return loaders.userLoader.load(userId);
+};
 
 const queryResolvers: IResolvers = {
   Query: {
-    me(_, _args, _context, _info) {
-
-    },
-    userByName(_, args, _context, _info) {
-
-    },
-    allShows(_, _, _context, _) {
-
-    },
+    me: meResolver,
   },
-};
-
-const userResolvers = {
-  User: {
-
-  }
 };
 
 const resolvers = [queryResolvers, userResolvers];

@@ -1,6 +1,10 @@
 export const modelTypeDefs = /* GraphQL */ `
-  type UserAvatar {}
-  type Avatar {}
+  type Avatar {
+    head: String!
+    torso: String!
+    background: String!
+    type: String
+  }
 
   type User {
     id: Int!
