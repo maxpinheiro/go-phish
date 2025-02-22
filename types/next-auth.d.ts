@@ -1,6 +1,6 @@
 import { AvatarConfig } from '@/types/main';
 import { User as UserModel } from '@prisma/client';
-import { Account, DefaultSession } from 'next-auth';
+import { Account } from 'next-auth';
 
 declare module 'next-auth' {
   /**
@@ -8,21 +8,14 @@ declare module 'next-auth' {
    */
   interface Session {
     accessToken?: Account.accessToken;
-    user: User & DefaultSession['user'];
-    // user: {
-    //   // id: number | undefined;
-    //   // username: string | undefined;
-    //   // admin?: boolean | undefined;
-    //   // avatarConfig?: AvatarConfig | undefined;
-    // } & DefaultSession['user'];
+    // user: User & DefaultSession['user'];
+    user?: UserModel & {
+      avatarConfig?: AvatarConfig;
+    };
   }
 
   interface User extends UserModel {
-    // id: number; // <- here it is
-    id: number | undefined;
-    username: string | undefined;
-    admin?: boolean | undefined;
-    avatarConfig?: AvatarConfig | undefined;
+    avatarConfig?: AvatarConfig;
   }
 }
 

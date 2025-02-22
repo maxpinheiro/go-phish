@@ -1,6 +1,9 @@
 import { PreviousGuess } from '@/components/guesses/GuessSelectorModal';
 import { GuessWithShow } from '@/models/guess.model';
+import { ShowWithVenue } from '@/models/show.model';
 import { Guess, Run, Show, User } from '@prisma/client';
+import moment from 'moment-timezone';
+import { formatShowDate } from './show.util';
 import { guessSorter } from './utils';
 
 export type OrganizedRunItem = { run: Run; points: number; scores: Guess[] };
@@ -124,4 +127,22 @@ export const buildGuessesWithShows = (guesses: Guess[], shows: Show[]): GuessWit
     if (show) guessesWithShow.push({ ...guess, show });
   });
   return guessesWithShow;
+};
+
+export const guessEditForbiddenReason = (user: User, show: ShowWithVenue): string | null => {
+  // allow admins to edit previous shows
+  if (user.admin) return null;
+  const timezone = show.venue.tz_id;
+  const nowInZone = moment().tz(timezone);
+  const showTimeInZone = moment(show.timestamp).tz(timezone);
+  // check if current time is past show start time
+  if (nowInZone > showTimeInZone) {
+    if (nowInZone.format('YYYY-MM-DD') === showTimeInZone.format('YYYY-MM-DD')) {
+      const startTime = formatShowDate(show, 'h:mm a z');
+      return `This show has already started! According to our records, the show started at ${startTime}`;
+    } else {
+      return 'This show has already happened! You can only add guesses for upcoming shows.';
+    }
+  }
+  return null;
 };

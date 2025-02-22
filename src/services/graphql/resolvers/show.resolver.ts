@@ -1,5 +1,6 @@
+import { guessEditForbiddenReason } from '@/utils/guess.util';
 import { IResolvers } from '@graphql-tools/utils';
-import { Run, Show, Venue } from '@prisma/client';
+import { Guess, Run, Show, Venue } from '@prisma/client';
 import { Resolver } from './util.resolver';
 
 export const showTypeDefs = /* GraphQL */ `
@@ -19,6 +20,11 @@ export const showTypeDefs = /* GraphQL */ `
     venueId: Int!
     venue: Venue!
     slug: String!
+
+    myGuesses: [Guess!]
+
+    "whether the current user is allowed to edit guesses for this show"
+    guessEditForbiddenReason: String
   }
 `;
 
@@ -42,6 +48,18 @@ const venueForShowResolver: Resolver<Show, any, Venue> = async (show, _, { loade
   return loaders.venueLoader.load(show.venueId);
 };
 
+const myGuessesForShowResolver: Resolver<Show, any, Guess[] | null> = async (show, _, { userId, loaders }) => {
+  if (!userId) return null;
+  return (await loaders.guessesForUserLoader.load(userId)).filter((guess) => guess.showId == show.id);
+};
+
+const guessEditForbiddenReasonResolver: Resolver<Show, any, String | null> = async (show, _, { userId, loaders }) => {
+  if (!userId) return 'You must be signed in to edit guesses.';
+  const user = await loaders.userLoader.load(userId);
+  const venue = await loaders.venueLoader.load(show.venueId);
+  return guessEditForbiddenReason(user, { ...show, venue });
+};
+
 export const showResolvers: IResolvers = {
   Query: {
     allShows: allShowsResolver,
@@ -51,5 +69,7 @@ export const showResolvers: IResolvers = {
   Show: {
     run: runForShowResolver,
     venue: venueForShowResolver,
+    myGuesses: myGuessesForShowResolver,
+    guessEditForbiddenReason: guessEditForbiddenReasonResolver,
   },
 };
