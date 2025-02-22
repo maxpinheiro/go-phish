@@ -13,7 +13,7 @@
     "migrate": "yarn prisma migrate",
     "migrate:dev": "yarn prisma migrate dev",
     "prettier:fix": "yarn prettier . --write",
-    "seed": "yarn prisma seed",
+    "seed": "yarn tsx prisma/seed.ts",
     "check-songs": "yarn tsx src/scripts/checkSongs.ts",
     "check-song-score": "yarn tsx src/scripts/checkSongScore.ts",
     "collect-songs": "yarn tsx src/scripts/collectSongInfo.ts",
