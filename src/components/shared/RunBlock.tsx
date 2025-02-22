@@ -1,5 +1,6 @@
 import { RunWithVenue } from '@/models/run.model';
 import { useThemeContext } from '@/store/theme.store';
+import { formatShowDate } from '@/utils/show.util';
 import { Show } from '@prisma/client';
 import React from 'react';
 import ShowLinks from '../shows/ShowLinks';
@@ -9,10 +10,18 @@ interface RunBlockProps {
   showLocation?: boolean;
   currentShow?: Show | undefined;
   showLinks?: boolean;
+  showStartTime?: boolean;
 }
 
-const RunBlock: React.FC<RunBlockProps> = ({ run, showLocation = true, showLinks = true, currentShow = undefined }) => {
+const RunBlock: React.FC<RunBlockProps> = ({
+  run,
+  showLocation = true,
+  showLinks = true,
+  currentShow = undefined,
+  showStartTime = true,
+}) => {
   const { color } = useThemeContext();
+  const startTime = currentShow && formatShowDate({ ...currentShow, venue: run.venue }, 'h:mm a z');
 
   return (
     <div
@@ -32,10 +41,11 @@ const RunBlock: React.FC<RunBlockProps> = ({ run, showLocation = true, showLinks
         </p>
       )}
       {showLinks && (
-        <div className={`text-${color} w-full px-4`}>
+        <div className={`text-${color} w-full px-10 md:px-4`}>
           <ShowLinks runId={run.id} show={currentShow} />
         </div>
       )}
+      {showStartTime && <p className="opacity-50 pb-2">Show starts at {startTime}</p>}
     </div>
   );
 };

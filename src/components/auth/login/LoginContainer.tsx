@@ -15,7 +15,7 @@ const LoginContainer: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center px-6">
+    <div className="flex flex-col w-full max-w-500 items-center px-6 mx-auto">
       <p className="text-4xl my-5">Login</p>
       {loginType === 'credentials' && (
         <CredentialsLogin onLogin={onLogin} toggleLoginType={() => setLoginType('email')} />

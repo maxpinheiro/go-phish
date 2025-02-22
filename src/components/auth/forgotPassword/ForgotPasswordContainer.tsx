@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 
 const ForgotPasswordContainer: React.FC = ({}) => {
   const [loading, setLoading] = useState(false);
-  const [emailRecipient, setEmailRecipient] = useState<string | null>('null');
+  const [emailRecipient, setEmailRecipient] = useState<string | null>(null);
 
   const submit = async (email: string) => {
     if (!isValidEmail(email)) {
@@ -28,7 +28,7 @@ const ForgotPasswordContainer: React.FC = ({}) => {
   };
 
   return (
-    <div className="flex flex-col items-center px-6">
+    <div className="flex flex-col w-full max-w-500 items-center px-6 mx-auto">
       <p className="text-subtitle-regular my-5">Forgot Password</p>
       {emailRecipient ? (
         <ForgotPasswordConfirmation emailRecipient={emailRecipient} resubmit={() => setEmailRecipient(null)} />

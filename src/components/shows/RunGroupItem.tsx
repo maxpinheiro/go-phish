@@ -29,7 +29,7 @@ const RunGroupItem: React.FC<RunGroupItemProps> = ({
   return (
     <div
       key={`run-group-item-${idx}`}
-      className={`flex flex-col items-center w-full ${idx === 0 && 'border-t'} border-b border-${color} ${
+      className={`flex flex-col items-center w-full px-10 md:px-20 ${idx === 0 && 'border-t'} border-b border-${color} ${
         openRunId === showGroup.runId ? `bg-${color} bg-opacity-15` : ''
       }`}
     >
@@ -64,7 +64,9 @@ const RunGroupItem: React.FC<RunGroupItemProps> = ({
         </div>
       )}
       {openRunId === showGroup.runId && openShowId && (
-        <ShowLinks runId={openRunId} show={showGroup.shows.find((s) => s.id === openShowId)} />
+        <div className="flex w-full pb-3">
+          <ShowLinks runId={openRunId} show={showGroup.shows.find((s) => s.id === openShowId)} />
+        </div>
       )}
     </div>
   );

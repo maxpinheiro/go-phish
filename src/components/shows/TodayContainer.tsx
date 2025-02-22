@@ -30,7 +30,7 @@ const NoShowFound = () => {
 
 const ShowFound = ({ show, run }: { show: ShowWithVenue; run: RunWithVenue }) => (
   <>
-    <p className="opacity-50 mb-2">Today&apos; Show:</p>
+    <p className="opacity-50 mb-2">Today&apos;s Show:</p>
     <RunBlock run={run} currentShow={show} />
   </>
 );
@@ -53,7 +53,7 @@ const TodayContainer: React.FC<TodayContainerProps> = ({ notFound, show, run, da
           </BackArrow>
         </div>
       </div>
-      <div className="flex flex-col items-center pb-4">
+      <div className="flex flex-col w-full items-center pb-4">
         <div className={`flex items-baseline space-x-2 border-b-2 border-${color} pb-2 mb-4`}>
           <p className="text-sm">Today is</p>
           <p className="text-xl font-medium">{dateStr}</p>

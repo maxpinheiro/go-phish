@@ -27,7 +27,7 @@ const YearGroupItem: React.FC<YearGroupItemProps> = ({
   return (
     <div
       key={`year-run-item-${idx}`}
-      className={`flex flex-col items-center w-full border-b border-${color} ${idx === 0 && 'border-t'} ${
+      className={`flex flex-col items-center w-full px-10 md:px-20 border-b border-${color} ${idx === 0 && 'border-t'} ${
         openRunId === showGroup.year ? `bg-${color} bg-opacity-15` : ''
       }`}
     >
@@ -62,7 +62,9 @@ const YearGroupItem: React.FC<YearGroupItemProps> = ({
                     </p>
                   </div>
                   {openRunId === showGroup.year && openShowId === show.id && (
-                    <ShowLinks runId={openRunId} show={runGroup.shows.find((s) => s.id === openShowId)} />
+                    <div className="flex w-full pb-3">
+                      <ShowLinks runId={openRunId} show={runGroup.shows.find((s) => s.id === openShowId)} />
+                    </div>
                   )}
                 </>
               ))}

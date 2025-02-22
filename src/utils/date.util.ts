@@ -2,7 +2,7 @@ import { DateString } from '@/types/main';
 import moment from 'moment-timezone';
 
 export const formatDateRange = (dates: DateString[], withYear?: boolean): string => {
-  if (dates.length < 2) return '';
+  if (dates.length === 0) return '';
   let dateObjs: Date[] = dates.map((date) => new Date(date.replaceAll('-', '/')));
   dateObjs.sort((a, b) => a.getTime() - b.getTime());
   let date1 = `${dateObjs[0].getMonth() + 1}/${dateObjs[0].getDate()}`;
@@ -11,7 +11,7 @@ export const formatDateRange = (dates: DateString[], withYear?: boolean): string
     date1 += `/${dateObjs[0].getFullYear() % 100}`;
     date2 += `/${dateObjs[dateObjs.length - 1].getFullYear() % 100}`;
   }
-  return `${date1} - ${date2}`;
+  return dates.length === 1 ? date1 : `${date1} - ${date2}`;
 };
 
 export const compareDates = (date1: DateString, date2: DateString) => {

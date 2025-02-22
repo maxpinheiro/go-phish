@@ -82,7 +82,9 @@ const GuessList: React.FC<GuessListProps> = ({ organizedGuesses, nightShow }) =>
                   <GuessListItem guess={guess} key={`guess-${guess.id}`} showRunNight={isRunTotal} />
                 ))}
               </div>
-              {guesses.complete.length > 0 && <div className="divider dark:bg-white dark:bg-opacity-25" />}
+              {guesses.incomplete.length > 0 && guesses.complete.length > 0 && (
+                <div className="divider dark:bg-white dark:bg-opacity-25" />
+              )}
               <div className="flex flex-col space-y-2">
                 {guesses.complete.map((guess) => (
                   <GuessListItem guess={guess} key={`guess-${guess.id}`} showRunNight={isRunTotal} />

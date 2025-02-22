@@ -13,7 +13,7 @@ const SignOutContainer: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center px-6">
+    <div className="flex flex-col w-full max-w-500 items-center px-6 mx-auto">
       <p className="text-4xl my-5">Logout</p>
       <p className="my-3">Are you sure you want to sign out?</p>
       <button className={`w-full bg-${color} text-white rounded-lg py-2 my-6`} onClick={logout}>

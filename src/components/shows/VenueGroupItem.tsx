@@ -28,7 +28,7 @@ const VenueGroupItem: React.FC<VenueGroupItemProps> = ({
   return (
     <div
       key={`venue-run-item-${idx}`}
-      className={`flex flex-col items-center w-full border-b border-${color} ${idx === 0 && 'border-t'} ${
+      className={`flex flex-col items-center w-full px-10 md:px-20 border-b border-${color} ${idx === 0 && 'border-t'} ${
         openRunId === showGroup.venue.id ? `bg-${color} bg-opacity-15` : ''
       }`}
     >
@@ -65,7 +65,9 @@ const VenueGroupItem: React.FC<VenueGroupItemProps> = ({
                     </p>
                   </div>
                   {openRunId === showGroup.venue.id && openShowId === show.id && (
-                    <ShowLinks runId={openRunId} show={runGroup.shows.find((s) => s.id === openShowId)} />
+                    <div className="flex w-full pb-3">
+                      <ShowLinks runId={openRunId} show={runGroup.shows.find((s) => s.id === openShowId)} />
+                    </div>
                   )}
                 </>
               ))}

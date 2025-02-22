@@ -1,7 +1,7 @@
-import { FilterType } from '@/pages/shows';
 import { ShowGroupRun, ShowGroupVenue, ShowGroupYear } from '@/types/main';
 import React, { useState } from 'react';
 import RunGroupItem from './RunGroupItem';
+import { FilterType } from './ShowsContainer';
 import VenueGroupItem from './VenueGroupItem';
 import YearGroupItem from './YearGroupItem';
 

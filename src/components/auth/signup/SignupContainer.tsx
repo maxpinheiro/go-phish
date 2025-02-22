@@ -63,7 +63,7 @@ const SignUpContainer: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center px-6">
+    <div className="flex flex-col w-full max-w-500 items-center px-6 mx-auto">
       <p className="text-4xl my-5">Signup</p>
       <div className="flex flex-col space-y-4 w-full">
         <InputField
