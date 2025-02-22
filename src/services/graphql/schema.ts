@@ -1,77 +1,50 @@
-export const modelTypeDefs = /* GraphQL */ `
-  type Avatar {
-    head: String!
-    torso: String!
-    background: String!
-    type: String
-  }
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { IResolvers } from '@graphql-tools/utils';
+import { User } from '@prisma/client';
+import { guessResolvers, guessTypeDefs } from './resolvers/guess.resolver';
+import { runResolvers, runTypeDefs } from './resolvers/run.resolver';
+import { showResolvers, showTypeDefs } from './resolvers/show.resolver';
+import { songResolvers, songTypeDefs } from './resolvers/song.resolver';
+import { userResolvers, userTypeDefs } from './resolvers/user.resolver';
+import { Resolver, utilTypeDefs } from './resolvers/util.resolver';
+import { venueResolvers, venueTypeDefs } from './resolvers/venue.resolver';
 
-  type User {
-    id: Int!
-    username: String!
-    name: String
-    bio: String
-    homemtown: String
-    email: String
-    image: String
-    admin: Boolean!
-    avatar: Avatar
-    avatarType: String
-    friend_ids: [Int!]!
-    guesses: [Guess!]!
-  }
-
-  type Venue {
-    id: Int!
-    name: String!
-    name_abbr: String
-    city: String
-    state: String
-    country: String
-    tz_id: String!
-    tz_name: String
-    runs: [Run!]!
-    shows: [Show!]!
-  }
-
-  type Run {
-    id: Int!
-    name: String!
-    dates: [Date!]! # db.date ?
-    venueId: Int!
-    venue: Venue!
-    shows: [Show!]!
-  }
-
-  type Show {
-    id: Int!
-    runId: Int!
-    run: Run!
-    runNight: Int!
-    date: Date! # db.date ?
-    timestamp: Date! # db.timestamptz ?
-    venueId: Int!
-    venue: Venue!
-  }
-
-  type Guess {
-    id: Int!
-    userId: Int!
-    songId: String!
-    songName: String!
-    showId: Int!
-    runId: Int!
-    encore: Boolean!
-    completed: Boolean!
-    points: Float!
-    user: User!
-  }
-
-  type Song {
-    id: String!
-    name: String!
-    averageGap: Float!
-    points: Float!
-    tags: [String!]
+const queryTypeDefs = /* GraphQL */ `
+  type Query {
+    me: User
   }
 `;
+
+const meResolver: Resolver<any, any, User | null> = async (_, _args, { userId, loaders }) => {
+  if (!userId) return null;
+  return loaders.userLoader.load(userId);
+};
+
+const queryResolvers: IResolvers = {
+  Query: {
+    me: meResolver,
+  },
+};
+
+const typeDefs = [
+  utilTypeDefs,
+  queryTypeDefs,
+  songTypeDefs,
+  userTypeDefs,
+  venueTypeDefs,
+  runTypeDefs,
+  showTypeDefs,
+  guessTypeDefs,
+];
+
+const resolvers = [
+  queryResolvers,
+  songResolvers,
+  userResolvers,
+  venueResolvers,
+  runResolvers,
+  showResolvers,
+  guessResolvers,
+];
+
+export const schema = makeExecutableSchema({ typeDefs, resolvers });

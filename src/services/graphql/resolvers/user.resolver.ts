@@ -1,17 +1,10 @@
-import { Guess, User } from "@prisma/client";
-import { Resolver } from "../setup";
-import { IResolvers } from "@graphql-tools/utils";
+import { IResolvers } from '@graphql-tools/utils';
+import { Guess, User } from '@prisma/client';
+import { Resolver } from './util.resolver';
 
-/*
+export const userTypeDefs = `
   type Query {
     userByName(username: String!): User
-  }
-
-  type Avatar {
-    head: String!
-    torso: String!
-    background: String!
-    type: String
   }
 
   type User {
@@ -28,10 +21,10 @@ import { IResolvers } from "@graphql-tools/utils";
     friend_ids: [Int!]!
     guesses: [Guess!]!
   }
-*/
+`;
 
-const userByNameResolver: Resolver<any, {username: string}, User | null> = async (_, {username}, _context) => {
-  return await prisma.user.findUnique({ where: { username }});
+const userByNameResolver: Resolver<any, { username: string }, User | null> = async (_, { username }, _context) => {
+  return await prisma.user.findUnique({ where: { username } });
 };
 
 const guessesForUserResolver: Resolver<User, any, Guess[]> = async (user, _, { loaders }) => {
@@ -44,5 +37,5 @@ export const userResolvers: IResolvers = {
   },
   User: {
     guesses: guessesForUserResolver,
-  }
+  },
 };
