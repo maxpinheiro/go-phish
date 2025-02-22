@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id            Int       @id @default(autoincrement())
-  username      String
+  username      String    @unique
   password      String
   name          String?
   bio           String
@@ -88,7 +88,7 @@ model Venue {
 model Run {
   id      Int        @id @default(autoincrement())
   name    String
-  slug    String     @default("")
+  slug    String     @unique
   dates   DateTime[] @db.Date
   venueId Int
   venue   Venue      @relation(fields: [venueId], references: [id])
@@ -102,7 +102,7 @@ model Show {
   runId     Int
   run       Run      @relation(fields: [runId], references: [id])
   runNight  Int
-  slug      String   @default("")
+  slug      String   @unique
   date      DateTime @db.Date
   timestamp DateTime @db.Timestamptz
   venueId   Int
