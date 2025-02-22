@@ -5,8 +5,7 @@ import { getRunWithVenue } from '@/services/run.service';
 import { getShowWithVenue, getShowsForRunWithVenue } from '@/services/show.service';
 import { getAllSongs } from '@/services/song.service';
 import { ResponseStatus } from '@/types/main';
-import { formatShowDate } from '@/utils/show.util';
-import moment from 'moment';
+import { guessEditForbiddenReason } from '@/utils/guess.util';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -18,9 +17,9 @@ type GuessEditorPageProps = Partial<GuessEditorContainerProps> & {
 
 export const getServerSideProps: GetServerSideProps<GuessEditorPageProps> = async (context) => {
   const session = await getSession(context);
-  const currentUserId = session?.user?.id;
+  const currentUser = session?.user;
   const showId = parseInt(context.query.showId?.toString() || '');
-  if (!currentUserId) {
+  if (!currentUser) {
     return {
       props: { error: 'You must be signed in to edit guesses.' },
     };
@@ -37,20 +36,7 @@ export const getServerSideProps: GetServerSideProps<GuessEditorPageProps> = asyn
     };
   }
   let show = JSON.parse(JSON.stringify(showData)) as typeof showData;
-  // check if current day is past show day
-  let forbiddenReason = null;
-  // if (isPastDate(dateToDateString(show.date))) {
-  // allow admins to edit previous shows
-  if (!session.user.admin) {
-    if (new Date() > new Date(show.timestamp)) {
-      if (moment().format('YYYY-MM-DD') === moment(show.timestamp).format('YYYY-MM-DD')) {
-        const startTime = formatShowDate(show, 'h:mm a z');
-        forbiddenReason = `This show has already started! According to our records, the show started at ${startTime}`;
-      } else {
-        forbiddenReason = 'This show has already happened! You can only add guesses for upcoming shows.';
-      }
-    }
-  }
+  const forbiddenReason = guessEditForbiddenReason(currentUser, show);
   let runShows = await getShowsForRunWithVenue(show.runId);
   if (runShows === ResponseStatus.NotFound) {
     return {
@@ -65,7 +51,7 @@ export const getServerSideProps: GetServerSideProps<GuessEditorPageProps> = asyn
     };
   }
   let run = JSON.parse(JSON.stringify(runData)) as typeof runData;
-  const guesses = await getGuessesForUserForShow(currentUserId, showId);
+  const guesses = await getGuessesForUserForShow(currentUser.id, showId);
   if (guesses === ResponseStatus.NotFound) {
     return {
       props: { error: 'Show not found.' },

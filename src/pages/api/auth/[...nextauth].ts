@@ -29,7 +29,7 @@ export const authOptions: AuthOptions = {
         const user = await attemptLogin(credentials?.username || '', credentials?.password || '');
         if (user !== ResponseStatus.NotFound) {
           // Any object returned will be saved in `user` property of the JWT
-          return user;
+          return { ...user, id: user.id.toString() };
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null;
@@ -37,7 +37,7 @@ export const authOptions: AuthOptions = {
       },
     }),
     EmailProvider({
-      id: 'email',
+      type: 'email',
       server: {
         host: process.env.EMAIL_SERVER_HOST,
         port: parseInt(process.env.EMAIL_SERVER_PORT || '25'),
@@ -89,9 +89,7 @@ export const authOptions: AuthOptions = {
       if (session.user && session.user.email) {
         const user = await getUserByEmail(session.user.email);
         if (user !== ResponseStatus.NotFound) {
-          session.user.id = user.id;
-          session.user.username = user.username;
-          session.user.admin = user.admin;
+          session.user = user;
           session.user.avatarConfig = JSON.parse(JSON.stringify(user.avatar)) as AvatarConfig;
         }
       }
