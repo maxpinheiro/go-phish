@@ -54,6 +54,11 @@ export function createLoaders() {
       const guesses = await prisma.guess.findMany({ where: { runId: { in: runIds as number[] } } });
       return groupRecords(guesses, runIds, (guess) => guess.runId);
     }),
+    guessesForShowLoader: new DataLoader<number, Guess[]>(async (showIds) => {
+      console.info(`Loading guesses for shows: [${showIds.join(', ')}]`);
+      const guesses = await prisma.guess.findMany({ where: { showId: { in: showIds as number[] } } });
+      return groupRecords(guesses, showIds, (guess) => guess.showId);
+    }),
     runsForVenueLoader: new DataLoader<number, Run[]>(async (venueIds) => {
       console.info(`Loading runs for venues: [${venueIds.join(', ')}]`);
       const runs = await prisma.run.findMany({ where: { venueId: { in: venueIds as number[] } } });

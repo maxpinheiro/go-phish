@@ -19,7 +19,7 @@ export const userTypeDefs = `
     avatar: Avatar
     avatarType: String
     friend_ids: [Int!]!
-    guesses: [Guess!]!
+    guesses(completed: Boolean): [Guess!]!
   }
 `;
 
@@ -27,8 +27,14 @@ const userByNameResolver: Resolver<any, { username: string }, User | null> = asy
   return await prisma.user.findUnique({ where: { username } });
 };
 
-const guessesForUserResolver: Resolver<User, any, Guess[]> = async (user, _, { loaders }) => {
-  return loaders.guessesForUserLoader.load(user.id);
+const guessesForUserResolver: Resolver<User, { completed?: boolean }, Guess[]> = async (
+  user,
+  { completed },
+  { loaders }
+) => {
+  return (await loaders.guessesForUserLoader.load(user.id)).filter(
+    (guess) => completed === undefined || guess.completed === completed
+  );
 };
 
 export const userResolvers: IResolvers = {

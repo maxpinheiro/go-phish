@@ -16,7 +16,7 @@ export const runTypeDefs = /* GraphQL */ `
     venue: Venue!
     shows: [Show!]!
     slug: String!
-    guesses: [Guess!]!
+    guesses(completed: Boolean): [Guess!]!
   }
 `;
 
@@ -32,8 +32,14 @@ const showsForRunResolver: Resolver<Run, any, Show[]> = async (run, _, { loaders
   return loaders.showsForRunLoader.load(run.id);
 };
 
-const guessesForRunResolver: Resolver<Run, any, Guess[]> = async (run, _, { loaders }) => {
-  return loaders.guessesForRunLoader.load(run.id);
+const guessesForRunResolver: Resolver<Run, { completed?: boolean }, Guess[]> = async (
+  run,
+  { completed },
+  { loaders }
+) => {
+  return (await loaders.guessesForRunLoader.load(run.id)).filter(
+    (guess) => completed === undefined || guess.completed === completed
+  );
 };
 
 export const runResolvers: IResolvers = {

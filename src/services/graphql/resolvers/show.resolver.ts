@@ -20,9 +20,8 @@ export const showTypeDefs = /* GraphQL */ `
     venueId: Int!
     venue: Venue!
     slug: String!
-
-    myGuesses: [Guess!]
-
+    guesses(completed: Boolean): [Guess!]
+    myGuesses(completed: Boolean): [Guess!]
     "whether the current user is allowed to edit guesses for this show"
     guessEditForbiddenReason: String
   }
@@ -48,9 +47,25 @@ const venueForShowResolver: Resolver<Show, any, Venue> = async (show, _, { loade
   return loaders.venueLoader.load(show.venueId);
 };
 
-const myGuessesForShowResolver: Resolver<Show, any, Guess[] | null> = async (show, _, { userId, loaders }) => {
+const guessesForShowResolver: Resolver<Show, { completed?: boolean }, Guess[]> = async (
+  show,
+  { completed },
+  { loaders }
+) => {
+  return (await loaders.guessesForShowLoader.load(show.id)).filter(
+    (guess) => completed === undefined || guess.completed === completed
+  );
+};
+
+const myGuessesForShowResolver: Resolver<Show, { completed?: boolean }, Guess[] | null> = async (
+  show,
+  { completed },
+  { userId, loaders }
+) => {
   if (!userId) return null;
-  return (await loaders.guessesForUserLoader.load(userId)).filter((guess) => guess.showId == show.id);
+  return (await loaders.guessesForShowLoader.load(show.id)).filter(
+    (guess) => guess.userId === userId && (completed === undefined || guess.completed === completed)
+  );
 };
 
 const guessEditForbiddenReasonResolver: Resolver<Show, any, String | null> = async (show, _, { userId, loaders }) => {
@@ -69,6 +84,7 @@ export const showResolvers: IResolvers = {
   Show: {
     run: runForShowResolver,
     venue: venueForShowResolver,
+    guesses: guessesForShowResolver,
     myGuesses: myGuessesForShowResolver,
     guessEditForbiddenReason: guessEditForbiddenReasonResolver,
   },
