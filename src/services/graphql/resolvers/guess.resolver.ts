@@ -2,7 +2,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { Guess, Run, Show, User } from '@prisma/client';
 import { Resolver } from './util.resolver';
 
-export const guessTypeDefs = /* GraphQL */ `
+/*
   type Guess {
     id: Int!
     userId: Int!
@@ -17,7 +17,7 @@ export const guessTypeDefs = /* GraphQL */ `
     completed: Boolean!
     points: Float!
   }
-`;
+*/
 
 const userForGuessResolver: Resolver<Guess, any, User> = async (guess, _, { loaders }) => {
   return loaders.userLoader.load(guess.userId);

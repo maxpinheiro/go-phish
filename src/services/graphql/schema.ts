@@ -1,19 +1,20 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { IResolvers } from '@graphql-tools/utils';
 import { User } from '@prisma/client';
-import { guessResolvers, guessTypeDefs } from './resolvers/guess.resolver';
-import { runResolvers, runTypeDefs } from './resolvers/run.resolver';
-import { showResolvers, showTypeDefs } from './resolvers/show.resolver';
-import { songResolvers, songTypeDefs } from './resolvers/song.resolver';
-import { userResolvers, userTypeDefs } from './resolvers/user.resolver';
-import { Resolver, utilTypeDefs } from './resolvers/util.resolver';
-import { venueResolvers, venueTypeDefs } from './resolvers/venue.resolver';
+import { readFileSync } from 'fs';
+import { guessResolvers } from './resolvers/guess.resolver';
+import { runResolvers } from './resolvers/run.resolver';
+import { showResolvers } from './resolvers/show.resolver';
+import { songResolvers } from './resolvers/song.resolver';
+import { userResolvers } from './resolvers/user.resolver';
+import { Resolver } from './resolvers/util.resolver';
+import { venueResolvers } from './resolvers/venue.resolver';
 
-const queryTypeDefs = /* GraphQL */ `
+/*
   type Query {
     me: User
   }
-`;
+*/
 
 const meResolver: Resolver<any, any, User | null> = async (_, _args, { userId, loaders }) => {
   if (!userId) return null;
@@ -26,16 +27,7 @@ const queryResolvers: IResolvers = {
   },
 };
 
-const typeDefs = [
-  utilTypeDefs,
-  queryTypeDefs,
-  songTypeDefs,
-  userTypeDefs,
-  venueTypeDefs,
-  runTypeDefs,
-  showTypeDefs,
-  guessTypeDefs,
-];
+const typeDefs = readFileSync('./schema.graphql', { encoding: 'utf-8' });
 
 const resolvers = [
   queryResolvers,

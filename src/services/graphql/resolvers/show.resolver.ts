@@ -3,7 +3,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { Guess, Run, Show, Venue } from '@prisma/client';
 import { Resolver } from './util.resolver';
 
-export const showTypeDefs = /* GraphQL */ `
+/*
   type Query {
     allShows: [Show!]!
     showBySlug(slug: String!): Show
@@ -25,7 +25,7 @@ export const showTypeDefs = /* GraphQL */ `
     "whether the current user is allowed to edit guesses for this show"
     guessEditForbiddenReason: String
   }
-`;
+*/
 
 const allShowsResolver: Resolver<any, { slug: string }, Show[]> = async (_, _args, _context) => {
   return await prisma.show.findMany();

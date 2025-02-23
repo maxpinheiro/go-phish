@@ -2,7 +2,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { Guess, User } from '@prisma/client';
 import { Resolver } from './util.resolver';
 
-export const userTypeDefs = `
+/*
   type Query {
     userByName(username: String!): User
   }
@@ -21,7 +21,7 @@ export const userTypeDefs = `
     friend_ids: [Int!]!
     guesses(completed: Boolean): [Guess!]!
   }
-`;
+*/
 
 const userByNameResolver: Resolver<any, { username: string }, User | null> = async (_, { username }, _context) => {
   return await prisma.user.findUnique({ where: { username } });

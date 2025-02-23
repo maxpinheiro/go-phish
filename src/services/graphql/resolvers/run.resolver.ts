@@ -3,7 +3,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { Guess, Run, Show, Venue } from '@prisma/client';
 import { Resolver } from './util.resolver';
 
-export const runTypeDefs = /* GraphQL */ `
+/*
   type Query {
     runBySlug(slug: String!): Run
   }
@@ -18,7 +18,7 @@ export const runTypeDefs = /* GraphQL */ `
     slug: String!
     guesses(completed: Boolean): [Guess!]!
   }
-`;
+*/
 
 const runBySlugResolver: Resolver<any, { slug: string }, Run | null> = async (_, { slug }, _context) => {
   return await prisma.run.findUnique({ where: { slug } });

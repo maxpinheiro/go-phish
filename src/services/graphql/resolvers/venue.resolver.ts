@@ -2,7 +2,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { Run, Show, Venue } from '@prisma/client';
 import { Resolver } from './util.resolver';
 
-export const venueTypeDefs = /* GraphQL */ `
+/*
   type Venue {
     id: Int!
     name: String!
@@ -15,7 +15,7 @@ export const venueTypeDefs = /* GraphQL */ `
     runs: [Run!]!
     shows: [Show!]!
   }
-`;
+*/
 
 const runsForVenueResolver: Resolver<Venue, any, Run[]> = async (venue, _, { loaders }) => {
   return loaders.runsForVenueLoader.load(venue.id);
