@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { showModeratorSlice } from './admin/showModerator.store';
 import { profileSlice } from './profile.store';
 import { settingsSlice } from './settings.store';
 
@@ -6,6 +7,7 @@ export const store = configureStore({
   reducer: {
     [profileSlice.name]: profileSlice.reducer,
     [settingsSlice.name]: settingsSlice.reducer,
+    [showModeratorSlice.name]: showModeratorSlice.reducer,
   },
 });
 

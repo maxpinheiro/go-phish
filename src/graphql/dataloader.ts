@@ -1,7 +1,7 @@
 import DataLoader from 'dataloader';
 
 import { Guess, Run, Show, User, Venue } from '@prisma/client';
-import prisma from '../db.service';
+import prisma from '../services/db.service';
 
 export const orderRecords = <T extends { id: number }>(records: T[], ids: readonly number[]): T[] => {
   const lookup = Object.fromEntries(records.map((record) => [record.id, record]));
@@ -78,3 +78,14 @@ export function createLoaders() {
 }
 
 export type DataLoaders = ReturnType<typeof createLoaders>;
+
+type Obj = Show | Guess | User | Venue | Run;
+
+export const loaderByType = (loaders: DataLoaders, type: string): DataLoader<number, Obj> | null => {
+  switch (type) {
+    case 'Show':
+      return loaders.showLoader;
+    default:
+      return null;
+  }
+};

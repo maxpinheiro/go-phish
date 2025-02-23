@@ -11,3 +11,7 @@ export type ShowWithVenue = Show & {
 export type ShowWithVenueAndRun = ShowWithVenue & {
   run: Run;
 };
+
+const showFields = ['runId', 'runNight', 'slug', 'date', 'timestamp', 'venueId'];
+
+export const isShow = (obj: Object): obj is Show => showFields.every((f) => obj.hasOwnProperty(f));

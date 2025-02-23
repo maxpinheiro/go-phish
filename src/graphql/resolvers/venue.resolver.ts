@@ -1,10 +1,11 @@
 import { IResolvers } from '@graphql-tools/utils';
 import { Run, Show, Venue } from '@prisma/client';
+import { globalIdResolver, idResolver } from './node.resolvers';
 import { Resolver } from './util.resolver';
 
 /*
-  type Venue {
-    id: Int!
+  type Venue implements Node {
+    venueId: Int!
     name: String!
     name_abbr: String
     city: String
@@ -25,8 +26,12 @@ const showsForVenueResolver: Resolver<Venue, any, Show[]> = async (venue, _, { l
   return loaders.showsForVenueLoader.load(venue.id);
 };
 
+const gidResolver: Resolver<Venue, any, String> = globalIdResolver('Venue');
+
 export const venueResolvers: IResolvers = {
   Venue: {
+    id: gidResolver,
+    venueId: idResolver,
     runs: runsForVenueResolver,
     shows: showsForVenueResolver,
   },

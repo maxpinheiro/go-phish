@@ -343,3 +343,7 @@ import { Song } from '@prisma/client';
 // }));
 
 export type SongUpdateData = Partial<Omit<Song, 'id'>>;
+
+const songFields = ['name', 'averageGap', 'points', 'tags'];
+
+export const isSong = (obj: Object): obj is Song => songFields.every((f) => obj.hasOwnProperty(f));

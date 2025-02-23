@@ -1,10 +1,12 @@
 import { IResolvers } from '@graphql-tools/utils';
 import { Guess, Run, Show, User } from '@prisma/client';
+import { globalIdResolver, idResolver } from './node.resolvers';
 import { Resolver } from './util.resolver';
 
 /*
-  type Guess {
-    id: Int!
+  type Guess implements Node {
+    id: ID!
+    guessId: Int!
     userId: Int!
     user: User!
     songId: String!
@@ -31,8 +33,12 @@ const showForGuessResolver: Resolver<Guess, any, Show> = async (guess, _, { load
   return loaders.showLoader.load(guess.showId);
 };
 
+const gidResolver: Resolver<Guess, any, String> = globalIdResolver('Guess');
+
 export const guessResolvers: IResolvers = {
   Guess: {
+    id: gidResolver,
+    guessId: idResolver,
     user: userForGuessResolver,
     run: runForGuessResolver,
     show: showForGuessResolver,

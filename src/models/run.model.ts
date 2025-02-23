@@ -7,3 +7,7 @@ export type RunOrderByQuery = Prisma.Enumerable<Prisma.RunOrderByWithRelationInp
 export type RunWithVenue = Run & {
   venue: Venue;
 };
+
+const runFields = ['name', 'slug', 'dates', 'venueId'];
+
+export const isRun = (obj: Object): obj is Run => runFields.every((f) => obj.hasOwnProperty(f));

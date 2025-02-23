@@ -3,6 +3,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { User } from '@prisma/client';
 import { readFileSync } from 'fs';
 import { guessResolvers } from './resolvers/guess.resolver';
+import { nodeResolvers } from './resolvers/node.resolvers';
 import { runResolvers } from './resolvers/run.resolver';
 import { showResolvers } from './resolvers/show.resolver';
 import { songResolvers } from './resolvers/song.resolver';
@@ -27,10 +28,11 @@ const queryResolvers: IResolvers = {
   },
 };
 
-const typeDefs = readFileSync('./schema.graphql', { encoding: 'utf-8' });
+const typeDefs = readFileSync('./src/graphql/schema.graphql', { encoding: 'utf-8' });
 
 const resolvers = [
   queryResolvers,
+  nodeResolvers,
   songResolvers,
   userResolvers,
   venueResolvers,

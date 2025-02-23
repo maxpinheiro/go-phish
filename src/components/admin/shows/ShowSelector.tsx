@@ -25,21 +25,21 @@ const ShowSelector: React.FC<ShowSelectorProps> = ({ shows, todayShow, selectSho
   const { color } = useThemeContext();
 
   return (
-    <div className="flex flex-col items-center max-w-500 space-y-2">
+    <div className="flex flex-col items-center w-full mt-2">
       {todayShow && (
         <div
-          className={`flex flex-col items-center space-y-2 px-6 py-4 border border-${color} rounded-lg shadow-sm cursor-pointer`}
+          className={`flex flex-col items-center min-w-52 h-24 space-y-2 px-6 py-4 border border-${color} rounded-lg shadow-sm cursor-pointer`}
           onClick={() => selectShow(todayShow)}
         >
           <p>Today&apos;s Show:</p>
           <ShowItem show={todayShow} select={selectShow} />
         </div>
       )}
-      <p className="">All Shows:</p>
-      <div className="flex flex-col items-center space-y-4 pb-10">
+      <p className="mt-4 text-header-light">All Shows:</p>
+      <div className="flex flex-col items-center space-y-4 pb-10 mt-2">
         {shows.map((showGroup, idx) => (
           <div className="flex flex-col items-center" key={`showgroup-${idx}`}>
-            <p className="font-semibold my-2">{showGroup.runName}</p>
+            <p className={`font-semibold my-2 text-${color}`}>{showGroup.runName}</p>
             <div className="flex flex-col items-center space-y-2">
               {showGroup.shows.map((show) => (
                 <ShowItem show={show} select={selectShow} key={`showitem${show.id}`} />

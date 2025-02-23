@@ -1,5 +1,6 @@
 import { IResolvers } from '@graphql-tools/utils';
 import { Guess, User } from '@prisma/client';
+import { globalIdResolver, idResolver } from './node.resolvers';
 import { Resolver } from './util.resolver';
 
 /*
@@ -7,8 +8,9 @@ import { Resolver } from './util.resolver';
     userByName(username: String!): User
   }
 
-  type User {
-    id: Int!
+  type User implements Node {
+    id: ID!
+    userId: Int!
     username: String!
     name: String
     bio: String
@@ -37,11 +39,15 @@ const guessesForUserResolver: Resolver<User, { completed?: boolean }, Guess[]> =
   );
 };
 
+const gidResolver: Resolver<User, any, String> = globalIdResolver('User');
+
 export const userResolvers: IResolvers = {
   Query: {
     userByName: userByNameResolver,
   },
   User: {
+    id: gidResolver,
+    userId: idResolver,
     guesses: guessesForUserResolver,
   },
 };

@@ -1,6 +1,7 @@
 import prisma from '@/services/db.service';
 import { IResolvers } from '@graphql-tools/utils';
 import { Guess, Run, Show, Venue } from '@prisma/client';
+import { globalIdResolver, idResolver } from './node.resolvers';
 import { Resolver } from './util.resolver';
 
 /*
@@ -8,8 +9,9 @@ import { Resolver } from './util.resolver';
     runBySlug(slug: String!): Run
   }
 
-  type Run {
-    id: Int!
+  type Run implements Node {
+    id: ID!
+    runId: Int!
     name: String!
     dates: [Date!]!
     venueId: Int!
@@ -42,11 +44,15 @@ const guessesForRunResolver: Resolver<Run, { completed?: boolean }, Guess[]> = a
   );
 };
 
+const gidResolver: Resolver<Run, any, String> = globalIdResolver('Run');
+
 export const runResolvers: IResolvers = {
   Query: {
     runBySlug: runBySlugResolver,
   },
   Run: {
+    id: gidResolver,
+    runId: idResolver,
     venue: venueForRunResolver,
     shows: showsForRunResolver,
     guesses: guessesForRunResolver,

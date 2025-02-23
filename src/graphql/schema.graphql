@@ -10,6 +10,7 @@ type Avatar {
 }
 
 type Query {
+  node(id: ID!): Node
   me: User
 
   userByName(username: String!): User
@@ -23,8 +24,13 @@ type Query {
   allSongs: [Song!]!
 }
 
-type User {
-  id: Int!
+interface Node {
+  id: ID!
+}
+
+type User implements Node {
+  id: ID!
+  userId: Int!
   username: String!
   name: String
   bio: String
@@ -39,8 +45,9 @@ type User {
   guesses(completed: Boolean): [Guess!]!
 }
 
-type Venue {
-  id: Int!
+type Venue implements Node {
+  id: ID!
+  venueId: Int!
   name: String!
   name_abbr: String
   city: String
@@ -53,8 +60,9 @@ type Venue {
   shows: [Show!]!
 }
 
-type Run {
-  id: Int!
+type Run implements Node {
+  id: ID!
+  runId: Int!
   name: String!
   slug: String!
   dates: [Date!]!
@@ -65,8 +73,9 @@ type Run {
   guesses(completed: Boolean): [Guess!]!
 }
 
-type Show {
-  id: Int!
+type Show implements Node {
+  id: ID!
+  showId: Int!
   runId: Int!
   runNight: Int!
   slug: String!
@@ -84,8 +93,9 @@ type Show {
   guessEditForbiddenReason: String
 }
 
-type Guess {
-  id: Int!
+type Guess implements Node {
+  id: ID!
+  guessId: Int!
   userId: Int!
   songId: String!
   songName: String!
@@ -100,8 +110,9 @@ type Guess {
   show: Show!
 }
 
-type Song {
-  id: String!
+type Song implements Node {
+  id: ID!
+  songId: String!
   name: String!
   averageGap: Float!
   points: Float!

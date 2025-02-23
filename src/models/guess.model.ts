@@ -7,3 +7,7 @@ export type GuessOrderByQuery = Prisma.Enumerable<Prisma.GuessOrderByWithRelatio
 export type GuessWithShow = Guess & {
   show: Show;
 };
+
+const guessFields = ['userId', 'songId', 'songName', 'showId', 'runId', 'encore', 'completed', 'points'];
+
+export const isGuess = (obj: Object): obj is Guess => guessFields.every((f) => obj.hasOwnProperty(f));

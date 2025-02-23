@@ -1,5 +1,5 @@
-import { createLoaders } from '@/services/graphql/dataloader';
-import { schema } from '@/services/graphql/schema';
+import { createLoaders } from '@/graphql/dataloader';
+import { schema } from '@/graphql/schema';
 import { graphqlHTTP } from 'express-graphql';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';

@@ -1,6 +1,7 @@
 import { guessEditForbiddenReason } from '@/utils/guess.util';
 import { IResolvers } from '@graphql-tools/utils';
 import { Guess, Run, Show, Venue } from '@prisma/client';
+import { globalIdResolver, idResolver } from './node.resolvers';
 import { Resolver } from './util.resolver';
 
 /*
@@ -10,8 +11,9 @@ import { Resolver } from './util.resolver';
     showForDate(dateStr: String): Show
   }
 
-  type Show {
-    id: Int!
+  type Show implements Node {
+    id: ID!
+    showId: Int!
     runId: Int!
     run: Run!
     runNight: Int!
@@ -75,6 +77,8 @@ const guessEditForbiddenReasonResolver: Resolver<Show, any, String | null> = asy
   return guessEditForbiddenReason(user, { ...show, venue });
 };
 
+const gidResolver: Resolver<Show, any, String> = globalIdResolver('Show');
+
 export const showResolvers: IResolvers = {
   Query: {
     allShows: allShowsResolver,
@@ -82,6 +86,8 @@ export const showResolvers: IResolvers = {
     showForDate: showForDateResolver,
   },
   Show: {
+    id: gidResolver,
+    showId: idResolver,
     run: runForShowResolver,
     venue: venueForShowResolver,
     guesses: guessesForShowResolver,

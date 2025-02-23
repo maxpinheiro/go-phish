@@ -81,6 +81,36 @@ module.exports = {
             fontWeight: '700',
           },
         ],
+        'header-light': [
+          '22px',
+          {
+            fontWeight: '300',
+          },
+        ],
+        'header-regular': [
+          '22px',
+          {
+            fontWeight: '400',
+          },
+        ],
+        'header-medium': [
+          '22px',
+          {
+            fontWeight: '500',
+          },
+        ],
+        'header-semibold': [
+          '22px',
+          {
+            fontWeight: '600',
+          },
+        ],
+        'header-bold': [
+          '22px',
+          {
+            fontWeight: '700',
+          },
+        ],
       },
     },
   },

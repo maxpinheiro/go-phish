@@ -51,3 +51,20 @@ export const avatarColorLabels: Record<AvatarType, Record<keyof Omit<AvatarConfi
 };
 
 interface UserStats {}
+
+const userFields = [
+  'username',
+  'password',
+  'name',
+  'bio',
+  'hometown',
+  'email',
+  'emailVerified',
+  'image',
+  'admin',
+  'avatarType',
+  'avatar',
+  'friend_ids',
+];
+
+export const isUser = (obj: Object): obj is User => userFields.every((f) => obj.hasOwnProperty(f));
