@@ -10,10 +10,10 @@ interface TitleBarProps {
 
 const TitleBar: React.FC<TitleBarProps> = ({ left, center, right, px = '4', py = '4' }) => {
   return (
-    <div className={`flex items-center w-full max-w-500 justify-between px-${px} py-${py}`}>
-      {left}
+    <div className={`flex items-center w-full justify-center px-${px} py-${py} relative`}>
+      <div className="absolute left-0">{left}</div>
       {typeof center === 'string' ? <p className="text-2xl font-light">{center}</p> : center}
-      {right}
+      <div className="absolute right-0">{right}</div>
     </div>
   );
 };

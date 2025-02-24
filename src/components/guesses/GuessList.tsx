@@ -42,7 +42,7 @@ const GuessList: React.FC<GuessListProps> = ({ organizedGuesses, nightShow }) =>
     return (
       <div className="flex flex-col items-center">
         <p className="my-4">There are no guesses for this show yet!</p>
-        <Link href={`/guesses/${nightShow.id}/edit`} className="link">
+        <Link href={`/guesses/${nightShow.slug}/edit`} className="link">
           Add Guesses
         </Link>
       </div>
@@ -52,7 +52,7 @@ const GuessList: React.FC<GuessListProps> = ({ organizedGuesses, nightShow }) =>
   return (
     <div className="flex flex-col items-center space-y-4 w-full max-w-500 mx-auto my-5 px-5 border-box" id="guess-list">
       {currentUserId && !organizedGuesses.some((g) => g.user.id === currentUserId) && nightShow && (
-        <Link href={`/guesses/${nightShow.id}/edit`} className="link mt-2">
+        <Link href={`/guesses/${nightShow.slug}/edit`} className="link mt-2">
           Add Your Guesses
         </Link>
       )}
@@ -69,7 +69,7 @@ const GuessList: React.FC<GuessListProps> = ({ organizedGuesses, nightShow }) =>
                 </Link>
                 <p>{`- ${guesses.complete.length}/${guesses.complete.length + guesses.incomplete.length} completed`}</p>
                 {currentUserId && currentUserId === user.id && nightShow && (
-                  <Link href={`/guesses/${nightShow.id}/edit`} className={`link text-${color}`}>
+                  <Link href={`/guesses/${nightShow.slug}/edit`} className={`link text-${color}`}>
                     edit
                   </Link>
                 )}

@@ -4,6 +4,10 @@ export type RunQuery = Prisma.RunWhereInput;
 
 export type RunOrderByQuery = Prisma.Enumerable<Prisma.RunOrderByWithRelationInput>;
 
+export type RunWithISODates = Omit<Run, 'dates'> & {
+  dates: string[];
+};
+
 export type RunWithVenue = Run & {
   venue: Venue;
 };

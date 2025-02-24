@@ -7,19 +7,6 @@ import { Song } from '@prisma/client';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
-export interface SongLookupContainerProps {
-  allSongs: Song[];
-}
-
-/**
- * 
- <p className="">Last Played: {songData.last_played}</p>
-          <p className="">Debut: {songData.debut}</p>
-          <p className="">Times Played: {songData.times_played}</p>
-          <p className="">Current Gap: {songData.gap}</p>
-          <p className="">Average Gap: {selectedSong.averageGap}</p>
-          <p className="">Points: {selectedSong.points}</p>
- */
 const songInfoList = (song: Song, data: PhishNetSong): { label: string; value: string | number }[] => [
   { label: 'Last Played:', value: data.last_played },
   { label: 'Debut:', value: data.debut },
@@ -40,7 +27,7 @@ const SongInfoList = ({ song, data }: { song: Song; data: PhishNetSong }) => (
   </>
 );
 
-const SongLookupContainer: React.FC<SongLookupContainerProps> = ({ allSongs }) => {
+const SongLookupContainer: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [songData, setSongData] = useState<PhishNetSong | null>(null);
@@ -67,7 +54,7 @@ const SongLookupContainer: React.FC<SongLookupContainerProps> = ({ allSongs }) =
     <div className="flex flex-col items-center">
       <p className="text-title-regular my-5">Song Lookup</p>
       <div className="w-3/4 mb-5">
-        <SongInput allSongs={allSongs} selectSong={selectSong} selectedSong={null} />
+        <SongInput selectSong={selectSong} selectedSong={null} />
       </div>
       {loading && <LoadingOverlay />}
       {songData && selectedSong && (

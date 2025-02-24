@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { showModeratorSlice } from './admin/showModerator.store';
+import { guessEditorSlice } from './guessEditor.store';
 import { profileSlice } from './profile.store';
 import { settingsSlice } from './settings.store';
 
 export const store = configureStore({
   reducer: {
+    [guessEditorSlice.name]: guessEditorSlice.reducer,
     [profileSlice.name]: profileSlice.reducer,
     [settingsSlice.name]: settingsSlice.reducer,
     [showModeratorSlice.name]: showModeratorSlice.reducer,

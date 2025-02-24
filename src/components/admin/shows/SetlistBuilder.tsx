@@ -8,34 +8,27 @@ import { ShowWithVenueAndRun } from '@/models/show.model';
 import { useThemeContext } from '@/store/theme.store';
 import { DateString, ResponseStatus, SetlistSong } from '@/types/main';
 import { formatShowDate } from '@/utils/show.util';
-import { Song } from '@prisma/client';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 interface SetlistBuilderProps {
   show: ShowWithVenueAndRun;
-  allSongs: Song[];
 }
 
 // input for manually submitting
 interface ManualSetlistBuilderProps {
-  allSongs: Song[];
   selectSong: (songId: string, name: string, encore: boolean) => void;
 }
 
-const ManualSetlistBuilder: React.FC<ManualSetlistBuilderProps> = ({ allSongs, selectSong }) => {
+const ManualSetlistBuilder: React.FC<ManualSetlistBuilderProps> = ({ selectSong }) => {
   const [encore, setEncore] = useState(false);
 
   return (
     <>
       <div className="flex flex-col items-center w-full my-4">
         <div className="w-full">
-          <SongInput
-            selectSong={(song) => selectSong(song.id, song.name, encore)}
-            selectedSong={null}
-            allSongs={allSongs}
-          />
+          <SongInput selectSong={(song) => selectSong(song.id, song.name, encore)} selectedSong={null} />
         </div>
       </div>
       <div className="flex items-center space-x-2 mb-4">
@@ -76,7 +69,7 @@ const SongSetlist = ({
   </div>
 );
 
-const SetlistBuilder: React.FC<SetlistBuilderProps> = ({ show, allSongs }) => {
+const SetlistBuilder: React.FC<SetlistBuilderProps> = ({ show }) => {
   const { color } = useThemeContext();
   const [setlist, setSetList] = useState<SetlistSong[]>([]);
   const [loading, setLoading] = useState(false);
@@ -125,7 +118,7 @@ const SetlistBuilder: React.FC<SetlistBuilderProps> = ({ show, allSongs }) => {
         </div>
       ) : (
         <>
-          {buildManually && <ManualSetlistBuilder allSongs={allSongs} selectSong={selectSong} />}
+          {buildManually && <ManualSetlistBuilder selectSong={selectSong} />}
           <SongSetlist songs={setlist} deleteSong={deleteSong} color={color} />
           <div className="flex flex-col items-center w-full mt-10 mb-10 space-y-5">
             <button

@@ -1,6 +1,7 @@
 import Navbar from '@/components/shared/Navbar';
 import { environment } from '@/graphql/relay/relayEnvironment';
 import { store } from '@/store/app.store';
+import { SongContextWrapper } from '@/store/song.store';
 import { ThemeWrapper } from '@/store/theme.store';
 import '@/styles/globals.css';
 import '@/styles/navmenu.styles.scss';
@@ -37,15 +38,17 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
     <SessionProvider session={session}>
       <ThemeProvider attribute="class">
         <ThemeWrapper>
-          <Provider store={store}>
-            <RelayEnvironmentProvider environment={environment}>
-              <Toaster position="top-right" toastOptions={toastOptions} />
-              <div className={`w-screen min-h-screen flex flex-col relative raleway-ksjdkwjew`}>
-                <Navbar />
-                <Component {...pageProps} />
-              </div>
-            </RelayEnvironmentProvider>
-          </Provider>
+          <SongContextWrapper>
+            <Provider store={store}>
+              <RelayEnvironmentProvider environment={environment}>
+                <Toaster position="top-right" toastOptions={toastOptions} />
+                <div className={`w-screen min-h-screen flex flex-col relative raleway-ksjdkwjew`}>
+                  <Navbar />
+                  <Component {...pageProps} />
+                </div>
+              </RelayEnvironmentProvider>
+            </Provider>
+          </SongContextWrapper>
         </ThemeWrapper>
       </ThemeProvider>
     </SessionProvider>

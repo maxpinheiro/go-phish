@@ -1,5 +1,6 @@
 import { Color } from '@/types/main';
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { SkeletonTheme } from 'react-loading-skeleton';
 
 export type ThemeColor = 'red' | 'blue' | 'purple' | 'green';
 
@@ -24,6 +25,7 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export function ThemeWrapper({ children }: { children: ReactNode }) {
   const [color, setColor] = useState<ThemeColor>('red');
+  const hexColor = themeHexColor[color];
 
   useEffect(() => {
     const themeCookie = typeof window !== 'undefined' ? window.localStorage.getItem('gophish-theme') : undefined;
@@ -37,11 +39,17 @@ export function ThemeWrapper({ children }: { children: ReactNode }) {
 
   const value = {
     color,
-    hexColor: themeHexColor[color],
+    hexColor,
     setThemeColor,
   };
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={value}>
+      <SkeletonTheme baseColor={hexColor} highlightColor="rgba(245, 245, 245, 0.5)">
+        {children}
+      </SkeletonTheme>
+    </ThemeContext.Provider>
+  );
 }
 
 export function useThemeContext() {

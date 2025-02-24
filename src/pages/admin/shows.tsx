@@ -1,4 +1,4 @@
-import ShowModerator from '@/components/admin/shows/ShowModeratorPage';
+import ShowModeratorPageComponent from '@/components/admin/shows/ShowModeratorPage';
 import ErrorMessage from '@/components/shared/ErrorMessage';
 import moment from 'moment-timezone';
 import { useSession } from 'next-auth/react';
@@ -21,7 +21,7 @@ const ShowModeratorPage: React.FC = () => {
       <Head>
         <title>Admin | Go Phish</title>
       </Head>
-      <ShowModerator todayStr={todayStr} />
+      <ShowModeratorPageComponent todayStr={todayStr} />
     </>
   );
 };

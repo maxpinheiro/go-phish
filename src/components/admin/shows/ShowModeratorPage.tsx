@@ -1,7 +1,8 @@
 import { buildShowWithVenueAndRunFromFragment } from '@/graphql/relay/Show.query';
 import { buildSongFromFragment } from '@/graphql/relay/Song.query';
+import { useSongContext } from '@/store/song.store';
 import { organizeShowsByRun } from '@/utils/show.util';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { graphql, useLazyLoadQuery } from 'react-relay';
 import ShowModerator, { ShowModeratorSkeleton } from './ShowModerator';
 import ShowModeratorNavbar from './ShowModeratorNavbar';
@@ -42,9 +43,14 @@ function useShowModeratorPageData(todayStr: string) {
 }
 
 const ShowModeratorWrapper: React.FC<ShowModeratorPageProps> = ({ todayStr }) => {
+  const { setAllSongs } = useSongContext();
   const { showsByRun, todayShow, songs } = useShowModeratorPageData(todayStr);
 
-  return <ShowModerator shows={showsByRun} todayShow={todayShow} allSongs={songs} />;
+  useEffect(() => {
+    if (songs) setAllSongs(songs);
+  }, [songs]);
+
+  return <ShowModerator shows={showsByRun} todayShow={todayShow} />;
 };
 
 const ShowModeratorPage: React.FC<ShowModeratorPageProps> = ({ todayStr }) => {

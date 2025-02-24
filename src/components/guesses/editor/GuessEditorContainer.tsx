@@ -1,20 +1,15 @@
-import GuessEditor from '@/components/guesses/GuessEditor';
-import BackLink from '@/components/shared/BackLink';
 import { ShowInfo } from '@/components/shared/RunInfo';
-import TitleBar from '@/components/shared/TitleBar';
 import { RunWithVenue } from '@/models/run.model';
-import { ShowWithVenue } from '@/models/show.model';
-import { useThemeContext } from '@/store/theme.store';
-import { Guess, Song } from '@prisma/client';
-import Link from 'next/link';
+import { ShowIdAndRunNight, ShowWithVenue } from '@/models/show.model';
+import { Guess } from '@prisma/client';
 import React from 'react';
+import GuessEditor from './GuessEditor';
 
 export interface GuessEditorContainerProps {
   run: RunWithVenue;
   show: ShowWithVenue;
-  runShows: ShowWithVenue[];
+  runShows: ShowIdAndRunNight[];
   currentGuesses: Guess[];
-  allSongs: Song[];
   forbiddenReason?: string | null; // valid data, but cannot edit for some reason
 }
 
@@ -23,33 +18,18 @@ const GuessEditorContainer: React.FC<GuessEditorContainerProps> = ({
   show,
   runShows,
   currentGuesses,
-  allSongs,
   forbiddenReason,
 }) => {
-  const { color } = useThemeContext();
-  const guessesUrl = `/guesses/run/${run.id}?night=${show.runNight}`;
-
   return (
-    <div id="guess-editor-page">
-      <div className="flex flex-col items-center pb-10">
-        <TitleBar
-          left={<BackLink text="Back" />}
-          center="Guesses"
-          right={
-            <Link href={guessesUrl} className={`text-${color}`}>
-              All Guesses
-            </Link>
-          }
-        />
-        <ShowInfo show={show} run={run} runShows={runShows} large />
-        {forbiddenReason ? (
-          <p className="text-center mt-8">{forbiddenReason}</p>
-        ) : (
-          <div className="w-full">
-            <GuessEditor run={run} show={show} runShows={runShows} allGuesses={currentGuesses} allSongs={allSongs} />
-          </div>
-        )}
-      </div>
+    <div className="flex flex-col items-center w-full pt-4 pb-10">
+      <ShowInfo show={show} run={run} large />
+      {forbiddenReason ? (
+        <p className="text-center mt-8">{forbiddenReason}</p>
+      ) : (
+        <div className="w-full">
+          <GuessEditor show={{ ...show, run }} runShows={runShows} currentGuesses={currentGuesses} />
+        </div>
+      )}
     </div>
   );
 };

@@ -16,7 +16,7 @@ const ShowLinks: React.FC<ShowLinksProps> = ({ runId, show }) => (
       <EyeIcon width={22} height={22} className="" />
     </Link>
     {show && (
-      <Link href={`/guesses/${show.id}/edit`}>
+      <Link href={`/guesses/${show.slug}/edit`}>
         <PencilIcon width={22} height={22} className="" />
       </Link>
     )}
