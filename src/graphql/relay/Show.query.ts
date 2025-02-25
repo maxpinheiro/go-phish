@@ -29,6 +29,11 @@ export const formatShow = (show: ShowFragment$data): Show => ({
   timestamp: new Date(show.timestamp),
 });
 
+export const buildShowFromFragment = (show: ShowFragment$key): Show => {
+  const showData = useFragment<ShowFragment$key>(ShowFragment, show);
+  return formatShow(showData);
+};
+
 export const ShowWithVenueFragment = graphql`
   fragment ShowWithVenueFragment on Show {
     ...ShowFragment

@@ -63,7 +63,7 @@ const YearGroupItem: React.FC<YearGroupItemProps> = ({
                   </div>
                   {openRunId === showGroup.year && openShowId === show.id && (
                     <div className="flex w-full pb-3">
-                      <ShowLinks runId={openRunId} show={runGroup.shows.find((s) => s.id === openShowId)} />
+                      <ShowLinks show={show} />
                     </div>
                   )}
                 </>

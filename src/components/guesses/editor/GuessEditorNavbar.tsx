@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 const GuessEditorNavbar: React.FC = () => {
   const { color } = useThemeContext();
   const show = useSelector(selectShow);
-  const guessesUrl = show && `/guesses/run/${show.run.id}?night=${show.runNight}`;
+  const guessesUrl = show && `/guesses/run/${show.run.slug}?night=${show.runNight}`;
 
   return (
     <TitleBar

@@ -1,7 +1,7 @@
 import { PreviousGuess } from '@/components/guesses/GuessSelectorModal';
-import { RunWithISODates } from '@/models/run.model';
-import { ShowWithISODates, ShowWithRun } from '@/models/show.model';
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { buildRunFromISODates, RunWithISODates } from '@/models/run.model';
+import { buildShowFromISODates, ShowWithISODates, ShowWithRun } from '@/models/show.model';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from './app.store';
 
 export type ShowWithRunWithISODates = ShowWithISODates & { run: RunWithISODates };
@@ -16,14 +16,6 @@ export interface GuessEditorState {
   previousGuesses: PreviousGuess[] | null;
 }
 
-// const [selectedSongId, setSelectedSongId] = useState<string | null>(null);
-// const [loading, setLoading] = useState(false);
-// const [suggestModalOpen, setModalOpen] = useState(false);
-// const [helpTextOpen, setHelpTextOpen] = useState(true);
-// const [missingTextOpen, setMissingTextOpen] = useState(true);
-// const [guessSelectorOpen, setGuessSelectorOpen] = useState(false);
-// const [previousGuesses, setPreviousGuesses] = useState<PreviousGuess[] | null>(null);
-
 const initialState: GuessEditorState = {
   show: null,
   selectedSongId: null,
@@ -33,14 +25,6 @@ const initialState: GuessEditorState = {
   guessSelectorOpen: false,
   previousGuesses: null,
 };
-
-// setSelectedSongId
-// setLoading
-// setModalOpen
-// setHelpTextOpen
-// setMissingTextOpen
-// setGuessSelectorOpen
-// setPreviousGuesses
 
 export const guessEditorSlice = createSlice({
   name: 'guessEditor',
@@ -58,13 +42,8 @@ export const selectShow = (state: AppState): ShowWithRun | null => {
   const show = state.guessEditor.show;
   if (!show) return null;
   return {
-    ...show,
-    date: new Date(show.date),
-    timestamp: new Date(show.timestamp),
-    run: {
-      ...show.run,
-      dates: show.run.dates.map((d) => new Date(d)),
-    },
+    ...buildShowFromISODates(show),
+    run: buildRunFromISODates(show.run),
   };
 };
 

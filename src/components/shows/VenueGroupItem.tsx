@@ -66,7 +66,7 @@ const VenueGroupItem: React.FC<VenueGroupItemProps> = ({
                   </div>
                   {openRunId === showGroup.venue.id && openShowId === show.id && (
                     <div className="flex w-full pb-3">
-                      <ShowLinks runId={openRunId} show={runGroup.shows.find((s) => s.id === openShowId)} />
+                      <ShowLinks show={show} />
                     </div>
                   )}
                 </>

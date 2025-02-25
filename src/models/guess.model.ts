@@ -1,4 +1,4 @@
-import { Guess, Prisma, Show } from '@prisma/client';
+import { Guess, Prisma, Show, User } from '@prisma/client';
 
 export type GuessQuery = Prisma.GuessWhereInput;
 
@@ -6,6 +6,10 @@ export type GuessOrderByQuery = Prisma.Enumerable<Prisma.GuessOrderByWithRelatio
 
 export type GuessWithShow = Guess & {
   show: Show;
+};
+
+export type GuessWithShowAndUser = GuessWithShow & {
+  user: User;
 };
 
 const guessFields = ['userId', 'songId', 'songName', 'showId', 'runId', 'encore', 'completed', 'points'];

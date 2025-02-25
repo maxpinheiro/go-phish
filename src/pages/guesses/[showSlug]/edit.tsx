@@ -16,7 +16,7 @@ const GuessEditorPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>{showName} - Edit Guesses | Go Phish</title>
+        <title>{`${showName} - Edit Guesses | Go Phish`}</title>
       </Head>
       {showSlug ? <GuessEditorPageComponent showSlug={showSlug} /> : <GuessEditorSkeleton />}
     </>

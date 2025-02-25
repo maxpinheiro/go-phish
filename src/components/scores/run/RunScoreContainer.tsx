@@ -1,14 +1,11 @@
 import LeaderboardInfo from '@/components/scores/Leaderboard';
-import BackLink from '@/components/shared/BackLink';
 import RadioGroup, { RadioOption } from '@/components/shared/RadioGroup';
 import { RunInfo } from '@/components/shared/RunInfo';
-import TitleBar from '@/components/shared/TitleBar';
 import { RunWithVenue } from '@/models/run.model';
 import { ShowWithVenue } from '@/models/show.model';
 import { useThemeContext } from '@/store/theme.store';
 import { RankedUserScores, rankedUserScoresForNight } from '@/utils/guess.util';
 import { Show } from '@prisma/client';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -29,7 +26,7 @@ const RunScoreContainer: React.FC<RunScoreContainerProps> = ({ run, shows, ranke
   const organizedScores = isNaN(selectedNight)
     ? rankedUserScores
     : rankedUserScoresForNight(rankedUserScores, shows, selectedNight);
-  const guessesUrl = `/guesses/run/${run.id}${nightShow ? `?night=${nightShow.runNight}` : ''}`;
+  const guessesUrl = `/guesses/run/${run.slug}${nightShow ? `?night=${nightShow.runNight}` : ''}`;
 
   const chooseNight = (night: number | string) => {
     if (night === 'total') {
@@ -48,16 +45,7 @@ const RunScoreContainer: React.FC<RunScoreContainerProps> = ({ run, shows, ranke
 
   return (
     <div id="leaderboard-page">
-      <div className="flex flex-col items-center pb-10">
-        <TitleBar
-          left={<BackLink link="/shows" text="Shows" />}
-          center="Leaderboard"
-          right={
-            <Link href={guessesUrl} className={`text-${color}`}>
-              All Guesses
-            </Link>
-          }
-        />
+      <div className="flex flex-col items-center pt-4 pb-10">
         <RunInfo run={run} large showLocation />
         <RadioGroup
           options={nightRadioOptions}

@@ -50,13 +50,13 @@ const GuessList: React.FC<GuessListProps> = ({ organizedGuesses, nightShow }) =>
   }
 
   return (
-    <div className="flex flex-col items-center space-y-4 w-full max-w-500 mx-auto my-5 px-5 border-box" id="guess-list">
+    <div className="flex flex-col items-center space-y-4 w-full max-w-500 mx-auto my-5 border-box" id="guess-list">
       {currentUserId && !organizedGuesses.some((g) => g.user.id === currentUserId) && nightShow && (
         <Link href={`/guesses/${nightShow.slug}/edit`} className="link mt-2">
           Add Your Guesses
         </Link>
       )}
-      {Object.values(organizedGuesses).map(({ user, guesses }) => {
+      {organizedGuesses.map(({ user, guesses }) => {
         const avatar = JSON.parse(JSON.stringify(user.avatar)) as AvatarConfig;
         return (
           <ToggleDropdown

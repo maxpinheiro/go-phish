@@ -1,14 +1,10 @@
 import GuessList from '@/components/guesses/GuessList';
-import BackLink from '@/components/shared/BackLink';
 import RadioGroup, { RadioOption } from '@/components/shared/RadioGroup';
 import { RunInfo } from '@/components/shared/RunInfo';
-import TitleBar from '@/components/shared/TitleBar';
 import { RunWithVenue } from '@/models/run.model';
 import { ShowWithVenue } from '@/models/show.model';
-import { useThemeContext } from '@/store/theme.store';
 import { organizedGuessesForNight, OrganizedGuessesWithShow } from '@/utils/guess.util';
 import { Show } from '@prisma/client';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -22,17 +18,14 @@ const GuessRunContainer: React.FC<GuessRunContainerProps> = ({ run, shows, guess
   const router = useRouter();
   const { night: runNight } = router.query;
   const selectedNight = parseInt(runNight?.toString() || '');
-  const { color } = useThemeContext();
   // TODO: custom hook for selecting/filtering guesses
   const nightNumbers: number[] = shows.map((show) => show.runNight).sort();
   const nightShow: Show | undefined = shows.find((s) => s.runNight === selectedNight);
   const organizedGuesses = isNaN(selectedNight) ? guesses : organizedGuessesForNight(guesses, shows, selectedNight);
 
-  const scoresUrl = `/scores/run/${run.id}${nightShow ? `?night=${nightShow.runNight}` : ''}`;
-
   const chooseNight = (night: number | string) => {
     if (night === 'total') {
-      router.query.night = '';
+      router.query = {};
       router.push(router, undefined, { shallow: true });
     } else if (!isNaN(parseInt(night.toString()))) {
       router.query.night = night.toString();
@@ -46,16 +39,7 @@ const GuessRunContainer: React.FC<GuessRunContainerProps> = ({ run, shows, guess
   }));
 
   return (
-    <div className="flex flex-col items-center pb-10">
-      <TitleBar
-        left={<BackLink link="/shows" text="Shows" />}
-        center="Guesses"
-        right={
-          <Link href={scoresUrl} className={`text-${color}`}>
-            Leaderboard
-          </Link>
-        }
-      />
+    <div className="flex flex-col items-center pt-4 pb-10">
       <RunInfo run={run} large showLocation />
       <RadioGroup
         options={nightRadioOptions}

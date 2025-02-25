@@ -41,7 +41,7 @@ const LeaderboardInfo: React.FC<LeaderboardInfoProps> = ({ rankedUserScores, nig
 
   return (
     <div
-      className="flex flex-col items-centers space-y-4 w-full max-w-500 mx-auto px-5 my-5 border-box"
+      className="flex flex-col items-centers space-y-4 w-full max-w-500 mx-auto my-5 border-box"
       id="leaderboard-list"
     >
       {rankedUserScores.map(({ user, points, guesses }, idx) => {

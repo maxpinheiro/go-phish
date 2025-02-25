@@ -54,7 +54,6 @@ interface UserStats {}
 
 const userFields = [
   'username',
-  'password',
   'name',
   'bio',
   'hometown',

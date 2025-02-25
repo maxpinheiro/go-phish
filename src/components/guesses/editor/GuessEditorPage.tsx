@@ -4,7 +4,8 @@ import { buildGuessFromFragment } from '@/graphql/relay/Guess.query';
 import { buildRunWithVenueFromFragment } from '@/graphql/relay/Run.query';
 import { buildShowWithVenueFromFragment } from '@/graphql/relay/Show.query';
 import { buildSongFromFragment } from '@/graphql/relay/Song.query';
-import { ShowIdAndRunNight } from '@/models/show.model';
+import { buildRunWithISODates } from '@/models/run.model';
+import { buildShowWithISODates, ShowIdAndRunNight } from '@/models/show.model';
 import { setShow, ShowWithRunWithISODates } from '@/store/guessEditor.store';
 import { useSongContext } from '@/store/song.store';
 import Head from 'next/head';
@@ -70,13 +71,8 @@ const GuessEditorWrapper: React.FC<GuessEditorPageProps> = ({ showSlug }) => {
   useEffect(() => {
     if (show && run) {
       const showData: ShowWithRunWithISODates = {
-        ...show,
-        date: show.date.toISOString(),
-        timestamp: show.timestamp.toISOString(),
-        run: {
-          ...run,
-          dates: run.dates.map((d) => d.toISOString()),
-        },
+        ...buildShowWithISODates(show),
+        run: buildRunWithISODates(run),
       };
       dispatch(setShow(showData));
     }
@@ -88,9 +84,7 @@ const GuessEditorWrapper: React.FC<GuessEditorPageProps> = ({ showSlug }) => {
   return (
     <>
       <Head>
-        <title>
-          {run.name}, Night {show.runNight} - Edit Guesses | Go Phish
-        </title>
+        <title>{`${run.name}, Night ${show.runNight} - Edit Guesses | Go Phish`}</title>
       </Head>
       <GuessEditorContainer
         run={run}

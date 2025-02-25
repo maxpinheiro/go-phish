@@ -25,6 +25,7 @@ const RunGroupItem: React.FC<RunGroupItemProps> = ({
   setOpenShowId,
 }) => {
   const { color } = useThemeContext();
+  const openShow = showGroup.shows.find((s) => s.id === openShowId);
 
   return (
     <div
@@ -63,9 +64,9 @@ const RunGroupItem: React.FC<RunGroupItemProps> = ({
           ))}
         </div>
       )}
-      {openRunId === showGroup.runId && openShowId && (
+      {openRunId === showGroup.runId && openShow && (
         <div className="flex w-full pb-3">
-          <ShowLinks runId={openRunId} show={showGroup.shows.find((s) => s.id === openShowId)} />
+          <ShowLinks show={openShow} />
         </div>
       )}
     </div>

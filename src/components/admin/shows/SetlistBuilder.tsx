@@ -114,7 +114,7 @@ const SetlistBuilder: React.FC<SetlistBuilderProps> = ({ show }) => {
       {scoredShows ? (
         <div className="flex flex-col items-center my-4">
           <p className="my-4">Successfully scored guesses.</p>
-          <Link href={`/scores/run/${show.runId}?night=${show.runNight || ''}`}>View Leaderboard</Link>
+          <Link href={`/scores/run/${show.run.slug}?night=${show.runNight || ''}`}>View Leaderboard</Link>
         </div>
       ) : (
         <>

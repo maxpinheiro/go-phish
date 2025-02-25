@@ -7,17 +7,17 @@ import ShowLinks from '../shows/ShowLinks';
 
 interface RunBlockProps {
   run: RunWithVenue;
+  currentShow: Show;
   showLocation?: boolean;
-  currentShow?: Show | undefined;
   showLinks?: boolean;
   showStartTime?: boolean;
 }
 
 const RunBlock: React.FC<RunBlockProps> = ({
   run,
+  currentShow,
   showLocation = true,
   showLinks = true,
-  currentShow = undefined,
   showStartTime = true,
 }) => {
   const { color } = useThemeContext();
@@ -42,7 +42,8 @@ const RunBlock: React.FC<RunBlockProps> = ({
       )}
       {showLinks && (
         <div className={`text-${color} w-full px-10 md:px-4`}>
-          <ShowLinks runId={run.id} show={currentShow} />
+          {/* <ShowLinks runId={run.id} show={currentShow} /> */}
+          <ShowLinks show={{ ...currentShow, run }} />
         </div>
       )}
       {showStartTime && <p className="opacity-50 pb-2">Show starts at {startTime}</p>}

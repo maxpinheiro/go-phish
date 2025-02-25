@@ -9,6 +9,18 @@ export type ShowWithISODates = Omit<Show, 'date' | 'timestamp'> & {
   timestamp: string;
 };
 
+export const buildShowWithISODates = (show: Show): ShowWithISODates => ({
+  ...show,
+  date: show.date.toISOString(),
+  timestamp: show.timestamp.toISOString(),
+});
+
+export const buildShowFromISODates = (show: ShowWithISODates): Show => ({
+  ...show,
+  date: new Date(show.date),
+  timestamp: new Date(show.timestamp),
+});
+
 export type ShowWithVenue = Show & {
   venue: Venue;
 };

@@ -8,6 +8,16 @@ export type RunWithISODates = Omit<Run, 'dates'> & {
   dates: string[];
 };
 
+export const buildRunWithISODates = (run: Run): RunWithISODates => ({
+  ...run,
+  dates: run.dates.map((d) => d.toISOString()),
+});
+
+export const buildRunFromISODates = (run: RunWithISODates): Run => ({
+  ...run,
+  dates: run.dates.map((d) => new Date(d)),
+});
+
 export type RunWithVenue = Run & {
   venue: Venue;
 };
