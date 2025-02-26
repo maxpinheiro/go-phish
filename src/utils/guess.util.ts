@@ -1,5 +1,5 @@
 import { PreviousGuess } from '@/components/guesses/GuessSelectorModal';
-import { GuessWithShow, GuessWithShowAndUser } from '@/models/guess.model';
+import { GuessWithRun, GuessWithShow, GuessWithShowAndUser } from '@/models/guess.model';
 import { ShowWithVenue } from '@/models/show.model';
 import { Guess, Run, Show, User } from '@prisma/client';
 import moment from 'moment-timezone';
@@ -8,10 +8,11 @@ import { organizeArrayByField } from './utils';
 
 export type OrganizedRunItem = { run: Run; points: number; scores: Guess[] };
 
-export const organizeRunRecord = (guessesByRun: Record<number, Guess[]>, runs: Run[]): OrganizedRunItem[] => {
+export const organizeRunRecord = (guesses: GuessWithRun[]): OrganizedRunItem[] => {
   let runRecord: OrganizedRunItem[] = [];
+  const guessesByRun = organizeArrayByField(guesses, 'runId');
   Object.entries(guessesByRun).forEach(([runId, guesses]) => {
-    const run = runs.find((r) => r.id === parseInt(runId));
+    const run = guesses[0].run;
     if (!run) return;
     const score = guesses.map((g) => g.points).reduce((acc, curr) => acc + curr, 0);
     runRecord.push({ run, points: score, scores: guesses.filter((g) => g.completed) });

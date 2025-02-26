@@ -1,4 +1,4 @@
-import { Guess, Prisma, Show, User } from '@prisma/client';
+import { Guess, Prisma, Run, Show, User } from '@prisma/client';
 
 export type GuessQuery = Prisma.GuessWhereInput;
 
@@ -6,6 +6,10 @@ export type GuessOrderByQuery = Prisma.Enumerable<Prisma.GuessOrderByWithRelatio
 
 export type GuessWithShow = Guess & {
   show: Show;
+};
+
+export type GuessWithRun = Guess & {
+  run: Run;
 };
 
 export type GuessWithShowAndUser = GuessWithShow & {
