@@ -30,9 +30,9 @@ const ShowModerator: React.FC<ShowModeratorProps> = ({ shows, todayShow }) => {
 
 export const ShowModeratorSkeleton = () => (
   <div className="flex flex-col items-center min-w-52 mx-auto">
-    <OpaqueSkeleton height={96} containerClassName="w-full rounded-lg shadow-sm" />
+    <OpaqueSkeleton height={96} containerClassName="rounded-lg shadow-sm" />
     <div className="h-4" />
-    <OpaqueSkeleton height={24} count={10} containerClassName="w-full space-y-4" />
+    <OpaqueSkeleton height={24} count={10} containerClassName="space-y-4" />
   </div>
 );
 

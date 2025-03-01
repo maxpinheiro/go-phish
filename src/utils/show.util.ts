@@ -1,8 +1,8 @@
+import { RadioOption } from '@/components/shared/RadioGroup';
 import { ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
 import { ShowGroupRun, ShowGroupVenue, ShowGroupYear } from '@/types/main';
-import { Run, Venue } from '@prisma/client';
+import { Run, Show, Venue } from '@prisma/client';
 import moment from 'moment';
-import { dateToDateString } from './date.util';
 
 export const formatShowDate = (show: ShowWithVenue, format: string): string => {
   return moment(show.timestamp).tz(show.venue.tz_id).format(format);
@@ -23,13 +23,11 @@ export const organizeShowsByRun = (shows: ShowWithVenueAndRun[]): ShowGroupRun[]
     const run = runsById[parseInt(runId)];
     if (!run) continue;
     showGroups.push({
-      runId: parseInt(runId),
-      runName: run.name,
-      runDates: run.dates.map((d) => dateToDateString(d)),
+      run,
       shows: shows.sort((s1, s2) => new Date(s1.timestamp).getTime() - new Date(s2.timestamp).getTime()),
     });
   }
-  showGroups.sort((group1, group2) => new Date(group2.runDates[0]).getTime() - new Date(group1.runDates[0]).getTime());
+  showGroups.sort((group1, group2) => group2.run.dates[0].getTime() - group1.run.dates[0].getTime());
   return showGroups;
 };
 
@@ -68,4 +66,15 @@ export const organizeShowsByVenue = (shows: ShowWithVenueAndRun[]): ShowGroupVen
   }));
   showGroups.sort((group1, group2) => group1.venue.name.charCodeAt(0) - group2.venue.name.charCodeAt(0));
   return showGroups;
+};
+
+export const nightShowsRadioOptions = (shows: Show[], includeTotal = true): RadioOption[] => {
+  const nightOptions: RadioOption[] = shows
+    .map((show) => show.runNight)
+    .sort()
+    .map((nightNumber) => ({
+      value: nightNumber,
+      label: `Night ${nightNumber}`,
+    }));
+  return includeTotal ? nightOptions.concat([{ value: 'total', label: 'Total' }]) : nightOptions;
 };

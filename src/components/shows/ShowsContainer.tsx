@@ -22,10 +22,7 @@ const ShowsContainer: React.FC<ShowsContainerProps> = ({ showsByRun, showsByYear
   const [filterType, setFilterType] = useState<FilterType>('run');
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative">
-        <p className="text-4xl my-4">Shows</p>
-      </div>
+    <div className="flex flex-col w-full items-center">
       <RadioGroup
         options={filterRadioOptions}
         selected={filterType}

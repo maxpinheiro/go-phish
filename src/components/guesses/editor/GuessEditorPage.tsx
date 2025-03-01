@@ -114,7 +114,7 @@ export const GuessEditorSkeleton = () => (
     <div className="h-2" />
     <OpaqueSkeleton width="20%" height={18} borderRadius={6} className="min-w-44" />
     <div className="h-4" />
-    <OpaqueSkeleton height={34} count={10} borderRadius={8} containerClassName="w-full space-y-4 px-8" />
+    <OpaqueSkeleton height={34} count={10} borderRadius={8} containerClassName="space-y-4 px-8" />
   </div>
 );
 

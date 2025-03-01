@@ -84,15 +84,16 @@ const RunScorePage: React.FC<RunScorePageProps> = ({ runSlug }) => {
 };
 
 export const RunScoreSkeleton = () => (
-  <div className="flex flex-col items-center w-full pt-4">
-    <OpaqueSkeleton opacityClass="opacity-10" width="25%" height={102} borderRadius={8} className="min-w-56" />
+  <div className="flex flex-col items-center w-full max-w-500 mx-auto p-4">
+    <div className="flex w-1/4 min-w-56 mx-auto">
+      <OpaqueSkeleton opacityClass="opacity-10" height={102} borderRadius={8} />
+    </div>
     <div className="h-4" />
     <OpaqueSkeleton
-      width="60%"
       height={42}
       count={6}
       borderRadius={8}
-      className="min-w-72"
+      className="min-w-72 mx-auto"
       containerClassName="space-y-4"
     />
   </div>

@@ -55,13 +55,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username }) => {
 
 export const ProfilePageSkeleton = () => (
   <div className="flex flex-col items-center w-full mt-4 px-4">
-    <OpaqueSkeleton height={48} borderRadius={6} containerClassName="w-full" />
+    <OpaqueSkeleton height={48} borderRadius={6} />
     <div className="h-8" />
-    <OpaqueSkeleton height={32} count={2} borderRadius={6} containerClassName="w-full space-y-4" />
+    <OpaqueSkeleton height={32} count={2} borderRadius={6} containerClassName="space-y-4" />
     <div className="h-8" />
-    <OpaqueSkeleton height={32} count={2} borderRadius={6} containerClassName="w-full space-y-4" />
+    <OpaqueSkeleton height={32} count={2} borderRadius={6} containerClassName="space-y-4" />
     <div className="h-8" />
-    <OpaqueSkeleton height={32} count={2} borderRadius={6} containerClassName="w-full space-y-4" />
+    <OpaqueSkeleton height={32} count={2} borderRadius={6} containerClassName="space-y-4" />
   </div>
 );
 

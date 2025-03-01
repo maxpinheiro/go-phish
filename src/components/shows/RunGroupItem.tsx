@@ -1,8 +1,8 @@
 import { useThemeContext } from '@/store/theme.store';
-import { ShowGroupRun } from '@/types/main';
-import { formatDateRange } from '@/utils/date.util';
+import { DateString, ShowGroupRun } from '@/types/main';
+import { dateToDateString, formatDateRange } from '@/utils/date.util';
 import React from 'react';
-import ShowLinks from './ShowLinks';
+import RunShowLinks from './RunShowLinks';
 
 /**
  * A collection of shows within a single run.
@@ -26,26 +26,28 @@ const RunGroupItem: React.FC<RunGroupItemProps> = ({
 }) => {
   const { color } = useThemeContext();
   const openShow = showGroup.shows.find((s) => s.id === openShowId);
+  const runId = showGroup.run.id;
+  const runDates: DateString[] = showGroup.run.dates.map(dateToDateString);
 
   return (
     <div
       key={`run-group-item-${idx}`}
       className={`flex flex-col items-center w-full px-10 md:px-20 ${idx === 0 && 'border-t'} border-b border-${color} ${
-        openRunId === showGroup.runId ? `bg-${color} bg-opacity-15` : ''
+        openRunId === showGroup.run.id ? `bg-${color} bg-opacity-15` : ''
       }`}
     >
       <div
         className="cursor-pointer"
         onClick={() => {
-          setOpenRunId((runId) => (runId === showGroup.runId ? null : showGroup.runId));
+          setOpenRunId((openRunId) => (openRunId === runId ? null : runId));
           setOpenShowId(null);
         }}
       >
-        <p className={`my-4 ${openRunId === showGroup.runId ? `font-medium text-${color}` : ''}`}>{`${formatDateRange(
-          showGroup.runDates
-        )} : ${showGroup.runName}`}</p>
+        <p className={`my-4 ${openRunId === showGroup.run.id ? `font-medium text-${color}` : ''}`}>{`${formatDateRange(
+          runDates
+        )} : ${showGroup.run.name}`}</p>
       </div>
-      {openRunId === showGroup.runId && (
+      {openRunId === runId && (
         <div className="flex justify-center w-full flex-wrap border-box space-x-4 py-2.5 ">
           {[...showGroup.shows, null].map((show, idx) => (
             <div
@@ -64,9 +66,9 @@ const RunGroupItem: React.FC<RunGroupItemProps> = ({
           ))}
         </div>
       )}
-      {openRunId === showGroup.runId && openShow && (
+      {openRunId === runId && openShowId && (
         <div className="flex w-full pb-3">
-          <ShowLinks show={openShow} />
+          <RunShowLinks run={showGroup.run} show={openShow} />
         </div>
       )}
     </div>
