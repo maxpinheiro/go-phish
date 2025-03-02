@@ -15,7 +15,7 @@ const OpaqueSkeleton: React.FC<OpaqueSkeletonProps> = ({
 }) => (
   <Skeleton
     className={`${opacityClass} ${className}`}
-    containerClassName={containerClassName + containerFill ? ' w-full' : ''}
+    containerClassName={containerClassName + (containerFill ? ' w-full' : '')}
     {...props}
   />
 );

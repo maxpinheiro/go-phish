@@ -69,7 +69,7 @@ const OnboardingContainer: React.FC<OnboardingContainerProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center px-6">
+    <div className="flex flex-col items-center mx-auto px-6">
       <p className="text-4xl my-5">Finish Your Account</p>
       <p className={`w-full text-right text-${color} cursor-pointer`} onClick={openProfile}>
         Skip for Now
