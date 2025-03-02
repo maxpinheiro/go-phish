@@ -10,8 +10,8 @@ import React from 'react';
 export interface TodayContainerProps {
   notFound: boolean;
   dateStr: string;
-  show?: ShowWithVenue;
-  run?: RunWithVenue;
+  show: ShowWithVenue | null;
+  run: RunWithVenue | null;
 }
 
 const NoShowFound = () => {
@@ -39,8 +39,8 @@ const TodayContainer: React.FC<TodayContainerProps> = ({ notFound, show, run, da
   const { color } = useThemeContext();
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex justify-start items-center w-full max-w-500 p-4 pb-0">
+    <div className="flex flex-col items-center w-full max-w-500 mx-auto p-4">
+      <div className="flex justify-start items-center w-full">
         <div className="flex items-center space-x-2">
           <BackArrow
             width={16}
