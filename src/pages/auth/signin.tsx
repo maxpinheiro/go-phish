@@ -1,28 +1,19 @@
 import LoginContainer from '@/components/auth/login/LoginContainer';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React from 'react';
 
-export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const session = await getSession(context);
+const SignInPage: React.FC = () => {
+  const router = useRouter();
+  const { data: session } = useSession();
   const username = session?.user?.username;
 
-  // redirect to profile if already logged in
   if (username) {
-    return {
-      redirect: {
-        destination: `/users/${username}`,
-        permanent: false,
-      },
-    };
+    router.push(`/users/${username}`);
+    return;
   }
-  return {
-    props: {},
-  };
-};
 
-const SignInPage: React.FC = () => {
   return (
     <>
       <Head>
