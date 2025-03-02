@@ -27,7 +27,6 @@ const OnboardingPageQuery = graphql`
 
 function useOnboardingPageData() {
   const { me } = useLazyLoadQuery<OnboardingPageQueryType>(OnboardingPageQuery, {});
-  console.log(me);
   if (!me) return null;
 
   const { userId, username, name, hometown, bio, avatar } = me;
