@@ -1,6 +1,6 @@
-import Container, { OnboardingContainerProps } from '@/components/users/onboarding/OnboardingContainer';
+import OnboardingContainer, { OnboardingContainerProps } from '@/components/users/onboarding/OnboardingContainer';
 import { getUserById } from '@/services/user.service';
-import { AvatarConfig } from '@/types/main';
+import { AvatarConfig, ResponseStatus } from '@/types/main';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -46,7 +46,7 @@ const OnboardingPage: React.FC<OnboardingContainerProps> = (props) => {
       <Head>
         <title>Login | Go Phish</title>
       </Head>
-      <Container {...props} />
+      <OnboardingContainer {...props} />
     </>
   );
 };

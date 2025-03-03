@@ -1,6 +1,6 @@
 import CloseIcon from '@/media/CloseIcon.svg';
 import { useThemeContext } from '@/store/theme.store';
-import { Guess, Song } from '@prisma/client';
+import { Guess } from '@prisma/client';
 import React from 'react';
 import SongInput from './SongInput';
 
@@ -8,20 +8,18 @@ interface GuessSlotProps {
   guess: Guess | null;
   slotIdx: number;
   numSlots: number;
-  selectedSongId: string | null;
+  selectedSongId?: string | null;
   submitGuess: (songId: string, encore: boolean) => void;
   subtractGuess: (guessId: number) => void;
-  allSongs: Song[];
 }
 
 const GuessSlot: React.FC<GuessSlotProps> = ({
   guess,
   slotIdx,
   numSlots,
-  selectedSongId,
+  selectedSongId = null,
   submitGuess,
   subtractGuess,
-  allSongs,
 }) => {
   const { color } = useThemeContext();
   const isEncore = slotIdx === numSlots - 1;
@@ -35,11 +33,7 @@ const GuessSlot: React.FC<GuessSlotProps> = ({
           <p className="m-0 ">{guess?.songName}&nbsp;</p>
         </div>
       ) : (
-        <SongInput
-          selectedSong={selectedSongId}
-          selectSong={(song) => submitGuess(song.id, isEncore)}
-          allSongs={allSongs}
-        />
+        <SongInput selectedSong={selectedSongId} selectSong={(song) => submitGuess(song.id, isEncore)} />
       )}
       <div
         style={guess === null ? { opacity: 0.25, userSelect: 'none' } : { cursor: 'cursor-pointer' }}

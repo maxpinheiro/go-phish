@@ -1,5 +1,11 @@
-import { emptyUser } from '@/models/user.model';
+import { isGuess } from '@/models/guess.model';
+import { isRun } from '@/models/run.model';
+import { isShow } from '@/models/show.model';
+import { isSong } from '@/models/song.model';
+import { emptyUser, isUser } from '@/models/user.model';
+import { isVenue } from '@/models/venue.model';
 import { Guess, User } from '@prisma/client';
+import toast from 'react-hot-toast';
 import { compareTwoStrings } from 'string-similarity';
 
 export const parseObj = (_key: string, value: any) =>
@@ -195,4 +201,18 @@ export const promiseAllInBatches = async <A, B>(
     position += batchSize;
   }
   return results;
+};
+
+export const getModelName = (obj: Object): string | null => {
+  if (isGuess(obj)) return 'Guess';
+  else if (isRun(obj)) return 'Run';
+  else if (isShow(obj)) return 'Show';
+  else if (isSong(obj)) return 'Song';
+  else if (isUser(obj)) return 'User';
+  else if (isVenue(obj)) return 'Venue';
+  else return null;
+};
+
+export const showError = (message: string, duration = 3000) => {
+  toast.error(message, { duration });
 };

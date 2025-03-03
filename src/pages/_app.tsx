@@ -1,17 +1,18 @@
 import Navbar from '@/components/shared/Navbar';
+import { environment } from '@/graphql/relay/relayEnvironment';
 import { store } from '@/store/app.store';
+import { SongContextWrapper } from '@/store/song.store';
 import { ThemeWrapper } from '@/store/theme.store';
 import '@/styles/globals.css';
 import '@/styles/navmenu.styles.scss';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
-import type { AppProps } from 'next/app';
-import { Raleway } from 'next/font/google';
+import { AppProps } from 'next/app';
 import { DefaultToastOptions, Toaster } from 'react-hot-toast';
+import 'react-loading-skeleton/dist/skeleton.css';
 import Modal from 'react-modal';
 import { Provider } from 'react-redux';
-
-const raleway = Raleway({ subsets: ['latin'] });
+import { RelayEnvironmentProvider } from 'react-relay';
 
 Modal.setAppElement('#__next');
 
@@ -37,13 +38,17 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
     <SessionProvider session={session}>
       <ThemeProvider attribute="class">
         <ThemeWrapper>
-          <Provider store={store}>
-            <Toaster position="top-right" toastOptions={toastOptions} />
-            <div className={`w-screen min-h-screen flex flex-col relative ${raleway.className}`}>
-              <Navbar />
-              <Component {...pageProps} />
-            </div>
-          </Provider>
+          <SongContextWrapper>
+            <Provider store={store}>
+              <RelayEnvironmentProvider environment={environment}>
+                <Toaster position="top-right" toastOptions={toastOptions} />
+                <div className={`w-screen min-h-screen flex flex-col relative raleway-ksjdkwjew`}>
+                  <Navbar />
+                  <Component {...pageProps} />
+                </div>
+              </RelayEnvironmentProvider>
+            </Provider>
+          </SongContextWrapper>
         </ThemeWrapper>
       </ThemeProvider>
     </SessionProvider>

@@ -1,9 +1,9 @@
 import { useThemeContext } from '@/store/theme.store';
 import { ShowGroupYear } from '@/types/main';
-import { formatDateRange } from '@/utils/date.util';
+import { dateToDateString, formatDateRange } from '@/utils/date.util';
 import { formatShowDate } from '@/utils/show.util';
 import React from 'react';
-import ShowLinks from './ShowLinks';
+import RunShowLinks from './RunShowLinks';
 
 interface YearGroupItemProps {
   idx: number;
@@ -45,8 +45,8 @@ const YearGroupItem: React.FC<YearGroupItemProps> = ({
           {showGroup.showsByRun.map((runGroup, idx) => (
             <div key={`year-group-run-group-${idx}`} className="w-full flex flex-col items-center space-y-2.5">
               <div className="flex items-center space-x-2">
-                <p className="font-medium">{runGroup.runName}:</p>
-                <p className="font-medium">{formatDateRange(runGroup.runDates)}</p>
+                <p className="font-medium">{runGroup.run.name}:</p>
+                <p className="font-medium">{formatDateRange(runGroup.run.dates.map(dateToDateString))}</p>
               </div>
               {runGroup.shows.map((show, idx) => (
                 <>
@@ -63,7 +63,7 @@ const YearGroupItem: React.FC<YearGroupItemProps> = ({
                   </div>
                   {openRunId === showGroup.year && openShowId === show.id && (
                     <div className="flex w-full pb-3">
-                      <ShowLinks runId={openRunId} show={runGroup.shows.find((s) => s.id === openShowId)} />
+                      <RunShowLinks run={runGroup.run} show={show} />
                     </div>
                   )}
                 </>

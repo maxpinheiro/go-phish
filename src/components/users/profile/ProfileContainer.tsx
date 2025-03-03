@@ -19,7 +19,7 @@ const ProfileContainer: React.FC<ProfileContainerProps> = ({ user: initUser, run
   const user = updatedUser || initUser;
   const dispatch = useDispatch();
   return (
-    <div className="flex flex-col w-full max-w-500 mt-2" id="user-info">
+    <div className="flex flex-col w-full">
       <ProfileHeader user={user} />
       <div className="flex flex-col mx-4">
         <AboutMe user={user} />

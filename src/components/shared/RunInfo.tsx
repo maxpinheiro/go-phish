@@ -31,14 +31,11 @@ export const RunInfo: React.FC<RunInfoProps> = ({ run, large = false, showLocati
 interface ShowInfoProps {
   run: RunWithVenue;
   show: ShowWithVenue;
-  runShows: ShowWithVenue[];
   large?: boolean;
   showLinks?: boolean;
 }
 
-export const ShowInfo: React.FC<ShowInfoProps> = ({ run, show, runShows, large = false, showLinks = false }) => {
-  const prevShow = runShows.find((s) => s.runNight === show.runNight - 1);
-  const nextShow = runShows.find((s) => s.runNight === show.runNight + 1);
+export const ShowInfo: React.FC<ShowInfoProps> = ({ run, show, large = false, showLinks = false }) => {
   return (
     <div className="flex flex-col items-center" id="run-info">
       <p className={`mt-0 mb-2.5 ${large ? 'text-3xl' : 'text-xl'}`}>{run.name}</p>

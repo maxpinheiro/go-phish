@@ -1,0 +1,120 @@
+scalar DateTime
+
+scalar Date
+
+type Avatar {
+  head: String!
+  torso: String!
+  background: String!
+  type: String
+}
+
+type Query {
+  node(id: ID!): Node
+  me: User
+
+  userByName(username: String!): User
+
+  runBySlug(slug: String!): Run
+
+  allShows: [Show!]!
+  showBySlug(slug: String!): Show
+  showForDate(dateStr: String): Show
+
+  allSongs: [Song!]!
+}
+
+interface Node {
+  id: ID!
+}
+
+type User implements Node {
+  id: ID!
+  userId: Int!
+  username: String!
+  name: String
+  bio: String
+  hometown: String
+  email: String
+  image: String
+  admin: Boolean!
+  avatar: Avatar
+  avatarType: String
+  friend_ids: [Int!]!
+
+  guesses(completed: Boolean): [Guess!]!
+}
+
+type Venue implements Node {
+  id: ID!
+  venueId: Int!
+  name: String!
+  name_abbr: String
+  city: String
+  state: String
+  country: String
+  tz_id: String!
+  tz_name: String
+
+  runs: [Run!]!
+  shows: [Show!]!
+}
+
+type Run implements Node {
+  id: ID!
+  runId: Int!
+  name: String!
+  slug: String!
+  dates: [Date!]!
+  venueId: Int!
+
+  venue: Venue!
+  shows: [Show!]!
+  guesses(completed: Boolean): [Guess!]!
+}
+
+type Show implements Node {
+  id: ID!
+  showId: Int!
+  runId: Int!
+  runNight: Int!
+  slug: String!
+  date: Date!
+  timestamp: Date!
+  venueId: Int!
+
+  run: Run!
+  venue: Venue!
+  guesses(completed: Boolean): [Guess!]
+
+  myGuesses(completed: Boolean): [Guess!]
+
+  "whether the current user is allowed to edit guesses for this show"
+  guessEditForbiddenReason: String
+}
+
+type Guess implements Node {
+  id: ID!
+  guessId: Int!
+  userId: Int!
+  songId: String!
+  songName: String!
+  showId: Int!
+  runId: Int!
+  encore: Boolean!
+  completed: Boolean!
+  points: Float!
+
+  user: User!
+  run: Run!
+  show: Show!
+}
+
+type Song implements Node {
+  id: ID!
+  songId: String!
+  name: String!
+  averageGap: Float!
+  points: Float!
+  tags: [String!]
+}

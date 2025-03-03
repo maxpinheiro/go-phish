@@ -1,5 +1,5 @@
 import { ShowWithVenueAndRun } from '@/models/show.model';
-import { Venue } from '@prisma/client';
+import { Run, Venue } from '@prisma/client';
 
 // main
 
@@ -76,9 +76,7 @@ export interface AvatarConfig {
 // shows
 
 export interface ShowGroupRun {
-  runId: number;
-  runName: string;
-  runDates: DateString[];
+  run: Run;
   shows: ShowWithVenueAndRun[];
 }
 

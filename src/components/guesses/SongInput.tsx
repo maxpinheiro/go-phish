@@ -1,32 +1,20 @@
+import { useSongContext } from '@/store/song.store';
 import { useThemeContext } from '@/store/theme.store';
-import { stringSimilarity } from '@/utils/utils';
 import { Song } from '@prisma/client';
 import { useState } from 'react';
 
 interface SongInputProps {
   selectedSong: string | null;
   selectSong: (song: Song) => void;
-  allSongs: Song[];
   preserveInput?: boolean;
 }
 
-const SongInput: React.FC<SongInputProps> = ({ selectedSong, selectSong, allSongs, preserveInput = false }) => {
+const SongInput: React.FC<SongInputProps> = ({ selectedSong, selectSong, preserveInput = false }) => {
+  const { color } = useThemeContext();
+  const { searchSong } = useSongContext();
   const [songInput, setSongInput] = useState('');
   const [songResults, setSongResults] = useState<Song[]>([]);
-  const { color } = useThemeContext();
-
-  const searchSong = (query: string) => {
-    if (query === '') {
-      setSongResults([]);
-      return;
-    }
-    let songs = allSongs.filter((song) => song.name.toLowerCase().includes(query.toLowerCase()));
-    //let songs = allSongs.filter(song => song.name.toLowerCase().startsWith(query.toLowerCase()));
-    songs = songs.sort((song1, song2) => stringSimilarity(song2.name, query) - stringSimilarity(song1.name, query));
-
-    const topSongs = songs.slice(0, 3);
-    setSongResults(topSongs);
-  };
+  const searchForSong = (query: string) => setSongResults(searchSong(query));
 
   const chooseSong = (song: Song) => {
     selectSong(song);
@@ -44,7 +32,7 @@ const SongInput: React.FC<SongInputProps> = ({ selectedSong, selectSong, allSong
         value={songInput}
         onChange={(e) => {
           setSongInput(e.target.value);
-          searchSong(e.target.value);
+          searchForSong(e.target.value);
         }}
         placeholder="Song Name"
       />

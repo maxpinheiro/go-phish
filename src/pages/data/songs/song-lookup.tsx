@@ -1,23 +1,35 @@
-import SongLookupContainer, { SongLookupContainerProps } from '@/components/data/songs/SongLookupContainer';
+import SongLookupContainer from '@/components/data/songs/SongLookupContainer';
 import { getAllSongs } from '@/services/song.service';
+import { useSongContext } from '@/store/song.store';
+import { Song } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-export const getServerSideProps: GetServerSideProps<SongLookupContainerProps> = async () => {
+interface SongLookupPageProps {
+  allSongs: Song[];
+}
+
+export const getServerSideProps: GetServerSideProps<SongLookupPageProps> = async () => {
   const allSongs = await getAllSongs();
   return {
     props: { allSongs },
   };
 };
 
-const SongLookupPage: React.FC<SongLookupContainerProps> = ({ allSongs }) => {
+const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
+  const { setAllSongs } = useSongContext();
+
+  useEffect(() => {
+    if (allSongs) setAllSongs(allSongs);
+  }, [allSongs]);
+
   return (
     <>
       <Head>
         <title>Song Lookup | Go Phish</title>
       </Head>
-      <SongLookupContainer allSongs={allSongs} />
+      <SongLookupContainer />
     </>
   );
 };

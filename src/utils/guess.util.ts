@@ -1,17 +1,18 @@
 import { PreviousGuess } from '@/components/guesses/GuessSelectorModal';
-import { GuessWithShow } from '@/models/guess.model';
+import { GuessWithRun, GuessWithShow, GuessWithShowAndUser } from '@/models/guess.model';
 import { ShowWithVenue } from '@/models/show.model';
 import { Guess, Run, Show, User } from '@prisma/client';
 import moment from 'moment-timezone';
 import { formatShowDate } from './show.util';
-import { guessSorter } from './utils';
+import { organizeArrayByField } from './utils';
 
 export type OrganizedRunItem = { run: Run; points: number; scores: Guess[] };
 
-export const organizeRunRecord = (guessesByRun: Record<number, Guess[]>, runs: Run[]): OrganizedRunItem[] => {
+export const organizeRunRecord = (guesses: GuessWithRun[]): OrganizedRunItem[] => {
   let runRecord: OrganizedRunItem[] = [];
+  const guessesByRun = organizeArrayByField(guesses, 'runId');
   Object.entries(guessesByRun).forEach(([runId, guesses]) => {
-    const run = runs.find((r) => r.id === parseInt(runId));
+    const run = guesses[0].run;
     if (!run) return;
     const score = guesses.map((g) => g.points).reduce((acc, curr) => acc + curr, 0);
     runRecord.push({ run, points: score, scores: guesses.filter((g) => g.completed) });
@@ -35,6 +36,19 @@ export const rankScoresByUser = (guessesByUser: Record<number, GuessWithShow[]>,
   return rankedUserScores;
 };
 
+export const rankScoresWithUsers = (guesses: GuessWithShowAndUser[]): RankedUserScores => {
+  let rankedUserScores: RankedUserScores = [];
+  const guessesByUser = organizeArrayByField<GuessWithShowAndUser>(guesses, 'userId');
+  Object.values(guessesByUser).forEach((guesses) => {
+    const user = guesses[0].user;
+    if (!user) return;
+    const score = guesses.map((g) => g.points).reduce((acc, curr) => acc + curr, 0);
+    rankedUserScores.push({ user, points: score, guesses: guesses.filter((g) => g.completed) });
+  });
+  rankedUserScores.sort((a, b) => b.points - a.points);
+  return rankedUserScores;
+};
+
 export const rankedUserScoresForNight = (scores: RankedUserScores, shows: Show[], night: number): RankedUserScores => {
   const show = shows.find((s) => s.runNight === night);
   return scores
@@ -50,15 +64,25 @@ export const rankedUserScoresForNight = (scores: RankedUserScores, shows: Show[]
     .sort((a, b) => b.points - a.points);
 };
 
+export type GuessesByCompletion<T extends Guess = Guess> = { complete: T[]; incomplete: T[] };
+
 export type OrganizedGuesses = {
   user: User;
-  guesses: { complete: Guess[]; incomplete: Guess[] };
+  guesses: GuessesByCompletion;
 }[];
 
 export type OrganizedGuessesWithShow = {
   user: User;
-  guesses: { complete: GuessWithShow[]; incomplete: GuessWithShow[] };
+  guesses: GuessesByCompletion<GuessWithShow>;
 }[];
+
+const groupGuessesByCompletion = <T extends Guess = Guess>(guesses: T[]): GuessesByCompletion<T> => {
+  const lookup: GuessesByCompletion<T> = { complete: [], incomplete: [] };
+  guesses.forEach((guess) => {
+    lookup[guess.completed ? 'complete' : 'incomplete'].push(guess);
+  });
+  return lookup;
+};
 
 export const organizeGuessesByUser = (guessesByUser: Record<number, Guess[]>, users: User[]): OrganizedGuesses => {
   let organizedGuesses: OrganizedGuesses = [];
@@ -66,16 +90,20 @@ export const organizeGuessesByUser = (guessesByUser: Record<number, Guess[]>, us
   Object.entries(guessesByUser).forEach(([userId, guesses]) => {
     const user = users.find((u) => u.id === parseInt(userId));
     if (!user) return;
-    let guessDict: { complete: Guess[]; incomplete: Guess[] } = { complete: [], incomplete: [] };
-    guesses.sort(guessSorter);
-    const pivot = guesses.findIndex((guess) => !guess.completed);
-    if (pivot >= 0) {
-      guessDict.complete = guesses.slice(0, pivot);
-      guessDict.incomplete = guesses.slice(pivot);
-    } else {
-      // no pivot -> all completed
-      guessDict.complete = guesses;
-    }
+    let guessDict = groupGuessesByCompletion(guesses);
+    organizedGuesses.push({ user, guesses: guessDict });
+  });
+  organizedGuesses.sort((a, b) => b.guesses.complete.length - a.guesses.complete.length);
+  return organizedGuesses;
+};
+
+export const organizeGuessesWithUsers = (guesses: GuessWithShowAndUser[]): OrganizedGuessesWithShow => {
+  let organizedGuesses: OrganizedGuessesWithShow = [];
+
+  const guessesByUser = organizeArrayByField<GuessWithShowAndUser>(guesses, 'userId');
+  Object.values(guessesByUser).forEach((guesses) => {
+    const user = guesses[0].user;
+    let guessDict = groupGuessesByCompletion<GuessWithShow>(guesses);
     organizedGuesses.push({ user, guesses: guessDict });
   });
   organizedGuesses.sort((a, b) => b.guesses.complete.length - a.guesses.complete.length);
