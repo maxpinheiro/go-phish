@@ -1,6 +1,7 @@
 import { updateUser } from '@/client/user.client';
 import CloseIcon from '@/media/CloseIcon.svg';
 import EditIcon from '@/media/EditIcon.svg';
+import { defaultAvatar } from '@/models/user.model';
 import {
   selectAvatar,
   selectBio,
@@ -38,7 +39,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ closeModal }) => {
   const desatColor = desaturateColor(hexColor, 0.5);
   const editing = useSelector(selectEditing);
   const userId = useSelector(selectUserId);
-  const avatar = useSelector(selectAvatar);
+  const avatar = useSelector(selectAvatar) || defaultAvatar;
   const nameInput = useSelector(selectName);
   const hometownInput = useSelector(selectHometown);
   const bioInput = useSelector(selectBio);

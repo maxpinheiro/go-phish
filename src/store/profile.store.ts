@@ -13,7 +13,7 @@ export interface ProfileState {
   name: string;
   bio: string;
   hometown: string;
-  avatar: AvatarConfig;
+  avatar: AvatarConfig | null;
   avatarModalOpen: boolean;
   updatedUser: User | null;
   error: string | null;
