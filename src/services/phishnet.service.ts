@@ -113,5 +113,3 @@ export const scrapeSongFrequency = async (songId: string): Promise<number | Resp
     return ResponseStatus.NotFound;
   }
 };
-
-export default { getAllSongs, scrapeSongFrequency };

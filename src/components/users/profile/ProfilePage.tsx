@@ -27,7 +27,7 @@ const ProfilePageQuery = graphql`
 function useProfilePageData(username: string) {
   const data = useLazyLoadQuery<ProfilePageQueryType>(ProfilePageQuery, { username });
   const { userByName } = data;
-  const user = userByName ? useUserFragment(userByName) : null;
+  const user = useUserFragment(userByName || null);
   const guessesWithRun: GuessWithRun[] = userByName?.guesses?.map(useGuessWithRunFragment) || [];
 
   const runRecord = organizeRunRecord(guessesWithRun);

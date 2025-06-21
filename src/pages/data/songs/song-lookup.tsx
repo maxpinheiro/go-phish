@@ -22,7 +22,7 @@ const SongLookupPage: React.FC<SongLookupPageProps> = ({ allSongs }) => {
 
   useEffect(() => {
     if (allSongs) setAllSongs(allSongs);
-  }, [allSongs]);
+  }, [allSongs, setAllSongs]);
 
   return (
     <>

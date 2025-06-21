@@ -1,10 +1,15 @@
-import { GuessWithRun } from '@/models/guess.model';
+import { GuessWithRun, GuessWithShowAndUser } from '@/models/guess.model';
 import { Guess } from '@prisma/client';
 import { graphql, useFragment } from 'react-relay';
 import { RunFragment, formatRun } from './Run.query';
+import { formatShow } from './Show.query';
+import { formatUser } from './User.query';
 import { GuessFragment$data, GuessFragment$key } from './__generated__/GuessFragment.graphql';
 import { GuessWithRunFragment$key } from './__generated__/GuessWithRunFragment.graphql';
+import { GuessesWithShowAndUserFragment$key } from './__generated__/GuessesWithShowAndUserFragment.graphql';
 import { RunFragment$key } from './__generated__/RunFragment.graphql';
+import { ShowFragment$data } from './__generated__/ShowFragment.graphql';
+import { UserFragment$data } from './__generated__/UserFragment.graphql';
 
 export const GuessFragment = graphql`
   fragment GuessFragment on Guess {
@@ -50,21 +55,60 @@ export const useGuessWithRunFragment = (guess: GuessWithRunFragment$key): GuessW
   };
 };
 
-// export const GuessWithShowFragment = graphql`
-//   fragment ShowWithVenueFragment on Show {
-//     ...ShowFragment
-//     venue {
-//       ...VenueFragment
-//     }
-//   }
-// `;
+export const GuessesWithShowAndUserFragment = graphql`
+  fragment GuessesWithShowAndUserFragment on Guess @relay(plural: true) {
+    id
+    guessId
+    userId
+    songId
+    songName
+    showId
+    runId
+    encore
+    completed
+    points
 
-// export const useShowWithVenueFragment = (show: ShowWithVenueFragment$key): ShowWithVenue => {
-//   const showFragment = useFragment<ShowWithVenueFragment$key>(ShowWithVenueFragment, show);
-//   const showData = useFragment<ShowFragment$key>(ShowFragment, showFragment);
-//   const venueData = useFragment<VenueFragment$key>(VenueFragment, showFragment.venue);
-//   return {
-//     ...formatShow(showData),
-//     venue: formatVenue(venueData),
-//   };
-// };
+    user {
+      id
+      userId
+      username
+      name
+      bio
+      hometown
+      email
+      image
+      admin
+      avatar {
+        head
+        torso
+        background
+        type
+      }
+      avatarType
+    }
+
+    show {
+      id
+      showId
+      runId
+      runNight
+      slug
+      date
+      timestamp
+      venueId
+    }
+  }
+`;
+
+export const useGuessesWithShowAndUser = (
+  guessesRef: GuessesWithShowAndUserFragment$key | null
+): GuessWithShowAndUser[] => {
+  const guesses = useFragment<GuessesWithShowAndUserFragment$key>(GuessesWithShowAndUserFragment, guessesRef ?? []);
+
+  return guesses.map((g) => ({
+    ...g,
+    id: g.guessId,
+    user: formatUser(g.user as UserFragment$data),
+    show: formatShow(g.show as ShowFragment$data),
+  }));
+};

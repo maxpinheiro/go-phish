@@ -57,4 +57,6 @@ function text(feedback: string, contactInfo?: string) {
   return `Feedback Received: \n${feedback}\n\nContact Info: \n${contactInfo || '(Not provided)'}\n\n`;
 }
 
-export default { subject, html, text };
+const data = { subject, html, text };
+
+export default data;

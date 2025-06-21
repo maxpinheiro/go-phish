@@ -1,5 +1,6 @@
 import { useShowWithVenueAndRunFragment } from '@/graphql/relay/Show.query';
 import { useSongFragment } from '@/graphql/relay/Song.query';
+import { ShowWithVenueAndRun } from '@/models/show.model';
 import { useSongContext } from '@/store/song.store';
 import { organizeShowsByRun } from '@/utils/show.util';
 import React, { Suspense, useEffect } from 'react';
@@ -30,13 +31,13 @@ function useShowModeratorPageData(todayStr: string) {
   const data = useLazyLoadQuery<ShowModeratorPageQueryType>(ShowModeratorPageQuery, { todayStr });
 
   const { allShows, showForDate, allSongs } = data;
-  const shows = allShows.map(useShowWithVenueAndRunFragment);
+  const shows = allShows.map(useShowWithVenueAndRunFragment) as ShowWithVenueAndRun[];
   shows.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
   const showsByRun = organizeShowsByRun(shows);
   showsByRun.forEach((showGroup) => showGroup.shows.sort((a, b) => b.runNight - a.runNight));
 
-  const todayShow = showForDate ? useShowWithVenueAndRunFragment(showForDate) : undefined;
+  const todayShow = useShowWithVenueAndRunFragment(showForDate || null);
   const songs = allSongs.map(useSongFragment);
 
   return { showsByRun, todayShow, songs };
@@ -48,7 +49,7 @@ const ShowModeratorWrapper: React.FC<ShowModeratorPageProps> = ({ todayStr }) =>
 
   useEffect(() => {
     if (songs) setAllSongs(songs);
-  }, [songs]);
+  }, [songs, setAllSongs]);
 
   return <ShowModerator shows={showsByRun} todayShow={todayShow} />;
 };

@@ -65,4 +65,6 @@ function text({ url, host }: { url: string; host: string }) {
   return `Sign in to ${host}\n${url}\n\n`;
 }
 
-export default { subject, html, text };
+const data = { subject, html, text };
+
+export default data;

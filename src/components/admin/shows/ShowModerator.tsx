@@ -9,7 +9,7 @@ import ShowSelector from './ShowSelector';
 
 interface ShowModeratorProps {
   shows: ShowGroupRun[];
-  todayShow: ShowWithVenueAndRun | undefined;
+  todayShow: ShowWithVenueAndRun | null;
 }
 
 const ShowModerator: React.FC<ShowModeratorProps> = ({ shows, todayShow }) => {

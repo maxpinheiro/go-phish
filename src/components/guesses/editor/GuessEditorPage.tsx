@@ -47,9 +47,9 @@ function useGuessEditorPageData(showSlug: string) {
   const data = useLazyLoadQuery<GuessEditorPageQueryType>(GuessEditorPageQuery, { showSlug });
   const { showBySlug, allSongs } = data;
 
-  let show = showBySlug ? useShowWithVenueFragment(showBySlug) : null;
+  let show = useShowWithVenueFragment(showBySlug || null);
   show = superjson.parse<typeof show>(superjson.stringify(show));
-  let run = showBySlug ? useRunWithVenueFragment(showBySlug.run) : null;
+  let run = useRunWithVenueFragment(showBySlug?.run || null);
   run = superjson.parse<typeof run>(superjson.stringify(run));
 
   const runShows: ShowIdAndRunNight[] =
@@ -77,7 +77,7 @@ const GuessEditorWrapper: React.FC<GuessEditorPageProps> = ({ showSlug }) => {
       dispatch(setShow(showData));
     }
     if (songs) setAllSongs(songs);
-  }, [show, run, songs]);
+  }, [show, run, songs, dispatch, setAllSongs]);
 
   if (!show || !run) return <ErrorMessage error="Show not found!" />;
 

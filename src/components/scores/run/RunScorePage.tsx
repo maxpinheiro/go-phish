@@ -1,16 +1,16 @@
 import ErrorMessage from '@/components/shared/ErrorMessage';
 import OpaqueSkeleton from '@/components/shared/OpaqueSkeleton';
-import { useGuessFragment } from '@/graphql/relay/Guess.query';
+import { useGuessesWithShowAndUser } from '@/graphql/relay/Guess.query';
 import { useRunWithVenueFragment } from '@/graphql/relay/Run.query';
-import { useShowFragment, useShowWithVenueFragment } from '@/graphql/relay/Show.query';
-import { useUserFragment } from '@/graphql/relay/User.query';
+import { useShowWithVenueFragment } from '@/graphql/relay/Show.query';
+import { ShowWithVenue } from '@/models/show.model';
 import { rankScoresWithUsers } from '@/utils/guess.util';
 import Head from 'next/head';
 import React, { Suspense } from 'react';
 import { graphql, useLazyLoadQuery } from 'react-relay';
+import { RunScorePageQuery as RunScorePageQueryType } from './__generated__/RunScorePageQuery.graphql';
 import RunScoreContainer from './RunScoreContainer';
 import RunScoreNavbar from './RunScoreNavbar';
-import { RunScorePageQuery as RunScorePageQueryType } from './__generated__/RunScorePageQuery.graphql';
 
 interface RunScorePageProps {
   runSlug: string;
@@ -24,13 +24,7 @@ const RunScorePageQuery = graphql`
         ...ShowWithVenueFragment
       }
       guesses(completed: true) {
-        ...GuessFragment
-        user {
-          ...UserFragment
-        }
-        show {
-          ...ShowFragment
-        }
+        ...GuessesWithShowAndUserFragment
       }
     }
   }
@@ -40,17 +34,11 @@ function useRunScorePageData(runSlug: string) {
   const data = useLazyLoadQuery<RunScorePageQueryType>(RunScorePageQuery, { runSlug });
   const { runBySlug } = data;
 
-  let run = runBySlug ? useRunWithVenueFragment(runBySlug) : null;
-  if (!run || !runBySlug) {
-    return { run, shows: [], guesses: [] };
-  }
+  let run = useRunWithVenueFragment(runBySlug || null);
 
-  const shows = runBySlug.shows.map(useShowWithVenueFragment);
-  const guesses = runBySlug.guesses.map((g) => ({
-    ...useGuessFragment(g),
-    user: useUserFragment(g.user),
-    show: useShowFragment(g.show),
-  }));
+  const shows = (runBySlug?.shows ?? []).map(useShowWithVenueFragment) as ShowWithVenue[];
+
+  const guesses = useGuessesWithShowAndUser(runBySlug?.guesses || null);
 
   const rankedUserScores = guesses ? rankScoresWithUsers(guesses) : null;
 

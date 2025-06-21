@@ -1,4 +1,4 @@
-import { ShowWithVenue, ShowWithVenueAndRun } from '@/models/show.model';
+import { ShowWithVenue } from '@/models/show.model';
 import { Show } from '@prisma/client';
 import { graphql, useFragment } from 'react-relay';
 import { RunFragment, formatRun } from './Run.query';
@@ -43,10 +43,13 @@ export const ShowWithVenueFragment = graphql`
   }
 `;
 
-export const useShowWithVenueFragment = (show: ShowWithVenueFragment$key): ShowWithVenue => {
+export const useShowWithVenueFragment = (show: ShowWithVenueFragment$key | null): ShowWithVenue | null => {
   const showFragment = useFragment<ShowWithVenueFragment$key>(ShowWithVenueFragment, show);
   const showData = useFragment<ShowFragment$key>(ShowFragment, showFragment);
-  const venueData = useFragment<VenueFragment$key>(VenueFragment, showFragment.venue);
+  const venueData = useFragment<VenueFragment$key>(VenueFragment, showFragment?.venue);
+
+  if (!showData || !venueData) return null;
+
   return {
     ...formatShow(showData),
     venue: formatVenue(venueData),
@@ -65,11 +68,14 @@ export const ShowWithVenueAndRunFragment = graphql`
   }
 `;
 
-export const useShowWithVenueAndRunFragment = (show: ShowWithVenueAndRunFragment$key): ShowWithVenueAndRun => {
+export const useShowWithVenueAndRunFragment = (show: ShowWithVenueAndRunFragment$key | null) => {
   const showFragment = useFragment<ShowWithVenueAndRunFragment$key>(ShowWithVenueAndRunFragment, show);
   const showData = useFragment<ShowFragment$key>(ShowFragment, showFragment);
-  const venueData = useFragment<VenueFragment$key>(VenueFragment, showFragment.venue);
-  const runData = useFragment<RunFragment$key>(RunFragment, showFragment.run);
+  const venueData = useFragment<VenueFragment$key>(VenueFragment, showFragment?.venue);
+  const runData = useFragment<RunFragment$key>(RunFragment, showFragment?.run);
+
+  if (!showData || !venueData || !runData) return null;
+
   return {
     ...formatShow(showData),
     venue: formatVenue(venueData),

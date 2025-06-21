@@ -21,8 +21,8 @@ const TodayPageQuery = graphql`
 function useTodayPageData(todayStr: string) {
   const { showForDate } = useLazyLoadQuery<TodayPageQueryType>(TodayPageQuery, { todayStr });
 
-  const show = showForDate ? useShowWithVenueFragment(showForDate) : null;
-  const run = showForDate ? useRunWithVenueFragment(showForDate.run) : null;
+  const show = useShowWithVenueFragment(showForDate || null);
+  const run = useRunWithVenueFragment(showForDate?.run || null);
 
   return { show, run };
 }

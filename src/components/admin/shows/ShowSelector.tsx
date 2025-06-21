@@ -6,7 +6,7 @@ import React from 'react';
 
 interface ShowSelectorProps {
   shows: ShowGroupRun[];
-  todayShow?: ShowWithVenueAndRun;
+  todayShow: ShowWithVenueAndRun | null;
   selectShow: (show: ShowWithVenueAndRun) => void;
 }
 
@@ -39,7 +39,7 @@ const ShowSelector: React.FC<ShowSelectorProps> = ({ shows, todayShow, selectSho
       <div className="flex flex-col items-center space-y-4 pb-10 mt-2">
         {shows.map((showGroup, idx) => (
           <div className="flex flex-col items-center" key={`showgroup-${idx}`}>
-            <p className={`font-semibold my-2 text-${color}`}>{showGroup.runName}</p>
+            <p className={`font-semibold my-2 text-${color}`}>{showGroup.run.name}</p>
             <div className="flex flex-col items-center space-y-2">
               {showGroup.shows.map((show) => (
                 <ShowItem show={show} select={selectShow} key={`showitem${show.id}`} />

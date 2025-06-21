@@ -63,4 +63,6 @@ function text({ token, username }: ResetPasswordMailerProps) {
   return `Reset your password: \nhttps://www.phishingphun.com/reset-password?token=${token}\n\n`;
 }
 
-export default { subject, html, text };
+const data = { subject, html, text };
+
+export default data;

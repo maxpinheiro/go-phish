@@ -38,11 +38,14 @@ const RunScoreContainer: React.FC<RunScoreContainerProps> = ({ run, shows, ranke
 
   const { selectedNight, chooseNight } = useRunNightQuery();
 
-  const nightShow: Show | undefined = useMemo(() => shows.find((s) => s.runNight === selectedNight), [selectedNight]);
+  const nightShow: Show | undefined = useMemo(
+    () => shows.find((s) => s.runNight === selectedNight),
+    [shows, selectedNight]
+  );
 
   const organizedScores = useMemo(
     () => (isNaN(selectedNight) ? rankedUserScores : rankedUserScoresForNight(rankedUserScores, shows, selectedNight)),
-    [selectedNight]
+    [rankedUserScores, shows, selectedNight]
   );
 
   return (
