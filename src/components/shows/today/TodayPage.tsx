@@ -1,6 +1,6 @@
 import OpaqueSkeleton from '@/components/shared/OpaqueSkeleton';
-import { buildRunWithVenueFromFragment } from '@/graphql/relay/Run.query';
-import { buildShowWithVenueFromFragment } from '@/graphql/relay/Show.query';
+import { useRunWithVenueFragment } from '@/graphql/relay/Run.query';
+import { useShowWithVenueFragment } from '@/graphql/relay/Show.query';
 import moment from 'moment-timezone';
 import React, { Suspense } from 'react';
 import { graphql, useLazyLoadQuery } from 'react-relay';
@@ -21,8 +21,8 @@ const TodayPageQuery = graphql`
 function useTodayPageData(todayStr: string) {
   const { showForDate } = useLazyLoadQuery<TodayPageQueryType>(TodayPageQuery, { todayStr });
 
-  const show = showForDate ? buildShowWithVenueFromFragment(showForDate) : null;
-  const run = showForDate ? buildRunWithVenueFromFragment(showForDate.run) : null;
+  const show = showForDate ? useShowWithVenueFragment(showForDate) : null;
+  const run = showForDate ? useRunWithVenueFragment(showForDate.run) : null;
 
   return { show, run };
 }

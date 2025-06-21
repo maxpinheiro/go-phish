@@ -1,5 +1,5 @@
-import { buildShowWithVenueAndRunFromFragment } from '@/graphql/relay/Show.query';
-import { buildSongFromFragment } from '@/graphql/relay/Song.query';
+import { useShowWithVenueAndRunFragment } from '@/graphql/relay/Show.query';
+import { useSongFragment } from '@/graphql/relay/Song.query';
 import { useSongContext } from '@/store/song.store';
 import { organizeShowsByRun } from '@/utils/show.util';
 import React, { Suspense, useEffect } from 'react';
@@ -30,14 +30,14 @@ function useShowModeratorPageData(todayStr: string) {
   const data = useLazyLoadQuery<ShowModeratorPageQueryType>(ShowModeratorPageQuery, { todayStr });
 
   const { allShows, showForDate, allSongs } = data;
-  const shows = allShows.map(buildShowWithVenueAndRunFromFragment);
+  const shows = allShows.map(useShowWithVenueAndRunFragment);
   shows.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
   const showsByRun = organizeShowsByRun(shows);
   showsByRun.forEach((showGroup) => showGroup.shows.sort((a, b) => b.runNight - a.runNight));
 
-  const todayShow = showForDate ? buildShowWithVenueAndRunFromFragment(showForDate) : undefined;
-  const songs = allSongs.map(buildSongFromFragment);
+  const todayShow = showForDate ? useShowWithVenueAndRunFragment(showForDate) : undefined;
+  const songs = allSongs.map(useSongFragment);
 
   return { showsByRun, todayShow, songs };
 }

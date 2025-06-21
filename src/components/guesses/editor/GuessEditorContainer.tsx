@@ -2,6 +2,7 @@ import { ShowInfo } from '@/components/shared/RunInfo';
 import { RunWithVenue } from '@/models/run.model';
 import { ShowIdAndRunNight, ShowWithVenue } from '@/models/show.model';
 import { Guess } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 import React from 'react';
 import GuessEditor from './GuessEditor';
 
@@ -20,14 +21,22 @@ const GuessEditorContainer: React.FC<GuessEditorContainerProps> = ({
   currentGuesses,
   forbiddenReason,
 }) => {
+  const { data: session } = useSession();
+  const currentUserId = session?.user?.id;
+
   return (
     <div className="flex flex-col items-center w-full pt-4 pb-10">
       <ShowInfo show={show} run={run} large />
-      {forbiddenReason ? (
+      {forbiddenReason || !currentUserId ? (
         <p className="text-center mt-8">{forbiddenReason}</p>
       ) : (
         <div className="w-full">
-          <GuessEditor show={{ ...show, run }} runShows={runShows} currentGuesses={currentGuesses} />
+          <GuessEditor
+            show={{ ...show, run }}
+            runShows={runShows}
+            currentGuesses={currentGuesses}
+            currentUserId={currentUserId}
+          />
         </div>
       )}
     </div>

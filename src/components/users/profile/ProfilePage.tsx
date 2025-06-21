@@ -1,7 +1,7 @@
 import ErrorMessage from '@/components/shared/ErrorMessage';
 import OpaqueSkeleton from '@/components/shared/OpaqueSkeleton';
-import { buildGuessWithRunFromFragment } from '@/graphql/relay/Guess.query';
-import { buildUserFromFragment } from '@/graphql/relay/User.query';
+import { useGuessWithRunFragment } from '@/graphql/relay/Guess.query';
+import { useUserFragment } from '@/graphql/relay/User.query';
 import { GuessWithRun } from '@/models/guess.model';
 import { organizeRunRecord } from '@/utils/guess.util';
 import React, { Suspense } from 'react';
@@ -27,8 +27,8 @@ const ProfilePageQuery = graphql`
 function useProfilePageData(username: string) {
   const data = useLazyLoadQuery<ProfilePageQueryType>(ProfilePageQuery, { username });
   const { userByName } = data;
-  const user = userByName ? buildUserFromFragment(userByName) : null;
-  const guessesWithRun: GuessWithRun[] = userByName?.guesses?.map(buildGuessWithRunFromFragment) || [];
+  const user = userByName ? useUserFragment(userByName) : null;
+  const guessesWithRun: GuessWithRun[] = userByName?.guesses?.map(useGuessWithRunFragment) || [];
 
   const runRecord = organizeRunRecord(guessesWithRun);
 

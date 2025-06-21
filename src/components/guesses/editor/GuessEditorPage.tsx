@@ -1,9 +1,9 @@
 import ErrorMessage from '@/components/shared/ErrorMessage';
 import OpaqueSkeleton from '@/components/shared/OpaqueSkeleton';
-import { buildGuessFromFragment } from '@/graphql/relay/Guess.query';
-import { buildRunWithVenueFromFragment } from '@/graphql/relay/Run.query';
-import { buildShowWithVenueFromFragment } from '@/graphql/relay/Show.query';
-import { buildSongFromFragment } from '@/graphql/relay/Song.query';
+import { useGuessFragment } from '@/graphql/relay/Guess.query';
+import { useRunWithVenueFragment } from '@/graphql/relay/Run.query';
+import { useShowWithVenueFragment } from '@/graphql/relay/Show.query';
+import { useSongFragment } from '@/graphql/relay/Song.query';
 import { buildRunWithISODates } from '@/models/run.model';
 import { buildShowWithISODates, ShowIdAndRunNight } from '@/models/show.model';
 import { setShow, ShowWithRunWithISODates } from '@/store/guessEditor.store';
@@ -47,18 +47,18 @@ function useGuessEditorPageData(showSlug: string) {
   const data = useLazyLoadQuery<GuessEditorPageQueryType>(GuessEditorPageQuery, { showSlug });
   const { showBySlug, allSongs } = data;
 
-  let show = showBySlug ? buildShowWithVenueFromFragment(showBySlug) : null;
+  let show = showBySlug ? useShowWithVenueFragment(showBySlug) : null;
   show = superjson.parse<typeof show>(superjson.stringify(show));
-  let run = showBySlug ? buildRunWithVenueFromFragment(showBySlug.run) : null;
+  let run = showBySlug ? useRunWithVenueFragment(showBySlug.run) : null;
   run = superjson.parse<typeof run>(superjson.stringify(run));
 
   const runShows: ShowIdAndRunNight[] =
     showBySlug?.run?.shows.map(({ showId, runNight }) => ({ id: showId, runNight })) || [];
 
-  const myGuesses = showBySlug?.myGuesses?.map(buildGuessFromFragment) || [];
+  const myGuesses = showBySlug?.myGuesses?.map(useGuessFragment) || [];
   const guessEditForbiddenReason = showBySlug?.guessEditForbiddenReason ?? null;
 
-  const songs = allSongs.map(buildSongFromFragment);
+  const songs = allSongs.map(useSongFragment);
   return { show, run, runShows, myGuesses, guessEditForbiddenReason, songs };
 }
 

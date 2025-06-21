@@ -29,7 +29,7 @@ export const formatShow = (show: ShowFragment$data): Show => ({
   timestamp: new Date(show.timestamp),
 });
 
-export const buildShowFromFragment = (show: ShowFragment$key): Show => {
+export const useShowFragment = (show: ShowFragment$key): Show => {
   const showData = useFragment<ShowFragment$key>(ShowFragment, show);
   return formatShow(showData);
 };
@@ -43,7 +43,7 @@ export const ShowWithVenueFragment = graphql`
   }
 `;
 
-export const buildShowWithVenueFromFragment = (show: ShowWithVenueFragment$key): ShowWithVenue => {
+export const useShowWithVenueFragment = (show: ShowWithVenueFragment$key): ShowWithVenue => {
   const showFragment = useFragment<ShowWithVenueFragment$key>(ShowWithVenueFragment, show);
   const showData = useFragment<ShowFragment$key>(ShowFragment, showFragment);
   const venueData = useFragment<VenueFragment$key>(VenueFragment, showFragment.venue);
@@ -65,7 +65,7 @@ export const ShowWithVenueAndRunFragment = graphql`
   }
 `;
 
-export const buildShowWithVenueAndRunFromFragment = (show: ShowWithVenueAndRunFragment$key): ShowWithVenueAndRun => {
+export const useShowWithVenueAndRunFragment = (show: ShowWithVenueAndRunFragment$key): ShowWithVenueAndRun => {
   const showFragment = useFragment<ShowWithVenueAndRunFragment$key>(ShowWithVenueAndRunFragment, show);
   const showData = useFragment<ShowFragment$key>(ShowFragment, showFragment);
   const venueData = useFragment<VenueFragment$key>(VenueFragment, showFragment.venue);

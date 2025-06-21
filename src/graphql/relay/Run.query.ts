@@ -32,7 +32,7 @@ export const RunWithVenueFragment = graphql`
   }
 `;
 
-export const buildRunWithVenueFromFragment = (run: RunWithVenueFragment$key): RunWithVenue => {
+export const useRunWithVenueFragment = (run: RunWithVenueFragment$key): RunWithVenue => {
   const runFragment = useFragment<RunWithVenueFragment$key>(RunWithVenueFragment, run);
   const runData = useFragment<RunFragment$key>(RunFragment, runFragment);
   const venueData = useFragment<VenueFragment$key>(VenueFragment, runFragment.venue);

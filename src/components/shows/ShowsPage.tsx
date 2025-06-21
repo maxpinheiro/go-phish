@@ -1,4 +1,4 @@
-import { buildShowWithVenueAndRunFromFragment } from '@/graphql/relay/Show.query';
+import { useShowWithVenueAndRunFragment } from '@/graphql/relay/Show.query';
 import { ShowGroupRun, ShowGroupVenue, ShowGroupYear } from '@/types/main';
 import { organizeShowsByRun, organizeShowsByVenue, organizeShowsByYear } from '@/utils/show.util';
 import React, { Suspense } from 'react';
@@ -17,7 +17,7 @@ const ShowsPageQuery = graphql`
 
 function useShowsPageData() {
   const { allShows } = useLazyLoadQuery<ShowsPageQueryType>(ShowsPageQuery, {});
-  const shows = allShows.map(buildShowWithVenueAndRunFromFragment);
+  const shows = allShows.map(useShowWithVenueAndRunFragment);
 
   const showsByRun: ShowGroupRun[] = organizeShowsByRun(shows);
   const showsByYear: ShowGroupYear[] = organizeShowsByYear(shows);

@@ -1,29 +1,24 @@
-import ErrorMessage from '@/components/shared/ErrorMessage';
 import LoadingOverlay from '@/components/shared/LoadingOverlay';
 import { ShowIdAndRunNight, ShowWithRun } from '@/models/show.model';
 import { useGuessEditorManager } from '@/store/guessEditor.manager';
 import { useSongContext } from '@/store/song.store';
 import { useThemeContext } from '@/store/theme.store';
 import { Guess } from '@prisma/client';
-import { useSession } from 'next-auth/react';
 import React from 'react';
 import GuessSelectorModal from '../GuessSelectorModal';
 import GuessSlot from '../GuessSlot';
 import GuessEditorTools from './GuessEditorTools';
 
 interface GuessEditorProps {
+  currentUserId: number;
   show: ShowWithRun;
   runShows: ShowIdAndRunNight[];
   currentGuesses: Guess[];
 }
 
-const GuessEditor: React.FC<GuessEditorProps> = ({ show, runShows, currentGuesses }) => {
-  const { data: session } = useSession();
-  const currentUserId = session?.user?.id;
+const GuessEditor: React.FC<GuessEditorProps> = ({ currentUserId, show, runShows, currentGuesses }) => {
   const { color } = useThemeContext();
   const { songLookup } = useSongContext();
-
-  if (!currentUserId) return <ErrorMessage error="You must be logged in to view this page." />;
 
   const {
     guessList,

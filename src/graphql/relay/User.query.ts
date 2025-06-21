@@ -38,7 +38,7 @@ export const formatUser = (user: UserFragment$data): User => ({
   friend_ids: [],
 });
 
-export const buildUserFromFragment = (user: UserFragment$key): User => {
+export const useUserFragment = (user: UserFragment$key): User => {
   const userData = useFragment<UserFragment$key>(UserFragment, user);
   return formatUser(userData);
 };

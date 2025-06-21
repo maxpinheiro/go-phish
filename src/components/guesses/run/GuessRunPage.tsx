@@ -1,9 +1,9 @@
 import ErrorMessage from '@/components/shared/ErrorMessage';
 import OpaqueSkeleton from '@/components/shared/OpaqueSkeleton';
-import { buildGuessFromFragment } from '@/graphql/relay/Guess.query';
-import { buildRunWithVenueFromFragment } from '@/graphql/relay/Run.query';
-import { buildShowFromFragment, buildShowWithVenueFromFragment } from '@/graphql/relay/Show.query';
-import { buildUserFromFragment } from '@/graphql/relay/User.query';
+import { useGuessFragment } from '@/graphql/relay/Guess.query';
+import { useRunWithVenueFragment } from '@/graphql/relay/Run.query';
+import { useShowFragment, useShowWithVenueFragment } from '@/graphql/relay/Show.query';
+import { useUserFragment } from '@/graphql/relay/User.query';
 import { organizeGuessesWithUsers } from '@/utils/guess.util';
 import Head from 'next/head';
 import React, { Suspense } from 'react';
@@ -40,16 +40,16 @@ function useGuessRunPageData(runSlug: string) {
   const data = useLazyLoadQuery<GuessRunPageQueryType>(GuessRunPageQuery, { runSlug });
   const { runBySlug } = data;
 
-  let run = runBySlug ? buildRunWithVenueFromFragment(runBySlug) : null;
+  let run = runBySlug ? useRunWithVenueFragment(runBySlug) : null;
   if (!run || !runBySlug) {
     return { run, shows: [], guesses: [] };
   }
 
-  const shows = runBySlug.shows.map(buildShowWithVenueFromFragment);
+  const shows = runBySlug.shows.map(useShowWithVenueFragment);
   const guesses = runBySlug.guesses.map((g) => ({
-    ...buildGuessFromFragment(g),
-    user: buildUserFromFragment(g.user),
-    show: buildShowFromFragment(g.show),
+    ...useGuessFragment(g),
+    user: useUserFragment(g.user),
+    show: useShowFragment(g.show),
   }));
 
   const organizedGuesses = guesses ? organizeGuessesWithUsers(guesses) : null;

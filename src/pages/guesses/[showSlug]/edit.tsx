@@ -1,5 +1,7 @@
 import GuessEditorPageComponent, { GuessEditorSkeleton } from '@/components/guesses/editor/GuessEditorPage';
+import ErrorMessage from '@/components/shared/ErrorMessage';
 import { toUpper } from 'lodash';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
@@ -12,6 +14,11 @@ const GuessEditorPage: React.FC = () => {
     ?.split('-')
     ?.map((s) => toUpper(s))
     ?.join(' ');
+
+  const { data: session } = useSession();
+  const currentUserId = session?.user?.id;
+
+  if (!currentUserId) return <ErrorMessage error="You must be logged in to view this page." />;
 
   return (
     <>

@@ -26,7 +26,7 @@ export const formatGuess = (guess: GuessFragment$data): Guess => ({
   id: guess.guessId,
 });
 
-export const buildGuessFromFragment = (guess: GuessFragment$key): Guess => {
+export const useGuessFragment = (guess: GuessFragment$key): Guess => {
   const guessData = useFragment<GuessFragment$key>(GuessFragment, guess);
   return formatGuess(guessData);
 };
@@ -40,7 +40,7 @@ export const GuessWithRunFragment = graphql`
   }
 `;
 
-export const buildGuessWithRunFromFragment = (guess: GuessWithRunFragment$key): GuessWithRun => {
+export const useGuessWithRunFragment = (guess: GuessWithRunFragment$key): GuessWithRun => {
   const guessFragment = useFragment<GuessWithRunFragment$key>(GuessWithRunFragment, guess);
   const guessData = useFragment<GuessFragment$key>(GuessFragment, guessFragment);
   const runData = useFragment<RunFragment$key>(RunFragment, guessFragment.run);
@@ -59,7 +59,7 @@ export const buildGuessWithRunFromFragment = (guess: GuessWithRunFragment$key): 
 //   }
 // `;
 
-// export const buildShowWithVenueFromFragment = (show: ShowWithVenueFragment$key): ShowWithVenue => {
+// export const useShowWithVenueFragment = (show: ShowWithVenueFragment$key): ShowWithVenue => {
 //   const showFragment = useFragment<ShowWithVenueFragment$key>(ShowWithVenueFragment, show);
 //   const showData = useFragment<ShowFragment$key>(ShowFragment, showFragment);
 //   const venueData = useFragment<VenueFragment$key>(VenueFragment, showFragment.venue);

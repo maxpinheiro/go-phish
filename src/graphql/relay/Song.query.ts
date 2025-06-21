@@ -19,7 +19,7 @@ export const formatSong = (song: SongFragment$data): Song => ({
   tags: [...(song.tags || [])],
 });
 
-export const buildSongFromFragment = (song: SongFragment$key): Song => {
+export const useSongFragment = (song: SongFragment$key): Song => {
   const songData = useFragment<SongFragment$key>(SongFragment, song);
   return formatSong(songData);
 };
